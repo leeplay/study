@@ -32,3 +32,12 @@ Additionally, the thin target is able to perform snapshots. It means that at any
 Under the hood, the "thin target" actually uses two storage devices: a (large) one for the pool itself, and a smaller one to hold metadata. This metadata contains information about volumes, snapshots, and the mapping between the blocks of each volume or snapshot, and the blocks in the storage pool.
 
 좀 더 자세히 보면 thin target은 실제로 두 개의 storage devices를 사용합니다: 큰 하나는 풀 자신입니다. 그리고 작은 하나는 metadata를 기록합니다. 이 메타테이타는 volumes, snapshots 그리고 각 볼륨 또는 스냅샷의 블록과  저장소 풀의 블록을 맵핑합니다.
+
+When Docker uses the Device Mapper storage plugin, it will create two files (if they don't already exist) in /var/lib/docker/devicemapper/devicemapper/data and /var/lib/docker/devicemapper/devicemapper/metadata to hold respectively the storage pool and associated metadata. This is very convenient, because no specific setup is required on your side (you don't need an extra partition to store Docker containers, or to setup LVM or anything like that). However, it has two drawbacks:
+
+
+
+- the storage pool will have a default size of 100 GB;
+- it will be backed by a sparse file, which is great from a disk usage point of view (because just like volumes in the thin pool, it starts small, and actually uses disk blocks only when it gets written to) but less great from a performance point of view, because the VFS layer adds some overhead, especially for the "first write" scenario.
+
+Before checking how to resize a container, we will see how to make more room in that pool.
