@@ -20,3 +20,6 @@ It is based on the Device Mapper "thin target". It's actually a snapshot target,
 
 "thin target"은 DeviceMapper의 기본입니다. 실제로 Snapshot target입니다. thin provisioning을 허용하기 때문에 thin으로 불립니다. thin provisioning은 사용할 수 있는 storage blocks과 block devices를 통해 당신이 희망하는 만큼 임의의 사이즈로 pool을 할당하는 것을 의미합니다. 그러나 blocks은 실제로 디스크에 기록할 때 쓰여집니다.  
 
+This means that you can oversubscribe the pool; e.g. create thousands of 10 GB volumes with a 100 GB pool, or even a 100 TB volume on a 1 GB pool. As long as you don't actually write more blocks than you actually have in the pool, everything will be fine.
+
+pool의 용량 이상으로 크기를 가질 수 있다. 예를들어 100GB 풀에서 10GB volume을 100개 생성하거나 설사 1GB 풀에서 100TB 생성할 수 있다. 실제로 pool 많은 블록을 기록하지 않는다. 실제로 풀의 용량보다 많은 블록을 사용하지 않는다면 모든 것이 괜찮스니다.
