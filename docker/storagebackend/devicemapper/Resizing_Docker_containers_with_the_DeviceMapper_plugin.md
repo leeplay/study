@@ -29,3 +29,6 @@ Additionally, the thin target is able to perform snapshots. It means that at any
 추가로 thin target은 snapshot을 가능하게 합니다. 기존 volume의 단순 복사본을 만들 수 있다는 뜻입니다. 
 사용자 관점에서 보면 마치 독립적으로 변경될 수 있는 두 개의 동일한 볼륨을 가지고 있는 것과 같습니다. 마치 당신이 full copy를 한 것처럼 말이죠 그리고 storage를 두 번 사용하지 않고 하나의 voluems에서 변경이 발생하는 경우 추가 storage가 사용됩니다. 그 다음 thin target은 storage pool에 새로운 블록을 할당합니다. 
 
+Under the hood, the "thin target" actually uses two storage devices: a (large) one for the pool itself, and a smaller one to hold metadata. This metadata contains information about volumes, snapshots, and the mapping between the blocks of each volume or snapshot, and the blocks in the storage pool.
+
+좀 더 자세히 보면 thin target은 실제로 두 개의 storage devices를 사용합니다: 큰 하나는 풀 자신입니다. 그리고 작은 하나는 metadata를 기록합니다. 이 메타테이타는 volumes, snapshots 그리고 각 볼륨 또는 스냅샷의 블록과  저장소 풀의 블록을 맵핑합니다.
