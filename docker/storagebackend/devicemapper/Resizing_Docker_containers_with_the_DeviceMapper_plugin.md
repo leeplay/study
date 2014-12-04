@@ -22,7 +22,7 @@ It is based on the Device Mapper "thin target". It's actually a snapshot target,
 
 This means that you can oversubscribe the pool; e.g. create thousands of 10 GB volumes with a 100 GB pool, or even a 100 TB volume on a 1 GB pool. As long as you don't actually write more blocks than you actually have in the pool, everything will be fine.
 
-pool의 용량 이상으로 크기를 가질 수 있다. 예를들어 100GB 풀에서 10GB volume을 100개 생성하거나 설사 1GB 풀에서 100TB 생성할 수 있다. 실제로 pool 많은 블록을 기록하지 않는다. 실제 풀의 용량보다 많은 블록을 사용하지 않는다면 모든 것이 괜찮습니다.
+pool의 용량 이상으로 크기를 가질 수 있습니. 예를 들어 100GB 풀에서 10GB volume을 100개 생성하거나 설사 1GB 풀에서 100TB 생성할 수 있습니다. 실제로 pool에 많은 블록을 사용하지 않습니다. 실제 풀의 용량보다 많은 블록을 사용하지 않는다면 모든 것이 괜찮습니다.
 
 Additionally, the thin target is able to perform snapshots. It means that at any time, you can create a shallow copy of an existing volume. From a user point of view, it's exactly as if you now had two identical volumes, that can be changed independently. As if you had made a full copy, except that it was instantaneous (even for large volumes), and they don't use twice the storage. Additional storage is used only when changes are made in one of the volumes. Then the thin target allocates new blocks from the storage pool.
 
