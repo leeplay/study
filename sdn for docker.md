@@ -30,5 +30,8 @@
 
 새로운 컨테이너가 생성이 될 때 도커는 두 개의 가상 인터페이스를 생성합니다. 
 컨테이너와 도커에 의해 서브넷 레인지로부터 할당된 아이피 어드레스로 eth0은 연결됩니다.
-
 디폴트 라우트는 eth0으로 인터페이스 포인트를  docker0 브릿지의 도커 호스트의 아이피 어드레스로 연결됩니다. 
+
+The other interface uses the namespace of the host; it typically has a name of the type veth9a7d and is bound to the docker0 bridge. Docker creates a logical link between the two interfaces. This allows the newly created container to communicate with other containers in the same host and the host itself.
+
+In addition to creating two interfaces for the container, Docker also modifies the host’s iptables so that outbound communication is achieved with IP network access translation (NAT), which modifies iptables to allow outbound traffic and NATs container IP addresses to docker0 IP address.
