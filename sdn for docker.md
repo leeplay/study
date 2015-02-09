@@ -76,8 +76,3 @@ IBM SDN VE 멀티 테넌트 가상 네트워크 솔루션이 제공하는 특징
 우리의 목적은 위의 모든 특징을 클라우드에 딜리버리 할 수 있는 확장과 셀프 프로비져닝과 자동화 운용 모델을 도커 컨테이너에 제공하는 것 입니다. 
 
 IBE SDN VE는 컨테이너와 VM, bare metal 을 위한 가상 네트워크 인프라 구조를 제공할 수 있습니다. 
-
-
-We are currently working on extending IBM SDN VE to support containers to provide a unified, consistent network model for a variety of computational units. If you are interested in a beta trial or in discussing IBM SND VE for containers in further detail, please comment below to start the conversation.
-
-우리는 현재 IBM SDN VE
