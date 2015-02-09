@@ -29,4 +29,19 @@ Configuring DNS
 - --dns-search 옵션을 사용하면 dns 정보를 서치해 /etc/resolv.conf에 기록한다. 
 
 Communication between containers and the wider world
+====================================================
 
+호스트 머신은 어떻게 ip 패킷 포워드를 할 수 있는가 , ip_forard 시스템 파라미터에 의해 결정됩니다. 
+만약 파라메터가 1(true)이면 컨테이너들 끼리 패킷은 전달됩니다. 보통 Docker 서버를 떠나 true로 설정하고 쓸 것이며 도커는 1로 설정합니다. 
+
+Communication between containers
+================================
+
+- 컨테이너의 네트워크 인터페이스의 네트워크 토폴리지는 ? 디폴트로 도커는 모든 컨테이너를 패킷을 보내기 위해 docker0 브릿지로 연결합니다. 
+- iptables는 이 특별한 연결을 어떻게 생성할까요 ? 도커는 데몬이 시작할 때 iptables=false라면 시스템의 iptables를 변경하지 않습니다. 반면에 토커 서버는 포워드 체인에 icc가 true이면 ACCEPT를 false이면 DROP 룰을 추가합니다.  
+
+icc가 true이든 false로 변경이되는 걸 떠나 전략적인 질문이다. iptables은 호스트와 다른 컨테이너를 접근되는 임의의 포트로 보호합니다. 가장 보안적인 설정인 icc=false를 선택했다면, 이 경우 다른 서비스를 제공하기 위해 컨테이너 통신은 어떻게 할 수 있을까요 ?
+
+이 질문에 답은 --link옵션입니다. 만약 icc=false iptables=true로 도커 데몬이 실행 중이라면, 도커 서버는 새로운 컨테이너에 연결할 수있도록 포트를 노출하고 iptables에 ACCEPT룰을 추가합니다. 
+
+iptables 커맨드는 도커 호스트에서 확인이 가능하다. 
