@@ -24,7 +24,9 @@ Configuring DNS
 변경될 수도 있으니 파일은 수정하지 말고 옵션을 사용하도록 합니다. 
 
 - -h, --hostname /etc/hostname과 /etc/hosts에 설정됨, 프롬프트에도 이 이름으로 보임, 하지만 다른 컨테이너나 데몬에서는 볼 수 없음
-- --link 이 옵션을 사용하면 /etc/hosts에 ip와 alias 정보가 기록된다. 
+- --link 이 옵션을 사용하면 /etc/hosts에 ip와 alias 정보가 기록된다. 컨테이너가 재실행하면 link 정보는 변경되지 않는다. 
 - --dns 옵션을 사용하면 /etc/resolv.conf의 정보로 기록된다. 
 - --dns-search 옵션을 사용하면 dns 정보를 서치해 /etc/resolv.conf에 기록한다. 
+
+Communication between containers and the wider world
 
