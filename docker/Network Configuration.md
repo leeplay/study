@@ -35,11 +35,24 @@ Communication between containers and the wider world
 도커는 어떻게 패킷 포워드를 할 수 있을까?, ip_forward란 리눅스 시스템 파라미터에 의해 결정됩니다. 
 ip_forward 파라메터가 1(true)이면 컨테이너들 끼리 패킷을 전달 할 수 있습니다. 보통 true로 설정하고 사용할 것이며 도커 데몬에 의해 1로 설정됩니다. 
 
+```
+# Usually not necessary: turning on forwarding,
+# on the host where your Docker server is running
+
+$ cat /proc/sys/net/ipv4/ip_forward
+0
+$ sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+$ cat /proc/sys/net/ipv4/ip_forward
+1
+```
+
 Communication between containers
 ================================
 
+두 개의 컨테이너끼리의 통신여부는 두 가지 요인으로 결정됩니다. 
+
 - 디폴트로 도커는 모든 컨테이너에 패킷을 보내기 위해 docker0 브릿지로 연결합니다. 
-- 도커는 데몬이 시작할 때 iptables=false라면 시스템의 iptables를 변경하지 않습니다. 도커 서버는 포워드 체인에 icc가 true이면 ACCEPT를 false이면 DROP 룰을 추가합니다.  
+- 도커는 데몬이 시작할 때 iptables=false라면 시스템의 iptables를 변경하지 않습니다. 그렇지 않으면 도커 서버는 포워드 체인에 icc가 true이면 ACCEPT를 false이면 DROP 룰을 추가합니다.  
 
 > 토폴로지(topology, 문화어: 망구성방식)는 컴퓨터 네트워크의 요소들(링크, 노드 등)을 물리적으로 연결해 놓은 것, 또는 그 연결 방식을 말한다.
 
