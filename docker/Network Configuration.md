@@ -24,32 +24,69 @@ Configuring DNS
 - -h, --hostname /etc/hostname과 /etc/hosts에 설정됨, 프롬프트에도 이 이름으로 보임, 하지만 다른 컨테이너나 데몬에서는 볼 수 없음
 - --link 이 옵션을 사용하면 /etc/hosts에 ip와 alias 정보가 기록된다. 컨테이너가 재실행하면 link 정보는 변경되지 않는다. 
 - --dns 옵션을 사용하면 /etc/resolv.conf의 정보로 기록된다. 
-- --dns-search 옵션을 사용하면 dns 정보를 서치해 /etc/resolv.conf에 기록한다. 
+- --dns-search 옵션을 사용하면 dns 정보를 검색해 /etc/resolv.conf에 기록한다. 
 
 Communication between containers and the wider world
 ====================================================
 
-호스트 머신은 어떻게 ip 패킷 포워드를 할 수 있는가 , ip_forard 시스템 파라미터에 의해 결정됩니다. 
-만약 파라메터가 1(true)이면 컨테이너들 끼리 패킷은 전달됩니다. 보통 Docker 서버를 떠나 true로 설정하고 쓸 것이며 도커는 1로 설정합니다. 
+호스트 머신은 어떻게 ip 패킷 포워드를 할 수 있는가 ?, ip_forward란 리눅스 시스템 파라미터에 의해 결정됩니다. 
+만약 파라메터가 1(true)이면 컨테이너들 끼리 패킷을 전달 할 수 있습니다. 보통 Docker 서버를 떠나 true로 설정하고 사용할 것이며 도커 데몬 시작 시에 도커에 의해 1로 설정됩니다. 
 
 Communication between containers
 ================================
 
-- 컨테이너의 네트워크 인터페이스의 네트워크 토폴리지는 ? 디폴트로 도커는 모든 컨테이너를 패킷을 보내기 위해 docker0 브릿지로 연결합니다. 
-- iptables는 이 특별한 연결을 어떻게 생성할까요 ? 도커는 데몬이 시작할 때 iptables=false라면 시스템의 iptables를 변경하지 않습니다. 반면에 토커 서버는 포워드 체인에 icc가 true이면 ACCEPT를 false이면 DROP 룰을 추가합니다.  
+- 네트워크 토폴로지에도 컨테이너의 네트워크 인터페이스를 연결합니까? 디폴트로 도커는 모든 컨테이너를 패킷을 보내기 위해 docker0 브릿지로 연결합니다. 
+- iptables는 이 특별한 연결을 어떻게 생성할까요 ? 도커는 데몬이 시작할 때 iptables=false라면 시스템의 iptables를 변경하지 않습니다. 반면에 도커 서버는 포워드 체인에 icc가 true이면 ACCEPT를 false이면 DROP 룰을 추가합니다.  
 
-icc가 true이든 false로 변경이되는 걸 떠나 전략적인 질문이다. iptables은 호스트와 다른 컨테이너를 접근되는 임의의 포트로 보호합니다. 가장 보안적인 설정인 icc=false를 선택했다면, 이 경우 다른 서비스를 제공하기 위해 컨테이너 통신은 어떻게 할 수 있을까요 ?
+> 토폴로지(topology, 문화어: 망구성방식)는 컴퓨터 네트워크의 요소들(링크, 노드 등)을 물리적으로 연결해 놓은 것, 또는 그 연결 방식을 말한다.
 
-이 질문에 답은 --link옵션입니다. 만약 icc=false iptables=true로 도커 데몬이 실행 중이라면, 도커 서버는 새로운 컨테이너에 연결할 수있도록 포트를 노출하고 iptables에 ACCEPT룰을 추가합니다. 
+icc가 true 혹은 false 이든 이것은 전략적인 질문입니다. iptables은 접근되는 임의의 포트로부터 도커 호스트와 컨테이너들을 보호합니다. 가장 보안적인 설정인 icc=false를 선택했다면, 이 경우 다른 서비스를 제공하기 위해 컨테이너 통신은 어떻게 할 수 있을까요 ?
 
-iptables 커맨드를 통해 포워드 체인이 도커 호스트에서 확인이 가능하다.
+이 질문에 답은 이전 섹션에 언급되어진 --link옵션입니다. 만약 icc=false, iptables=true로 도커 데몬이 실행 중에 도커 컨테이너를 --link옵션으로 실행했다면 도커 서버는 iptables의 ACCEPT룰을 입력하고 새로운 컨테이너가 노출된 다른 컨테이너의 노출된 포트로 접속을 할 수 있도록 합니다.
+
+도커 호스트에서 iptables 커맨드를 통해 포워드 체인이 가진 ACCEPT, DROP 규칙의 확인이 가능하다.
+
+```
+# When --icc=false, you should see a DROP rule:
+
+$ sudo iptables -L -n
+...
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+DROP       all  --  0.0.0.0/0            0.0.0.0/0
+...
+
+# When a --link= has been created under --icc=false,
+# you should see port-specific ACCEPT rules overriding
+# the subsequent DROP policy for all other packets:
+
+$ sudo iptables -L -n
+...
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+ACCEPT     tcp  --  172.17.0.2           172.17.0.3           tcp spt:80
+ACCEPT     tcp  --  172.17.0.3           172.17.0.2           tcp dpt:80
+DROP       all  --  0.0.0.0/0            0.0.0.0/0
+```
 
 Binding container ports to the host
 ===================================
 
-도커 컨테이너는 디폴트로 외부와 연결을 생성할 수 있다. 그러나 외부는 컨테이너로 연결할 수 없습니다. 
-도커 서버가 시작할 때 iptables에 masquerading(가상 아이피로 외부와 통신이 가능하게 하는 옵션 룰을 호스트머신에 생성한 덕분에 외부와의 연결이 보일겁니다. 
+도커 컨테이너는 외부와 연결할 수 있습니다. 그러나 외부는 컨테이너로 연결할 수 없습니다. 외부로의 연결은 iptables의 masquerading 룰로 인해(가상 아이피로 외부와 통신이 가능하게 하는 옵션 룰) 가능합니다. 
 
-그러나 도커 컨테이너로 인커밍 연결을 가능하게 하려면 특별한 옵션이 있습니다. 2가지 접근방법이 있습니다.
+```
+# You can see that the Docker server creates a
+# masquerade rule that let containers connect
+# to IP addresses in the outside world:
+
+$ sudo iptables -t nat -L -n
+...
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination
+MASQUERADE  all  --  172.17.0.0/16       !172.17.0.0/16
+...
+```
+
+도커 컨테이너로 연결을 원한다면 docker run 실행 시에 특별한 옵션을 주어야 합니다.(자세한 건 사용 guide에서 확인하십시오) 두 가지 접근 방법이 있습니다. 
 
 - 
