@@ -121,4 +121,44 @@ docker는 싱글 이더넷 네트워크처럼 작동하는 물리 혹은 가상 
 
 docker0에 ip address와 netmaskk, ip 할당 범위를 설정할 수 있습니다. 호스트 머신은 다른 브릿지를 통해 연결된 컨테이너에 패킷을 송수신 할 수 있습니다. 
 
-- -bip=CIDR docker0 브리지에 ip와 netmask를 할당합니다. 
+- -bip=CIDR docker0 브리지에 특정한 ip와 netmask를 할당합니다. 
+- --fixed-cidr docker0 subnet에 ip 범위를 제한을 줄 수 있습니다. 
+- --mtu maximum transmission unit 의 약자로 docker0이 허용하는 최대 패킷 길이를 정의합니다.
+
+docker0 브리지에 연결된 컨테이너를  brctl 명령으로 확인가능합니다.
+
+```
+# Display bridge info
+
+$ sudo brctl show
+bridge name     bridge id               STP enabled     interfaces
+docker0         8000.3a1d7362b4ee       no              veth65f9
+                                                        vethdda6
+```
+brctl이 설치 안되어있다면 설치하세요 
+sudo apt-get install bridge-utils
+
+```
+# The network, as seen from a container
+
+$ sudo docker run -i -t --rm base /bin/bash
+
+$$ ip addr show eth0
+24: eth0: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 32:6f:e0:35:57:91 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.3/16 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::306f:e0ff:fe35:5791/64 scope link
+       valid_lft forever preferred_lft forever
+
+$$ ip route
+default via 172.17.42.1 dev eth0
+172.17.0.0/16 dev eth0  proto kernel  scope link  src 172.17.0.3
+
+$$ exit
+```
+ip route로 확인해보면 컨테이너의 eth0이 docker0과 연결된 걸 확인할 수 있습니다. 
+그리고 명심하세요 도커는 리눅스 시스템에 ip_forward가 fasle면 패킷을 존송하지 않습니다. 
+
+Building your own bridge
+========================
