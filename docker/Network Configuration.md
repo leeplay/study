@@ -162,3 +162,38 @@ ip route로 확인해보면 컨테이너의 eth0이 docker0과 연결된 걸 확
 
 Building your own bridge
 ========================
+
+docker 시작 전에 -b or --bridge 옵션을 통해서 도커가 제공하는 docker0 말고 직접 설정한 브릿지를 사용할 수 있습니다. 그리고 docker가 실행된 후에 docker0 브릿지의 정보를 수정하려면 docker0을 down 한 후 interface에서 제거 후 설정해야 합니다. 아래는 설정 방법입니다. 
+
+```
+# Create our own bridge
+
+$ sudo brctl addbr bridge0
+$ sudo ip addr add 192.168.5.1/24 dev bridge0
+$ sudo ip link set dev bridge0 up
+
+# Confirming that our bridge is up and running
+
+$ ip addr show bridge0
+4: bridge0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state UP group default
+    link/ether 66:38:d0:0d:76:18 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.5.1/24 scope global bridge0
+       valid_lft forever preferred_lft forever
+
+# Tell Docker about it and restart (on Ubuntu)
+
+$ echo 'DOCKER_OPTS="-b=bridge0"' >> /etc/default/docker
+$ sudo service docker start
+
+# Confirming new outgoing NAT masquerade is set up
+
+$ sudo iptables -t nat -L -n
+...
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination
+MASQUERADE  all  --  192.168.5.0/24      0.0.0.0/0
+```
+
+How Docker networks a container
+===============================
+
