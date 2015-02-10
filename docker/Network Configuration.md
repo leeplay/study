@@ -4,9 +4,7 @@ TL;DR
 도커는 호스트에 docker0이라 불리는 가상 인터페이스를 생성합니다. 
 호스트의 private 범위에서 랜덤으로 ip 주소와 서브넷를 선택합니다.(RFC 1918 기준) 그리고 아이피를 docker0에 할당합니다. 도커가 시작되기 전에 172.17.42.1/16 중에 하나의 아이피를 선택합니다. 예를 들어 16 bit netmask는 호스트머신과 컨테이너를 위해 65,534 개의 주소를 제공합니다. 맥 어드레스는 ARP 충돌을 피하고 할당된 컨테이너의 ip 어드레스를 사용하기 위해  2 66 172 17 0 0 ~ 2 66 172 17 255 255 범위에서 생성됩니다. 
 
-docker0은 평범한 인터페이스는 아닙니다. 
-자동으로 다른 접근 가능한 네트워크 인터페이스와 패킷 포워드를 하기위한 가상 이더넷 브릿지 입니다. 
-컨테이너를 호스트 머신과 외부와의 통신을 가능케 합니다. 
+docker0은 평범한 인터페이스는 아닙니다. 자동으로 다른 접근 가능한 네트워크 인터페이스와 패킷 포워드를 하기위한 가상 이더넷 브릿지 입니다. 컨테이너를 호스트 머신과 외부와의 통신을 가능케 합니다. 
 
 도커는 매번 컨테이너를 만들 때 한쪽에서 패킷을 보내고 다른 쪽에서 받을 수 있도록 파이프와 같은 짝을 이루는 peers 인터페이스를 생성합니다. peer는 vethAQI2QT와 같은 유니크한 이름을 주어 컨테이너 내의 eth0 인터페이스가 되고 다른 피어(도커 데몬이라 이해하면 됨)와 연결을 유지합니다. 모든 veth* 인터페이스는 docker0을 통한 브릿지와 바인딩을 해 도커 호스트와 모든 컨테이너간에 공유된 가상 subnet을 생성합니다. 
 
@@ -18,15 +16,15 @@ Configuring DNS
 최신 정보를 작성할 수 있도록 가상화한 파일을 /etc 에 오버레이합니다. 실행 중인 컨테이너에서 mount 명령어를 치면 확인가능합니다.
 
 도커는 resolv.conf(네임서버 정보)를 호스트 머신이 새로운 DHCP 정보를 받을 때의 최신 상태로 유지시킵니다. 직접 설정 파일을 수정하지 말고 아래의 옵션을 통해 사용하도록 합니다. 
-- -h, --hostname /etc/hostname과 /etc/hosts에 설정됨, 프롬프트에도 이 이름으로 보임, 하지만 다른 컨테이너나 데몬에서는 볼 수 없음
-- --link 이 옵션을 사용하면 /etc/hosts에 ip와 alias 정보가 기록된다. 컨테이너가 재실행하면 link 정보는 변경되지 않는다. 
-- --dns 옵션을 사용하면 /etc/resolv.conf의 정보로 기록된다. 
-- --dns-search 옵션을 사용하면 dns 정보를 검색해 /etc/resolv.conf에 기록한다. 
+- -h, --hostname : /etc/hostname과 /etc/hosts에 설정됨, 프롬프트에도 이 이름으로 보입니다. 하지만 다른 컨테이너나 데몬에서는 확인할 수 없습니다.
+- --link : 이 옵션을 사용하면 /etc/hosts에 ip와 alias 정보가 기록됩니다. 컨테이너가 재실행하면 link 정보는 변경되지 않습니다. 
+- --dns : 옵션을 사용하면 주어진 값이 /etc/resolv.conf의 정보로 기록됩니다. 
+- --dns-search : 옵션을 사용하면 자동으로 dns 정보를 검색해 /etc/resolv.conf에 기록합니다. 
 
 Communication between containers and the wider world
 ====================================================
 
-도커는 어떻게 ip 패킷 포워드를 할 수 있을가 ?, ip_forward란 리눅스 시스템 파라미터에 의해 결정됩니다. 
+도커는 어떻게 ip 패킷 포워드를 할 수 있을까?, ip_forward란 리눅스 시스템 파라미터에 의해 결정됩니다. 
 ip_forward 파라메터가 1(true)이면 컨테이너들 끼리 패킷을 전달 할 수 있습니다. 보통 true로 설정하고 사용할 것이며 도커 데몬에 의해 1로 설정됩니다. 
 
 Communication between containers
@@ -39,9 +37,9 @@ Communication between containers
 
 iptables은 접근가능한 임의의 포트로부터 도커 호스트와 컨테이너들을 보호합니다. 가장 보안적인 설정인 icc=false를 선택했다면, 이 경우 컨테이너끼리 통신은 어떻게 할 수 있을까요 ?
 
-이 질문에 답은 이전 섹션에 언급되어진 --link옵션입니다. 만약 icc=false, iptables=true로 도커 데몬이 실행 중에 도커 컨테이너를 --link옵션으로 실행했다면 도커 서버는 iptables의 ACCEPT룰을 입력하고 새로운 컨테이너가 노출된 다른 컨테이너의 노출된 포트로 접속을 할 수 있도록 합니다.
+이 질문에 답은 이전 섹션에 언급되어진 --link옵션입니다. 만약 icc=false, iptables=true로 도커 데몬이 실행 중에 도커 컨테이너를 --link옵션으로 실행했다면 도커 서버는 iptables의 ACCEPT룰을 입력하고 새로운 컨테이너가 노출된 다른 컨테이너의 노출된 포트로 접속을 할 수 있습니다.
 
-도커 호스트에서 iptables 커맨드를 통해 포워드 체인이 가진 ACCEPT, DROP 규칙의 확인이 가능하다.
+도커 호스트에서 iptables 커맨드를 통해 포워드 체인이 가진 ACCEPT, DROP 규칙의 확인이 가능합니다.
 
 ```
 # When --icc=false, you should see a DROP rule:
@@ -84,10 +82,10 @@ MASQUERADE  all  --  172.17.0.0/16       !172.17.0.0/16
 ...
 ```
 
-도커 컨테이너로 연결을 원한다면 docker run 실행 시에 특별한 옵션을 주어야 합니다.(자세한 건 사용 guide에서 확인하십시오) 두 가지 접근 방법이 있습니다. 
+도커 컨테이너로 연결을 원한다면 docker run 실행 시에 특별한 옵션을 주어야 합니다. 두 가지 접근 방법이 있습니다. 
 
 - -P(대문자) or --publis-all=true|false : Dockerfile에서 EXPOSE 명령어를 통해 설정한 모든 포트를 오픈하도록 해준다.
-- -p(소문자) or --publish :  도커가 실행 중에 어떤 네트워크 포트를 오픈할지를 관리한다
+- -p(소문자) or --publish : 도커가 실행 중에 어떤 네트워크 포트를 오픈할지를 관리한다
 
 어떤 방법을 택하던지 간에 iptables의 DNAT 항목으로 확인이 가능해야 합니다. 
 
@@ -116,11 +114,11 @@ Customizing docker0
 
 docker는 싱글 이더넷 네트워크처럼 작동하는 물리 혹은 가상 네트워크 인터페이스 사이로 패킷을 주고 받을 수 있도록 호스트 시스템의 리눅스 커널안에 docker0 이더넷 브릿지를 생성합니다. 
 
-docker0에 ip address와 netmaskk, ip 할당 범위를 설정할 수 있습니다. 호스트 머신은 다른 브릿지를 통해 연결된 컨테이너에 패킷을 송수신 할 수 있습니다. 
+docker0에 ip address와 netmask, ip 할당 범위를 설정할 수 있습니다. 호스트 머신은 다른 브릿지를 통해 연결된 컨테이너에 패킷을 송수신 할 수 있습니다. 
 
-- -bip=CIDR docker0 브리지에 특정한 ip와 netmask를 할당합니다. 
-- --fixed-cidr docker0 subnet에 ip 범위를 제한을 줄 수 있습니다. 
-- --mtu maximum transmission unit 의 약자로 docker0이 허용하는 최대 패킷 길이를 정의합니다.
+- -bip=CIDR : docker0 브리지에 특정한 ip와 netmask를 할당합니다. 
+- --fixed-cidr : docker0 subnet에 ip 범위를 제한을 줄 수 있습니다. 
+- --mtu : maximum transmission unit 의 약자로 docker0이 허용하는 최대 패킷 길이를 정의합니다.
 
 docker0 브리지에 연결된 컨테이너를  brctl 명령으로 확인가능합니다.
 
@@ -154,8 +152,7 @@ default via 172.17.42.1 dev eth0
 
 $$ exit
 ```
-ip route로 확인해보면 컨테이너의 eth0이 docker0과 연결된 걸 확인할 수 있습니다. 
-그리고 명심하세요 도커는 리눅스 시스템에 ip_forward가 fasle면 패킷을 존송하지 않습니다. 
+ip route로 확인해보면 컨테이너의 eth0이 docker0과 연결된 걸 확인할 수 있습니다. 그리고 도커는 리눅스 시스템에 ip_forward가 fasle면 패킷을 존송하지 않습니다. 
 
 Building your own bridge
 ========================
@@ -194,12 +191,12 @@ MASQUERADE  all  --  192.168.5.0/24      0.0.0.0/0
 How Docker networks a container
 ===============================
 
-도커는 네트워크 설정은 계속 개발 중이고 변경 중입니다. 이번 섹션의 쉘 커맨드는 도커가 새로운 컨테이너를 만들 때 수행하는 네트워크 설정 작업을 러프한 레벨에서 단면적인 단계로 나타냅니다.
+도커는 네트워크 설정은 계속 개발 중이고 변경 중입니다. 아래의 커맨드가 부정확할 수 있습니다.
 
 도커는 호스트 머신과 컨테이너와의 통신을 위해 호스트 머신 안에 패킷을 보낼 수 있도록 링킹된 peers라고 불리는 특별한 가상 인터페이스를 사용합니다.
 
-- 짝을 이루는 peer 가상 인터페이스 생성
-- veth65f9와 같은 유일한 이름을 부여받음, docker 호스트에 유지되고 있다가 docker0에 바인드 됨 
+- 짝을 이루는 peer 가상 인터페이스 생성합니다.
+- veth65f9와 같은 유일한 이름을 부여받고, docker 호스트에 유지되고 있다가 docker0에 바인드 됩니다. 
 - 다른 인터페이스는 컨테이너 내에서 분리되고 유일한 네트워크 인터페이스 네임스페이스를 가진 상태로 eth0이란 이름으로 새로운 컨테이너로 전달합니다. 실제 물리 네트워크 인터페이스가 아닙니다. 
 - 인터페이스에 랜덤 or --mac-address 인자로 받은 맥 어드레스를 설정합니다. 
 - 브릿지의 범위안의 ip 를 컨테이너의 eth0에 부여합니다. ip 주소는 docker 호스트와 브릿지 됩니다. 
@@ -207,10 +204,10 @@ How Docker networks a container
 위의 스텝이 성공하면 컨테이너는 eth0 으로 다른 컨테이너 혹은 인터넷이 가능해집니다. 
 위의 절차를 따르지 않고 --net 옵션을 통해 docker 컨테이너 실행 시 특별한 옵션을 줄 수 있습니다. 
 
-- --net=bridge 기본 설정, 위의 절차대로 작동함 
-- --net=host
-- --net=container:NAME_or_ID
-- --net=none
+- --net=bridge : 기본 설정, 위의 절차대로 작동함 
+- --net=host : 
+- --net=container:NAME_or_ID : 
+- --net=none : 
 
 Tools and Examples
 ====================
@@ -271,4 +268,4 @@ A final permutation of this pattern is to create the point-to-point link between
 Editing networking config files
 ===============================
 
-Docker 1.2.0 에서부터 컨테이너 안에 /etc/hosts, /etc/hostname, /etc/resolve.conf 를 수정할 수 있습니다. 이 기능은 유용하게 사용할 수 있지만 docker commit과 docker run 시에 저장되지 않습니다. 이미지에 저장되지 않는다는 말입니다. they will only "stick" in a running container.( 관용어 같은데 해석이 안됨)
+Docker 1.2.0 에서부터 컨테이너 안에 /etc/hosts, /etc/hostname, /etc/resolve.conf 를 수정할 수 있습니다. 이 기능은 유용하게 사용할 수 있지만 docker commit과 docker run 시에 저장되지 않습니다. 이미지에 저장되지 않는다는 말입니다. 
