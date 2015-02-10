@@ -214,3 +214,8 @@ How Docker networks a container
 - --net=host
 - --net=container:NAME_or_ID
 - --net=none
+
+Editing networking config files
+===============================
+
+Docker 1.2.0 에서부터 컨테이너 안에 /etc/hosts, /etc/hostname, /etc/resolve.conf 를 수정할 수 있습니다. 이 기능은 유용하게 사용할 수 있지만 docker commit과 docker run 시에 저장되지 않습니다. 이미지에 저장되지 않는다는 말입니다. they will only "stick" in a running container.( 관용어 같은데 해석이 안됨)
