@@ -89,4 +89,36 @@ MASQUERADE  all  --  172.17.0.0/16       !172.17.0.0/16
 
 도커 컨테이너로 연결을 원한다면 docker run 실행 시에 특별한 옵션을 주어야 합니다.(자세한 건 사용 guide에서 확인하십시오) 두 가지 접근 방법이 있습니다. 
 
-- 
+- -P(대문자) or --publis-all=true|false : Dockerfile에서 EXPOSE 명령어를 통해 설정한 모든 포트를 오픈하도록 해준다.
+- -p(소문자) or --publish :  도커가 실행 중에 어떤 네트워크 포트를 오픈할지를 관리한다
+
+어떤 방법을 택하던지 간에 iptables의 DNAT 항목으로 확인이 가능해야 합니다. 
+
+```
+# What your NAT rules might look like when Docker
+# is finished setting up a -P forward:
+
+$ iptables -t nat -L -n
+...
+Chain DOCKER (2 references)
+target     prot opt source               destination
+DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:49153 to:172.17.0.2:80
+
+# What your NAT rules might look like when Docker
+# is finished setting up a -p 80:80 forward:
+
+Chain DOCKER (2 references)
+target     prot opt source               destination
+DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:80 to:172.17.0.2:80
+```
+
+항상 정해진 아이피에 바인딩을 해야한다면 /etc/default/docker의 DOCKER_OPTS 항목에 --ip=IP_ADDRESS 옵션으로 설정이 가능합니다. 
+
+Customizing docker0
+===================
+
+docker는 싱글 이더넷 네트워크처럼 작동하는 물리 혹은 가상 네트워크 인터페이스 사이로 패킷을 주고 받을 수 있도록 호스트 시스템의 리눅스 커널안에 docker0 이더넷 브릿지를 생성합니다. 
+
+docker0에 ip address와 netmaskk, ip 할당 범위를 설정할 수 있습니다. 호스트 머신은 다른 브릿지를 통해 연결된 컨테이너에 패킷을 송수신 할 수 있습니다. 
+
+- -bip=CIDR docker0 브리지에 ip와 netmask를 할당합니다. 
