@@ -218,11 +218,11 @@ How Docker networks a container
 Tools and Examples
 ====================
 
-Before diving into the following sections on custom network topologies, you might be interested in glancing at a few external tools or examples of the same kinds of configuration. Here are two:
+네트워크 토폴리지 구성을 보기 전에 흥미를 끌만한 몇 가지 툴과 예를 안내합니다. 
 
-    Jérôme Petazzoni has created a pipework shell script to help you connect together containers in arbitrarily complex scenarios: https://github.com/jpetazzo/pipework
-
-    Brandon Rhodes has created a whole network topology of Docker containers for the next edition of Foundations of Python Network Programming that includes routing, NAT'd firewalls, and servers that offer HTTP, SMTP, POP, IMAP, Telnet, SSH, and FTP: https://github.com/brandon-rhodes/fopnp/tree/m/playground
+- Jérôme Petazzoni has created a pipework shell script to help you connect together containers in arbitrarily complex scenarios: https://github.com/jpetazzo/pipework
+ 
+- Brandon Rhodes has created a whole network topology of Docker containers for the next edition of Foundations of Python Network Programming that includes routing, NAT'd firewalls, and servers that offer HTTP, SMTP, POP, IMAP, Telnet, SSH, and FTP: https://github.com/brandon-rhodes/fopnp/tree/m/playground
 
 Building a point-to-point connection
 ====================================
