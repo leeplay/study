@@ -63,6 +63,7 @@ nexhub0   Link encap:Ethernet  HWaddr 56:5d:e1:9a:09:80
 
 - 통신 확인
 - nexhub0과 nexhubns안에 생성된 veth1과 연결된 걸 확인
+- routing 정보 확인 (nexhub0은 라우팅 설정은 안된 상태여서 외부와 통신불가)
 
 ```
 # ping 10.1.1.1
@@ -81,6 +82,27 @@ PING 10.1.1.2 (10.1.1.2) 56(84) bytes of data.
 64 bytes from 10.1.1.2: icmp_seq=2 ttl=64 time=0.047 ms
 64 bytes from 10.1.1.2: icmp_seq=3 ttl=64 time=0.060 ms
 64 bytes from 10.1.1.2: icmp_seq=4 ttl=64 time=0.062 ms
+
+# route -FC
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         10.64.51.1      0.0.0.0         UG    0      0        0 eth0
+10.64.51.0      *               255.255.255.0   U     1      0        0 eth0
+172.17.0.0      *               255.255.0.0     U     0      0        0 docker0
+192.168.122.0   *               255.255.255.0   U     0      0        0 virbr0
+
+# ip route
+default via 10.64.51.1 dev eth0  proto static
+10.64.51.0/24 dev eth0  proto kernel  scope link  src 10.64.51.185  metric 1
+172.17.0.0/16 dev docker0  proto kernel  scope link  src 172.17.42.1
+192.168.122.0/24 dev virbr0  proto kernel  scope link  src 192.168.122.1
+```
+
+- 삭제 
+
+```
+# ifconfig nexhub0 down
+# ip netns delete nexhubns
 ```
 
 ### 정리
