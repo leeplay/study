@@ -1,13 +1,14 @@
 Network Namespace
 =================
 
+- 네트워크 스택에 대한 chroot 와 같은 역할
 - 네트워크 장치, 주소, 포트, 라우트, 방화벽 규칙 등의 사용을 분할하여 인스턴스가 실행 중이 환경에서 네트워크를 가상화함
 - 네트워크 가상화의 가장 기본 기술 (OpenStack, Docker에서 사용함)
 - 커널 2.6.24 버전에서 추가 
 
 ### 실습
 
-- namespace 생성 ( /var/lib/netns 경로에 생성됩니다.)
+- namespace 생성 (/var/lib/netns 경로에 생성됩니다.)
 - neutron (https://github.com/openstack/neutron/blob/592f641b4673b07737d689187bc999dff9e4a502/neutron/agent/linux/ip_lib.py#L130)
 - docker (https://github.com/docker/docker/blob/00d19150bb937bcc4572edf1f397d4051abb37c1/docs/sources/articles/runmetrics.md)
 
@@ -120,11 +121,15 @@ default via 10.64.51.1 dev eth0  proto static
 Neutron 
 =======
 
+### 설치
 
+### 스위칭
 
-- 2013.2월에 Havana 버전에서 등장 
-- 기존 버전에서 Quantum 이란 명칭이었는데 SDN 개념이 도입되면서 Neutron으로 변경
-- Quantum은 IceHouse 버전에서 2014.1월에 drop 됨
+### 라우팅
+
+### 로드 밸런싱
+
+### 방화벽 
 
 
 ML2 plugin
