@@ -115,6 +115,7 @@ default via 10.64.51.1 dev eth0  proto static
 1. 컨테이너 생성 시 네임스페이스 생성
 2. 호스트의 물리 이더넷 장치를 컨테이너 네임 스페이스에서 사용할 수 없기 때문에 네트워크 네임스페이스 안에 호스트용 가상 이더넷 장치와 컨테이너의 이더넷 장치를 연결
 3. 호스트용 가상 이더넷 장치를 물리 이더넷 장치로 연결 
+4. 이제 아래의 그림이 이제 이해가 되시죠 ~~~ ???
 
 [![Network Namespace](https://github.com/leeplay/study/blob/master/etc/2015-03-06%2011;47;18.PNG?raw=true)]()
 
