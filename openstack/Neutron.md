@@ -10,6 +10,10 @@ Network Namespace
 
 - namespace 생성 (/var/lib/netns 경로에 생성됩니다.)
 - neutron (https://github.com/openstack/neutron/blob/592f641b4673b07737d689187bc999dff9e4a502/neutron/agent/linux/ip_lib.py#L130)
+
+[![openstack](https://github.com/leeplay/study/blob/master/etc/2015-03-05%2018;46;36.PNG?raw=true)]()
+
+
 - docker (https://github.com/docker/docker/blob/00d19150bb937bcc4572edf1f397d4051abb37c1/docs/sources/articles/runmetrics.md)
 
 ```
@@ -112,10 +116,7 @@ default via 10.64.51.1 dev eth0  proto static
 2. 호스트의 물리 이더넷 장치를 컨테이너 네임 스페이스에서 사용할 수 없기 때문에 네트워크 네임스페이스 안에 호스트용 가상 이더넷 장치와 컨테이너의 이더넷 장치를 연결
 3. 호스트용 가상 이더넷 장치를 물리 이더넷 장치로 연결 
 
-
-
-
-
+[![Network Namespace](https://github.com/leeplay/study/blob/master/etc/2015-03-06%2011;47;18.PNG?raw=true)]()
 
 
 Neutron 
