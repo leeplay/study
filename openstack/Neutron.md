@@ -125,6 +125,9 @@ Neutron
 
 ### 설치
 
+- Bad router request: No IPs available for external network 7884eb60-71af-420e-2d1d02f55
+
+
 ### 스위칭
 
 ### 라우팅
