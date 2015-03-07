@@ -209,17 +209,31 @@ target     prot opt source               destination
 
 [![neutron br-tun](https://github.com/leeplay/study/blob/master/etc/br-tun.PNG?raw=true)]()
 
-VXLAN
+VXLAN : 작성 중...
 =====
 
-작성 중...
+- Cloud가 성장하면서 주목 받게 된 Network-Side 기술
+- 네트워크 스위치들의 MAC Addresse Table 수용에 한계 
+- 가상화 환경에서 네트워크 단일 도메인의 VLAN 숫자 한계
+- 가상화 환경에서 네트워크의 경직된 구성으로 인해 유연한 이동 한계
 
-IPTables
+### 네트워크 스위치들의 MAC Addresse Table 수용에 한계 
+
+- 가상화를 구현하지 않았던 시절에 서버를 L2 단일 스위치 도메인에 수천 대를 연결해도 큰 문제가 있지 않지만, 예를 들어 한 호스트에 30여개의 vm을 생성한다면 60개의 MAC Address 가 생성된다면 수십만 대의 address를 스위치에 연결해야 해 사실상 네트워크 도메인에서 수용불가능한 레벨이 되어버림 
+- VXLAN은 불필요하게 모든 MAC Address를 네트워크 스위치에서 가지고 있지 않고, 하단의 가상화 스위치에서만 소유하고 해당 테이블을 통해 Forwarding 하는 방식 
+
+### 가상화 환경에서 네트워크 단일 도메인의 VLAN 숫자 한계
+- Ehternet Frame Format이 12 bit의 VLAN ID를 제공 (eg. 4,096개)
+- VXLAN은 VLAN ID 가 24 bit 로 제공 (eg. 16,000,000개)
+ 
+### 가상화 환경에서 네트워크의 경직된 구성으로 인해 유연한 이동 한계
+
+
+IPTables : 작성 중...
 ========
 
-작성 중 ...
 
-Neutron : 다음 주 예정
+Neutron : 다음 주 예정 ...
 =======
 
 ### 설치
@@ -236,5 +250,5 @@ Neutron : 다음 주 예정
 
 ### 방화벽 
 
-ML2 plugin : 다음 주 예정
+ML2 plugin : 다음 주 예정 ...
 ==========
