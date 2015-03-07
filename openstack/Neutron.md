@@ -1,3 +1,6 @@
+뉴트론을 들어가기 전 뉴트런에서 사용하는 인스턴스 네트워크 가상화, 네트워크 타입, 라우팅, 보안정책에 대한 선수지식이 필요합니다. 
+
+
 Network Namespace
 =================
 
@@ -206,12 +209,6 @@ target     prot opt source               destination
 
 [![neutron br-tun](https://github.com/leeplay/study/blob/master/etc/br-tun.PNG?raw=true)]()
 
-- 
-- 
-- 
-
-VLAN
-====
 
 VXLAN
 =====
@@ -235,7 +232,6 @@ Neutron
 ### 로드 밸런싱
 
 ### 방화벽 
-
 
 ML2 plugin
 ==========
