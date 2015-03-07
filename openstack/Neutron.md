@@ -209,14 +209,17 @@ target     prot opt source               destination
 
 [![neutron br-tun](https://github.com/leeplay/study/blob/master/etc/br-tun.PNG?raw=true)]()
 
-
 VXLAN
 =====
+
+작성 중...
 
 IPTables
 ========
 
-Neutron 
+작성 중 ...
+
+Neutron : 다음 주 예정
 =======
 
 ### 설치
@@ -233,5 +236,5 @@ Neutron
 
 ### 방화벽 
 
-ML2 plugin
+ML2 plugin : 다음 주 예정
 ==========
