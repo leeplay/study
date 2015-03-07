@@ -87,21 +87,102 @@ PING 10.1.1.2 (10.1.1.2) 56(84) bytes of data.
 64 bytes from 10.1.1.2: icmp_seq=2 ttl=64 time=0.047 ms
 64 bytes from 10.1.1.2: icmp_seq=3 ttl=64 time=0.060 ms
 64 bytes from 10.1.1.2: icmp_seq=4 ttl=64 time=0.062 ms
+```
 
-# route -FC
+```
+//host newwork namepsace
+# route -FC  
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 default         10.64.51.1      0.0.0.0         UG    0      0        0 eth0
 10.64.51.0      *               255.255.255.0   U     1      0        0 eth0
+10.1.1.0        *               255.255.255.0   U     0      0        0 nexhub0
 172.17.0.0      *               255.255.0.0     U     0      0        0 docker0
 192.168.122.0   *               255.255.255.0   U     0      0        0 virbr0
 
-# ip route
+//nexhubns network namespace
+# ip netns exec nexhubns route -FC 
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+10.1.1.0        *               255.255.255.0   U     0      0        0 veth1
+
+//host newwork namepsace
+# ip route 
 default via 10.64.51.1 dev eth0  proto static
 10.64.51.0/24 dev eth0  proto kernel  scope link  src 10.64.51.185  metric 1
 172.17.0.0/16 dev docker0  proto kernel  scope link  src 172.17.42.1
 192.168.122.0/24 dev virbr0  proto kernel  scope link  src 192.168.122.1
+
+//nexhubns network namespace
+# ip netns exec nexhubns ip route  
+10.1.1.0/24 dev veth1  proto kernel  scope link  src 10.1.1.1
+
+//host newwork namepsace
+root@kyu-HP-EliteBook-2570p:/# iptables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+neutron-openvswi-INPUT  all  --  anywhere             anywhere
+ACCEPT     udp  --  anywhere             anywhere             udp dpt:domain
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:domain
+ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootps
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:bootps
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+neutron-filter-top  all  --  anywhere             anywhere
+neutron-openvswi-FORWARD  all  --  anywhere             anywhere
+ACCEPT     all  --  anywhere             192.168.122.0/24     ctstate RELATED,ESTABLISHED
+ACCEPT     all  --  192.168.122.0/24     anywhere
+ACCEPT     all  --  anywhere             anywhere
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+ACCEPT     all  --  anywhere             anywhere             ctstate RELATED,ESTABLISHED
+ACCEPT     all  --  anywhere             anywhere
+ACCEPT     all  --  anywhere             anywhere
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+neutron-filter-top  all  --  anywhere             anywhere
+neutron-openvswi-OUTPUT  all  --  anywhere             anywhere
+ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootpc
+
+Chain neutron-filter-top (2 references)
+target     prot opt source               destination
+neutron-openvswi-local  all  --  anywhere             anywhere
+
+Chain neutron-openvswi-FORWARD (1 references)
+target     prot opt source               destination
+
+Chain neutron-openvswi-INPUT (1 references)
+target     prot opt source               destination
+
+Chain neutron-openvswi-OUTPUT (1 references)
+target     prot opt source               destination
+
+Chain neutron-openvswi-local (1 references)
+target     prot opt source               destination
+
+Chain neutron-openvswi-sg-chain (0 references)
+target     prot opt source               destination
+
+Chain neutron-openvswi-sg-fallback (0 references)
+target     prot opt source               destination
+DROP       all  --  anywhere             anywhere             /* Default drop rule for unmatched traffic. */
+
+//nexhubns network namespace
+# ip netns exec nexhubns iptables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
 ```
+
+
 
 - 삭제 
 
@@ -119,6 +200,14 @@ default via 10.64.51.1 dev eth0  proto static
 
 [![Network Namespace](https://github.com/leeplay/study/blob/master/etc/2015-03-06%2011;47;18.PNG?raw=true)]()
 
+VLAN
+====
+
+VXLAN
+=====
+
+IPTables
+========
 
 Neutron 
 =======
