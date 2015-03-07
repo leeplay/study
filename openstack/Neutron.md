@@ -200,6 +200,16 @@ target     prot opt source               destination
 
 [![Network Namespace](https://github.com/leeplay/study/blob/master/etc/2015-03-06%2011;47;18.PNG?raw=true)]()
 
+###  neutron 에서는 ?
+
+- L2(가상 스위칭), L3(가상 라우팅) 사용을 위해 TUN(NexHubNS)/TAP(Veth1) 디바이스로 사용
+
+[![neutron br-tun](https://github.com/leeplay/study/blob/master/etc/br-tun.PNG?raw=true)]()
+
+- 
+- 
+- 
+
 VLAN
 ====
 
@@ -216,6 +226,7 @@ Neutron
 
 - Bad router request: No IPs available for external network 7884eb60-71af-420e-2d1d02f55
 
+[![Bad router request](https://github.com/leeplay/study/blob/master/etc/qrouter.PNG?raw=true)]()
 
 ### 스위칭
 
