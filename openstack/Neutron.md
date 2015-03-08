@@ -185,8 +185,6 @@ target     prot opt source               destination
 
 ```
 
-
-
 - 삭제 
 
 ```
@@ -209,7 +207,7 @@ target     prot opt source               destination
 
 [![neutron br-tun](https://github.com/leeplay/study/blob/master/etc/br-tun.PNG?raw=true)]()
 
-VXLAN : 작성 중...
+VXLAN
 =====
 
 - Cloud가 성장하면서 주목 받게 된 Network-Side 기술
@@ -238,6 +236,9 @@ VXLAN : 작성 중...
 - 학습한 목적지 VM Mac은 Peer to Peer Tunnel로 직접 해당 스위치와 통신 
 - 학습하지 못한 목적지 VM MAC은 IP Multicast를 이용하여 목적지 VM MAC주소가 있는 스위치에 전송 
 - Encapsulation과 Termination 지점에 이러한 기술을 지원해야 하는 스위치가 필요 (OpenVSwitch)
+
+[![VXLAN header](https://github.com/leeplay/study/blob/master/etc/VXLAN-Headers1.png?raw=true)]()
+
 
 IPTables : 작성 중...
 ========
