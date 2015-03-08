@@ -1,4 +1,4 @@
-뉴트론을 들어가기 전 뉴트런에서 사용하는 인스턴스 네트워크 가상화, 네트워크 타입, 라우팅, 보안정책에 대한 선수지식이 필요합니다. 
+Neutron 을 들어가기 전 뉴트런에서 사용하는 인스턴스 네트워크 가상화, 네트워크 타입, 라우팅, 보안정책에 대한 선수지식이 필요합니다. 
 
 
 Network Namespace
@@ -227,7 +227,17 @@ VXLAN : 작성 중...
 - VXLAN은 VLAN ID 가 24 bit 로 제공 (eg. 16,000,000개)
  
 ### 가상화 환경에서 네트워크의 경직된 구성으로 인해 유연한 이동 한계
+-  Multicast기반으로 능동적으로 Tree 구성
 
+### VXLAN 이란 ?
+- VLAN, Layer2의 더 큰 확정성을 제공
+- 기존 Ethernet Frame의 한계를 극복할 수 있는 것은 MAC over IP/UDP header(24bit)가 추가되어 VLAN ID를 새롭게 구성하므로 기존의 VLAN 숫자를 뛰어넘는 구성이 가능 
+- VMware, Arista Networks, Cisco 에서 제작
+- IETF에서 표준화(RFC 7348)
+- VM들이 직접 ARP Table을 보유하고 vSwitch 에서 이런한 Table을 관리
+- 학습한 목적지 VM Mac은 Peer to Peer Tunnel로 직접 해당 스위치와 통신 
+- 학습하지 못한 목적지 VM MAC은 IP Multicast를 이용하여 목적지 VM MAC주소가 있는 스위치에 전송 
+- Encapsulation과 Termination 지점에 이러한 기술을 지원해야 하는 스위치가 필요 (OpenVSwitch)
 
 IPTables : 작성 중...
 ========
