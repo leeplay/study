@@ -236,6 +236,7 @@ VXLAN
 - 학습한 목적지 VM Mac은 Peer to Peer Tunnel로 직접 해당 스위치와 통신 
 - 학습하지 못한 목적지 VM MAC은 IP Multicast를 이용하여 목적지 VM MAC주소가 있는 스위치에 전송 
 - Encapsulation과 Termination 지점에 이러한 기술을 지원해야 하는 스위치가 필요 (OpenVSwitch)
+- Overlay Network 구성이 가능해짐
 
 [![VXLAN header](https://github.com/leeplay/study/blob/master/etc/VXLAN-Headers1.png?raw=true)]()
 
@@ -243,7 +244,7 @@ VXLAN
 IPTables
 ========
 
-리눅스에 내장된 방화벽으로서 시스템 관리자가 네트워크 피킷을 처리하는 방식을 지정하는 룰을 체인으로 구성하여 테이블 형태로 작성
+리눅스에 내장된 방화벽으로서 시스템 관리자가 네트워크 패킷을 처리하는 방식을 지정하는 룰을 체인으로 구성하여 테이블 형태로 작성
 
 ### Table
 
