@@ -410,6 +410,57 @@ Devstack은 OVS 기반으로 네트워크를 구성하며 다음과 같은 가�
 
 [![ovs-bridge](https://github.com/leeplay/study/blob/master/etc/neutron-networking.png?raw=true)]()
 
+뉴트론에서 사용하는 네트워크 네임스페이스
+
+```
+root@kyu-HP-EliteBook-2570p:/var/run/netns# ls
+qdhcp-59089373-ec4d-44b9-b786-0a4122d36bba  qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5
+
+```
+
+```
+root@kyu-HP-EliteBook-2570p:/home/stack/openstack/devstack# ovs-vsctl show
+8a3f94fa-2b5f-4fa0-ba1b-c11e4a4eae9e
+    Bridge br-ex
+        Port br-ex
+            Interface br-ex
+                type: internal
+        Port "qg-b3f5b9d1-5e"
+            Interface "qg-b3f5b9d1-5e"
+                type: internal
+    Bridge br-int
+        fail_mode: secure
+        Port "qvo78e1e93f-27"
+            tag: 1
+            Interface "qvo78e1e93f-27"
+        Port "tapdd1b55ca-fd"
+            tag: 1
+            Interface "tapdd1b55ca-fd"
+                type: internal
+        Port "qr-8d969929-f7"
+            tag: 1
+            Interface "qr-8d969929-f7"
+                type: internal
+        Port br-int
+            Interface br-int
+                type: internal
+        Port "qvoada6a901-dc"
+            tag: 1
+            Interface "qvoada6a901-dc"
+        Port patch-tun
+            Interface patch-tun
+                type: patch
+                options: {peer=patch-int}
+    Bridge br-tun
+        Port patch-int
+            Interface patch-int
+                type: patch
+                options: {peer=patch-tun}
+        Port br-tun
+            Interface br-tun
+                type: internal
+    ovs_version: "2.0.2"
+```
 
 ### 네트워크 관리
 
