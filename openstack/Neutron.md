@@ -445,21 +445,27 @@ root@kyu-HP-EliteBook-2570p:/home/stack/openstack/devstack# ovs-vsctl show
 ...
 ```
 
-뉴트론 라우팅
+Neutron 라우팅
 =============
 
 클라우드에서 인스턴스에 대한 IP 라우팅과 NAT서비스를 제공할 수 있다. 네트워크를 생성하고 이를 라우터에 연결시키면 여기에 연결된 인스턴스와 여기서 구동되는 어플리케이션을 인터넷에 연결할 수 있다. 
 
 ### 외부 프로바이더 네트워크 생성
 
-- create_network
-- create_subnet 
-- create_router
-- router_set_gateway 
+- create_network : 프로바이더 네트워크 생성 
+- create_subnet : 서브넷 생성 
+- create_router : 라우터를 생성
+- router_set_gateway : 생성한 라우터를 외부 네트워크에 붙이기 
 
 ### 내부 네트워크 생성 
 
+- create_network : 테넌트에서 인스턴스에 대한 내부 네트워크를 생성
+- create_subnet : 서브넷 생성
+- add_router_interface : 생성한 서브넷을 라우터에 붙인다.
+ 
 ### 인스턴스 생성 
+
+ - nova-boot
 
 ```
 root@kyu-HP-EliteBook-2570p:/var/run/netns# ls
