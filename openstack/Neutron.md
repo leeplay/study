@@ -287,16 +287,24 @@ ACCEPT, DROP, REJECT와 같은 결정은 필터 테이블에서 내리며 다음
 - -i : 패킷이 들어오는 인터페이스에 매칭
 - -o : 패킷에 나가는 인터페이스에 매칭
 
-Neutron : 다음 주 예정 ...
+Neutron
 =======
 
 ### 설치
 
-- Bad router request: No IPs available for external network 7884eb60-71af-420e-2d1d02f55
-
-[![Bad router request](https://github.com/leeplay/study/blob/master/etc/qrouter.PNG?raw=true)]()
+- devstack 으로 설치
 
 ### 스위칭
+
+- 오픈스택 네트워킹의 핵심 기능 중 하나는 인스턴스에서 가상 물리 네트워크 인프라를 동적으로 설정할 수 있게 해주는 것이다. 
+- 인스턴스가 처음 부팅될 때 호스트에 대해 tap 인터페이스라는 가상 네트워크 인터페이스를 생성하고 tap  인터페이스를 통해 물리 네트워크에 연결하게 된다. 
+- 뉴트론에서는 네트워크 브릿지를 이용해 인스턴스를 연결한다. 두 개 이상의 L2 네트워크를 연결해 하나의 통합(aggregate) 네트워크를 생성한다. 뉴트론에서 브릿지는 물리 인터페이스 한 개와 여러 개의 가상 또는 탭 인터페이스로 구성된다. 브릿지로 동작하려면 물리 네트워크 인터페이스를 무작위(promiscuous) 모드로 전환해야 한다. 
+
+[![linux-bridge](https://github.com/leeplay/study/blob/master/etc/openstack-neutron-linuxbridge-12.png?raw=true)]()
+
+
+
+### 네트워킹 
 
 ### 라우팅
 
