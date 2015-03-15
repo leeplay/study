@@ -290,10 +290,6 @@ ACCEPT, DROP, REJECT와 같은 결정은 필터 테이블에서 내리며 다음
 Neutron
 =======
 
-### 설치
-
-- devstack 으로 설치
-
 ### 스위칭
 
 - 오픈스택 네트워킹의 핵심 기능 중 하나는 인스턴스에서 가상 물리 네트워크 인프라를 동적으로 설정할 수 있게 해주는 것이다. 
@@ -302,7 +298,115 @@ Neutron
 
 [![linux-bridge](https://github.com/leeplay/study/blob/master/etc/openstack-neutron-linuxbridge-12.png?raw=true)]()
 
+### Devstack Networking Example
 
+```
+qbr78e1e93f-27 Link encap:Ethernet  HWaddr da:b0:9a:35:75:45
+          inet6 addr: fe80::c8d3:1ff:fe88:6586/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1111 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:108 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:194292 (194.2 KB)  TX bytes:16242 (16.2 KB)
+		  
+qvb78e1e93f-27 Link encap:Ethernet  HWaddr da:b0:9a:35:75:45
+          inet6 addr: fe80::d8b0:9aff:fe35:7545/64 Scope:Link
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:1342 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:838 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:235492 (235.4 KB)  TX bytes:146401 (146.4 KB)
+		  
+qvo78e1e93f-27 Link encap:Ethernet  HWaddr 6a:fe:84:5e:7c:00
+          inet6 addr: fe80::68fe:84ff:fe5e:7c00/64 Scope:Link
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:838 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1342 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:146401 (146.4 KB)  TX bytes:235492 (235.4 KB)
+		  
+tap78e1e93f-27 Link encap:Ethernet  HWaddr fe:16:3e:71:3e:de
+          inet6 addr: fe80::fc16:3eff:fe71:3ede/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:174 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:418 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:500
+          RX bytes:20840 (20.8 KB)  TX bytes:50530 (50.5 KB)
+		  
+qbrada6a901-dc Link encap:Ethernet  HWaddr be:ef:e4:57:96:79
+          inet6 addr: fe80::6c36:7dff:fe8b:66c7/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:980 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:100 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:172951 (172.9 KB)  TX bytes:14715 (14.7 KB)
+
+		  qbrfefb9298-fa Link encap:Ethernet  HWaddr 86:78:ab:8d:92:57
+          inet6 addr: fe80::a841:8eff:fe18:9db5/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:130257 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:10976 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:23382621 (23.3 MB)  TX bytes:1696992 (1.6 MB)
+
+qvbada6a901-dc Link encap:Ethernet  HWaddr be:ef:e4:57:96:79
+          inet6 addr: fe80::bcef:e4ff:fe57:9679/64 Scope:Link
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:987 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:577 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+		  
+          RX bytes:187623 (187.6 KB)  TX bytes:105707 (105.7 KB)
+qvoada6a901-dc Link encap:Ethernet  HWaddr 02:a9:ba:2f:ac:f6
+          inet6 addr: fe80::a9:baff:fe2f:acf6/64 Scope:Link
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:577 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:987 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+		  
+          RX bytes:105707 (105.7 KB)  TX bytes:187623 (187.6 KB)
+tapada6a901-dc Link encap:Ethernet  HWaddr fe:16:3e:56:9b:2d
+          inet6 addr: fe80::fc16:3eff:fe56:9b2d/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:18 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:185 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:500
+          RX bytes:1860 (1.8 KB)  TX bytes:24701 (24.7 KB)
+
+qvbfefb9298-fa Link encap:Ethernet  HWaddr 86:78:ab:8d:92:57
+          inet6 addr: fe80::8478:abff:fe8d:9257/64 Scope:Link
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:130268 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:144163 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:25207738 (25.2 MB)  TX bytes:27523134 (27.5 MB)
+
+qvofefb9298-fa Link encap:Ethernet  HWaddr 8a:96:db:5e:ea:ce
+          inet6 addr: fe80::8896:dbff:fe5e:eace/64 Scope:Link
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:144163 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:130268 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:27523134 (27.5 MB)  TX bytes:25207738 (25.2 MB)
+```
+
+Devstack은 OVS 기반으로 네트워크를 구성하며 다음과 같은 가상 네트워킹 디바이스가 사용된다. 
+
+- 탭디바이스 : tapXXX, 인스턴스에서 가상 네트워크 인터페이스를 구현할 때 사용한다. 
+
+- 리눅스 브릿지 : qbrYYYY, 여러 네트워크 인터페이스를 연결하는 가상 인터페이스다. 
+
+- veth페어 : qvbYYYY, qvoYYYY
+
+- OVS 통합 브릿지 : br-int, 통합 브릿지로서 인스턴스와 DHCP서버, 라우터 등과 같은 여러 네트워크 리소스를 연결하는 가상 스위치로서 핵심역할, 인스턴스를 통합 브릿지에 직접 연결하지 않고 리눅스 브릿지를 통해 간접적으로 연결하는 이유는 뉴트론 시큐리티 그룹을 구현하는 데 핵심이 되는 iptables룰을 OVS 브릿지 포트에 직접 연결될 탭 디바이스에 둘 수 없기 때문이다.
+
+- OVS 패치 포트 : int-br-ethX, phy-br-ethX
+
+- OVS 프로바이더 브릿지 : br-ethX, 물리 네트워크 인터페이스와 OVS브릿지를 연결해준다. OVS 패치 포트에 연결된 가상 패치 케이블을 통해 OVS 통합 브릿지와 연결된다.
+
+- 물리 인터페이스 : ethX
+
+- OVS 패치 포트 :리눅스 veth 케이블과 비슷하게 동작하지만 OVS 에 좀 더 최적화된 패치 포트라는 내장 포트 타입을 제공한다. 두 개의 OVS 브릿지를 연결할 때 각 스위치에 맞물리는 양쪽 끝 포트를 패치 포트로 할당해 가상 패치 케이블을 생성한다.
 
 ### 네트워킹 
 
