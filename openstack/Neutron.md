@@ -410,12 +410,36 @@ Devstack은 OVS 기반으로 네트워크를 구성하며 다음과 같은 가�
 
 [![ovs-bridge](https://github.com/leeplay/study/blob/master/etc/neutron-networking.png?raw=true)]()
 
-뉴트론에서 사용하는 네트워크 네임스페이스
+DHCP 할당 과정 
+
+- DHCP 네트워크 네임스페이스에서 dnsmasq 프로세스가 구동된다.
+- DHCP 클라이언트에서 브로드캐스트 주소로 DHCPDISCOVERY 패킷을 보낸다. 
+- DHCP 서버는 요청에 다한 응답으로 DHCPOFFER 패킷을 보낸다. 이 패킷에는 요청을 보낸 인스턴스의 MAC, IP 주소, 서브넷 마스크 임대기간, DHCP서버의 IP 주소가 담겨 있따.
+- 응답을 받은 DHCP 클라이언트는 다시 DHCPREQUEST 패킷을 DHCP 서버로 보내어 서버에서 제공할 주소를 요청한다. 오직 한 개만 수락한다.
+- 이러한 요청에 대해 DHCP 서버는 DHCPACK 패킷을 인스턴스에게 보낸다. 이때 IP 설정이 완료된다. DHCP 서버는 namesevers나 routes와 같은 다른 DHCP 옵션도 인스턴스에게 보낸다. 
+
 
 ```
 root@kyu-HP-EliteBook-2570p:/var/run/netns# ls
 qdhcp-59089373-ec4d-44b9-b786-0a4122d36bba  qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5
+```
 
+```
+root@kyu-HP-EliteBook-2570p:/var/run/netns# ip netns exec qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5 ip link list
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+30: qr-8d969929-f7: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/ether fa:16:3e:7e:25:eb brd ff:ff:ff:ff:ff:ff
+31: qg-b3f5b9d1-5e: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/ether fa:16:3e:72:a5:92 brd ff:ff:ff:ff:ff:ff
+```
+
+```
+root@kyu-HP-EliteBook-2570p:/var/run/netns# ip netns exec qdhcp-59089373-ec4d-44b9-b786-0a4122d36bba ip link list
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+32: tapdd1b55ca-fd: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/ether fa:16:3e:85:2c:22 brd ff:ff:ff:ff:ff:ff
 ```
 
 ```
@@ -461,10 +485,6 @@ root@kyu-HP-EliteBook-2570p:/home/stack/openstack/devstack# ovs-vsctl show
                 type: internal
     ovs_version: "2.0.2"
 ```
-
-### 네트워크 관리
-
-
 
 ### 라우팅
 
