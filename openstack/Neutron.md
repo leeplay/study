@@ -287,10 +287,8 @@ ACCEPT, DROP, REJECT와 같은 결정은 필터 테이블에서 내리며 다음
 - -i : 패킷이 들어오는 인터페이스에 매칭
 - -o : 패킷에 나가는 인터페이스에 매칭
 
-Neutron
+Neutron 스위칭
 =======
-
-### 스위칭
 
 - 오픈스택 네트워킹의 핵심 기능 중 하나는 인스턴스에서 가상 물리 네트워크 인프라를 동적으로 설정할 수 있게 해주는 것이다. 
 - 인스턴스가 처음 부팅될 때 호스트에 대해 tap 인터페이스라는 가상 네트워크 인터페이스를 생성하고 tap  인터페이스를 통해 물리 네트워크에 연결하게 된다. 
@@ -390,27 +388,20 @@ qvofefb9298-fa Link encap:Ethernet  HWaddr 8a:96:db:5e:ea:ce
           RX bytes:27523134 (27.5 MB)  TX bytes:25207738 (25.2 MB)
 ```
 
-Devstack은 OVS 기반으로 네트워크를 구성하며 다음과 같은 가상 네트워킹 디바이스가 사용된다. 
+### Devstack은 OVS 기반으로 네트워크를 구성하며 다음과 같은 가상 네트워킹 디바이스가 사용된다. 
 
 - 탭디바이스 : tapXXX, 인스턴스에서 가상 네트워크 인터페이스를 구현할 때 사용한다. 
-
 - 리눅스 브릿지 : qbrYYYY, 여러 네트워크 인터페이스를 연결하는 가상 인터페이스다. 
-
 - veth페어 : qvbYYYY, qvoYYYY
-
 - OVS 통합 브릿지 : br-int, 통합 브릿지로서 인스턴스와 DHCP서버, 라우터 등과 같은 여러 네트워크 리소스를 연결하는 가상 스위치로서 핵심역할, 인스턴스를 통합 브릿지에 직접 연결하지 않고 리눅스 브릿지를 통해 간접적으로 연결하는 이유는 뉴트론 시큐리티 그룹을 구현하는 데 핵심이 되는 iptables룰을 OVS 브릿지 포트에 직접 연결될 탭 디바이스에 둘 수 없기 때문이다.
-
 - OVS 패치 포트 : int-br-ethX, phy-br-ethX
-
 - OVS 프로바이더 브릿지 : br-ethX, 물리 네트워크 인터페이스와 OVS브릿지를 연결해준다. OVS 패치 포트에 연결된 가상 패치 케이블을 통해 OVS 통합 브릿지와 연결된다.
-
 - OVS 패치 포트 :리눅스 veth 케이블과 비슷하게 동작하지만 OVS 에 좀 더 최적화된 패치 포트라는 내장 포트 타입을 제공한다. 두 개의 OVS 브릿지를 연결할 때 각 스위치에 맞물리는 양쪽 끝 포트를 패치 포트로 할당해 가상 패치 케이블을 생성한다.
-
 - 물리 인터페이스 : ethX
 
 [![ovs-bridge](https://github.com/leeplay/study/blob/master/etc/neutron-networking.png?raw=true)]()
 
-DHCP 할당 과정 
+### DHCP 할당 과정 
 
 - DHCP 네트워크 네임스페이스에서 dnsmasq 프로세스가 구동된다.
 - DHCP 클라이언트에서 브로드캐스트 주소로 DHCPDISCOVERY 패킷을 보낸다. 
@@ -422,16 +413,6 @@ DHCP 할당 과정
 ```
 root@kyu-HP-EliteBook-2570p:/var/run/netns# ls
 qdhcp-59089373-ec4d-44b9-b786-0a4122d36bba  qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5
-```
-
-```
-root@kyu-HP-EliteBook-2570p:/var/run/netns# ip netns exec qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5 ip link list
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-30: qr-8d969929-f7: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
-    link/ether fa:16:3e:7e:25:eb brd ff:ff:ff:ff:ff:ff
-31: qg-b3f5b9d1-5e: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
-    link/ether fa:16:3e:72:a5:92 brd ff:ff:ff:ff:ff:ff
 ```
 
 ```
@@ -461,20 +442,58 @@ root@kyu-HP-EliteBook-2570p:/home/stack/openstack/devstack# ovs-vsctl show
             tag: 1
             Interface "tapdd1b55ca-fd"
                 type: internal
+...
+```
+
+뉴트론 라우팅
+=============
+
+클라우드에서 인스턴스에 대한 IP 라우팅과 NAT서비스를 제공할 수 있다. 네트워크를 생성하고 이를 라우터에 연결시키면 여기에 연결된 인스턴스와 여기서 구동되는 어플리케이션을 인터넷에 연결할 수 있다. 
+
+### 외부 프로바이더 네트워크 생성
+
+- create_network
+- create_subnet 
+- create_router
+- router_set_gateway 
+
+### 내부 네트워크 생성 
+
+### 인스턴스 생성 
+
+```
+root@kyu-HP-EliteBook-2570p:/var/run/netns# ls
+qdhcp-59089373-ec4d-44b9-b786-0a4122d36bba  qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5
+```
+
+```
+root@kyu-HP-EliteBook-2570p:/var/run/netns# ip netns exec qrouter-cd8aaa3a-7e4c-4fa9-b89d-d0a68aef40d5 ip link list
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+30: qr-8d969929-f7: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/ether fa:16:3e:7e:25:eb brd ff:ff:ff:ff:ff:ff
+31: qg-b3f5b9d1-5e: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/ether fa:16:3e:72:a5:92 brd ff:ff:ff:ff:ff:ff
+```
+
+```
+root@kyu-HP-EliteBook-2570p:/home/stack/openstack/devstack# ovs-vsctl show
+8a3f94fa-2b5f-4fa0-ba1b-c11e4a4eae9e
+    Bridge br-ex
+        Port br-ex
+            Interface br-ex
+                type: internal
+        Port "qg-b3f5b9d1-5e"
+            Interface "qg-b3f5b9d1-5e"
+                type: internal
+    Bridge br-int
+...
         Port "qr-8d969929-f7"
             tag: 1
             Interface "qr-8d969929-f7"
                 type: internal
-        Port br-int
-            Interface br-int
-                type: internal
-        Port "qvoada6a901-dc"
-            tag: 1
-            Interface "qvoada6a901-dc"
-        Port patch-tun
-            Interface patch-tun
-                type: patch
-                options: {peer=patch-int}
+...
     Bridge br-tun
         Port patch-int
             Interface patch-int
@@ -485,8 +504,6 @@ root@kyu-HP-EliteBook-2570p:/home/stack/openstack/devstack# ovs-vsctl show
                 type: internal
     ovs_version: "2.0.2"
 ```
-
-### 라우팅
 
 ### 로드 밸런싱
 
