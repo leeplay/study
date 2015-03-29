@@ -1,6 +1,83 @@
 기존 비교 자료 정리
 ===================
 
+E. Network bandwidth—nuttcp
+We used the nuttcp tool to measure network bandwidth
+between the system under test and an identical machine connected using a direct 10 Gbps Ethernet link between
+two Mellanox ConnectX-2 EN NICs. We applied standard
+network tuning for 10 Gbps networking such as enabling TCP window scaling and increasing socket buffer sizes. 
+
+우리는 SUT 와 10gbps로 연결된 mellanox 머신의 네트워크 대역폭을 측정하기 위해 nuttcp 툴을 사용했으며 
+10 gbps로 네트워크 튜닝을 위해 소켓 버퍼 사이즈 증가와 tcp window scaling을 수행하였습니다. 
+
+As shown in Figure 1
+Docker attaches all containers on the host to a bridge and connects the bridge to the network via NAT. 
+In our KVM configuration we use virtio and vhost to minimize virtualization overhead
+We used nuttcp to measure the goodput of a unidirectional bulk data transfer over a single TCP connection with standard 1500-byte MTU. 
+In the client-to-server case the system under test (SUT) acts as the transmitter and 
+in the server-to-client case the SUT acts as the receiver; 
+it is necessary to measure both directions since TCP has different code paths for send and receive. 
+All three configurations reach 9.3 Gbps in both the transmit and receive direction, 
+
+다커는 호스트의 호스트의 모든 컨테이너를 브릿지하고, NAT를 통해 외부 네트워크와 연결합니다. 
+우리는 기본 1500 byte MTU 단일 TCP 연결 위로 단방향의 벌크 데이터 전송의 goodput을 측정하기 위해 nuttcp 를 사용했습니다.  
+c/s 경우에 SUT는 전송자처럼 수행하고 s/c 경우에는 수신자처럼 수행합니다. 
+TCP는 송신과 수신을 위한 다른 코드 패스를 가지고 있기 때문에 위와같은 양방향 측정 방식이 필요합니다. 
+송수신을 9.3gbps로 끌어올리기 위해 3가지 환경설정이 필요합니다. 
+
+very close to the theoretical limit of 9.41 Gbps due to packet headers.  
+Due to segmentation offload, bulk data transfer is very efficient even given the extra layers created by different forms of virtualization. 
+The bottleneck in this test is the NIC, leaving other resources mostly idle. 
+In such an I/O-bound scenario, we determine overhead by measuring the amount of CPU cycles required to transmit and receive data. 
+
+패킷 헤더 때문에 9.41gbps이 이론적 한계에 매우 가깝습니다. 
+세크멘테이션 오프로드 때문에 다른 가상화 형태로 추가로 생성되는 계층은 벌크 데이터 전송에 꽤 효율적입니다.
+이 테스트에서 병목은 NIC 이며 남은 다른 리소스는 유휴 상태 입니다. 
+우리는 데이터를 송수신하는 데에 필요한 CPU 싸이클의 양을 측정함으로써 오버헤드를 판단해야 합니다. 
+
+Figure 2 shows 
+system-wide CPU utilization for this test, measured using perf stat -a 
+Docker’s use of bridging and NAT noticeably increases the transmit path length; 
+vhost-net is fairly efficient at transmitting but has high overhead on the receive side. 
+Containers that do not use NAT have identical performance to native Linux.
+In real network-intensive workloads, we expect such CPU overhead to reduce overall performance.
+
+도커에서 사용하는 브릿징과 NAT는 현저하게 전송 단계를 증가시킵니다. 
+vhost-net은 전송에서는 아주 효율적이지만 수신 쪽에서는 높은 오버헤드입니다. 
+NAT를 사용하지 않는 컨테이너는 native linux와 동일한 성능을 가집니다. 
+실제 집중적인 네트워크 부하량에서 우리는 앞서 언급한 CPU 오버헤드가 전체적인 성능저하를 가져올 것이라고 예상합니다.
+
+
+Historically, Xen and KVM have struggled to provide line-rate networking due to circuitous I/O paths that sent every packet through userspace. 
+This has led to considerable research on complex network acceleration technologies like polling drivers or hypervisor bypass. 
+역사적으로 Xen과 KVM은 빙돌아서 유저 공간을 통해 모든 패킷을 보내는 I/O 경로 때문에 
+line-rate를(물리적으로 포트에서 손실없이 전달 가능한 최대 속도) 제공하기 위해 노력했습니다. 
+이런 요구는 폴링 드라이버나 하이퍼바이저 바이패스 같은 네트워크 가속 기술을 이끌었습니다.
+
+Our results show that vhost, which allows the VM to communicate directly with the host kernel, 
+solves the network throughput problem in a straightforward way. 
+With more NICs, we expect this server could drive over 40 Gbps of network traffic without using any exotic techniques.
+
+Network latency—netperf
+We used the netperf request-response benchmark to mea-
+sure round-trip network latency using similar configurations as
+the nuttcp tests in the previous section. In this case the system
+under test was running the netperf server (netserver) and the
+other machine ran the netperf client. The client sends a 100-
+byte request, the server sends a 200-byte response, and the
+client waits for the response before sending another request.
+Thus only one transaction is in flight at a time
+
+Figure 3
+shows the measured transaction latency for both
+TCP and UDP variants of the benchmark. NAT, as used in
+Docker, doubles latency in this test. KVM adds 30 ms of
+overhead to each transaction compared to the non-virtualized
+network stack, an increase of 80%. TCP and UDP have very
+similar latency because in both cases a transaction consists of
+a single packet in each direction. Unlike as in the throughput
+test, virtualization overhead cannot be amortized in this case.
+
 직접 테스트
 ===========
 
