@@ -43,40 +43,46 @@ Containers that do not use NAT have identical performance to native Linux.
 In real network-intensive workloads, we expect such CPU overhead to reduce overall performance.
 
 도커에서 사용하는 브릿징과 NAT는 현저하게 전송 단계를 증가시킵니다. 
-vhost-net은 전송에서는 아주 효율적이지만 수신 쪽에서는 높은 오버헤드입니다. 
+vhost-net은 전송에서는 아주 효율적이지만 수신 쪽에서는 높은 오버헤드를 보여줍니다.
 NAT를 사용하지 않는 컨테이너는 native linux와 동일한 성능을 가집니다. 
 실제 집중적인 네트워크 부하량에서 우리는 앞서 언급한 CPU 오버헤드가 전체적인 성능저하를 가져올 것이라고 예상합니다.
 
-
 Historically, Xen and KVM have struggled to provide line-rate networking due to circuitous I/O paths that sent every packet through userspace. 
 This has led to considerable research on complex network acceleration technologies like polling drivers or hypervisor bypass. 
+Our results show that vhost, which allows the VM to communicate directly with the host kernel, solves the network throughput problem in a straightforward way. 
+With more NICs, we expect this server could drive over 40 Gbps of network traffic without using any exotic techniques.
+
 역사적으로 Xen과 KVM은 빙돌아서 유저 공간을 통해 모든 패킷을 보내는 I/O 경로 때문에 
 line-rate를(물리적으로 포트에서 손실없이 전달 가능한 최대 속도) 제공하기 위해 노력했습니다. 
 이런 요구는 폴링 드라이버나 하이퍼바이저 바이패스 같은 네트워크 가속 기술을 이끌었습니다.
-
-Our results show that vhost, which allows the VM to communicate directly with the host kernel, 
-solves the network throughput problem in a straightforward way. 
-With more NICs, we expect this server could drive over 40 Gbps of network traffic without using any exotic techniques.
+우리의 결과는 vhost가 vm이 kernel 과 직접 연결을 허락해 네트워크 throughput 문제를 간단한 방법으로 해결하는 방법을 보여줍니다. 
+많은 NIC들을 사용해 우리는 서버에서 특이한 기술을 사용하지 않고 40gpbs 이상의 네트워크 트래픽을 제어할 수 있다고 예상했습니다. 
 
 Network latency—netperf
-We used the netperf request-response benchmark to mea-
-sure round-trip network latency using similar configurations as
-the nuttcp tests in the previous section. In this case the system
-under test was running the netperf server (netserver) and the
-other machine ran the netperf client. The client sends a 100-
-byte request, the server sends a 200-byte response, and the
-client waits for the response before sending another request.
-Thus only one transaction is in flight at a time
+We used the netperf request-response benchmark to measure round-trip network latency using similar configurations as
+the nuttcp tests in the previous section. 
+In this case the system under test was running the netperf server (netserver) and the other machine ran the netperf client. 
+The client sends a 100-byte request, the server sends a 200-byte response, 
+and the client waits for the response before sending another request. Thus only one transaction is in flight at a time
 
-Figure 3
-shows the measured transaction latency for both
-TCP and UDP variants of the benchmark. NAT, as used in
-Docker, doubles latency in this test. KVM adds 30 ms of
-overhead to each transaction compared to the non-virtualized
-network stack, an increase of 80%. TCP and UDP have very
-similar latency because in both cases a transaction consists of
-a single packet in each direction. Unlike as in the throughput
-test, virtualization overhead cannot be amortized in this case.
+우리는 네트워크 지연시간 측정을 위해 netperf를 사용했습니다.  
+클라이언트에서 100byte를 request를 전송하면 서버는 respose로 200byte를 전송했습니다. 
+그리고 클라이언트는 다른 요청을 보내기 전에 응답을 기다렸습니다.
+따라서 하나의 트랜잭션이 한 번의 비행시간이다. 
+
+Figure 3 shows the measured transaction latency for both TCP and UDP variants of the benchmark. 
+NAT, as used in Docker, doubles latency in this test. 
+KVM adds 30 ms of overhead to each transaction compared to the non-virtualized network stack, an increase of 80%. 
+TCP and UDP have very similar latency because in both cases a transaction consists of a single packet in each direction. 
+Unlike as in the throughput test, virtualization overhead cannot be amortized in this case.
+
+Nat를 사용하는 docker는 native에 비해 2배의 지연속도를 보여줍니다.
+KVM은 가상화 되지않은 네트워크 스택과 비교해 80%증가한 30ms 의 부하를 보여줍니다. 
+두 경우 모두 트랜잭션이 각 방향으로 하나의 패킷으로 구성하기 때문에 TCP 및 UDP는 매우 유사한 지연시간을 가집니다.
+이 테스트의 경우는 throughput 테스트와는 달리 가상화 오버헤드는 상환할 수 없습니다.  
+
+
+
 
 직접 테스트
 ===========
