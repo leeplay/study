@@ -4,6 +4,8 @@ Networkd configurations
 
 [![Network configurations](https://github.com/leeplay/study/blob/master/etc/nicstack.PNG?raw=true)]()
 
+- Native에 비해 성능 저하의 주요인은 path 의 증가 때문이다.  
+
 Network bandwidth
 ==================
 
