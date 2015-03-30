@@ -88,58 +88,10 @@ History of Docker network performance
 
 ### NAT
 
-```
-With NAT enabled, there is a throughput performance degradation of approximately 17% with
-1,000 NAT entries for an input stream containing 64 byte packets. The baseline throughput was
-determined to be 36,625 bytes/s when NAT was not configured on the system. With 1,000 NAT
-entries the throughput degraded to 30,250 bytes/s, which represents a performance degradation of
-approximately 17%. As the number of translation entries increases, the number of packets per
-second the router can forward decreases.
+- 1000번의 NAT가 수행된다면 대략 17 퍼센트 정도의 성능 저하가 발생합니다.
+- n초당 NAT 횟수가 증가하면 라우터의 forward 능력이감소됩니다.  
+- translation table의 증가는 라우터가 만들 수 있는 새로운 translation entry가 감소합니다.
+- translation entry를 수행하기 위해 필요한 CPU 점유율 증가합니다. 
 
-The rate at which the router can create new translation entries decreases as the number of NAT
-translation entries in the translation table increases. 
-A corollary to this characteristic is, with a fixed packet rate (throughput), 
-as the number of translation entries increases the percentage of CPU required to produce new entries increases. 
+[![NATCPU](https://github.com/leeplay/study/blob/master/etc/nat-cpu-utilization.png?raw=true)]()
 
-1000번의 NAT가 수행된다면 대략 17 퍼센트 정도의 성능 저하가 발생한다.
-기본 스루풋은 NAT가 설정되어 있지 않은 시스템에서 36,625 byte 정도 입니다. 
-1000번의 NAT 엔트리가 30,250 으로 스룻풋을 감소시킵니다. 
-초당 NAT 횟수가 증가하면 라우터의 forward 능력은 감소합니다.  
-
-transaltion table의 증가는 라우터가 만들 수 있는 새로운 translation 엔트리의 비율이 감소합니다.
-위 특징에 따라 변환 명령의 수는 새로운 엔트리를 만들기 위해 필요한 CPU의 점유율을  증가시킵니다. 
-
-Four sets of tests were used to test this characteristic.
-One aspect of these tests determined how fast a router could create a specified number of new NAT entries 
-without dropping a packet. 
-The second aspect of these set of tests was to determine the impact on CPU utilization with an increase 
-in the number of NAT entries.
-
-첫번 째는 얼마나 빨리 라우터가 패킷을 버리지않고 다수의 새로운 NAT 엔트리를 생성할 수 있는지 확인할 수 있습니다. 
-두번 째는 NAT 엔트리의 수의 증가가 CPU 사용률에 어떤 영향을 주는지 확인할 수 있습니다.
-
-35 CPU utilization was monitored while the number of NAT entries increased. 
-The CPU utilization increased with the number of entries as in Table 4.4. 
-The rate at which 100% CPU utilization is reached depends on the rate of creation of new translation entries 
-and how many translation entries are already in the NAT translation table. 
-For example, the packet rate was limited to 150 packets per second (PPS) and the CPU utilization climbed
-as the number of entries increased in the NAT translation table. 
-At 100% utilization, only 40 new translations-per-second could be created when the NAT table contained 10,000 entries.
-
-NAT 엔트리가 증가되는 동안 35개의 CPU 사용률을 모니터링 하였습니다.
-CPU 사용률의 증가는 4.4 테이블 처럼 됩니다. 
-
-
-As the number of translation entries in the translation table increases, the amount of memory used
-increases. The maximum number of NAT entries depends only on the amount of memory in the
-router. As the number of embedded applications supported by NAT increases in more recent
-versions of router operating system images, the number of bytes per entry will increase due to
-flags and other required data. In the router’s Operating System (OS) image that was used in the
-tests for this thesis, memory utilization was determined to be 124 bytes per NAT entry.
-IOS NAT is a performance-intensive feature that performs read and write operations on packets.
-
-As a result of this, moderate to heavy performance degradation is observed in networks. Since the
-NAT is a single point of entry and exit into a network, the NAT box happens to be a performance
-bottleneck. The next section addresses the enhancements that can be considered to the NAT
-software to optimize system performance.
-```
