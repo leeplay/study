@@ -4,8 +4,8 @@ Networkd configurations
 
 [![Network configurations](https://github.com/leeplay/study/blob/master/etc/nicstack.PNG?raw=true)]()
 
-- Native에 비해 성능 저하의 주요인은 path 의 증가 때문이다.  
-- 아래의 테스트는 docker 1.0 에서 테스트되었습니다.
+- Native에 비해 성능 저하의 주요인은 NAT 사용으로 인한 path 의 증가 때문이다.  
+
 
 Network bandwidth
 ==================
@@ -29,19 +29,6 @@ Network latency
 - 두 경우 모두 트랜잭션이 각 방향으로 하나의 패킷으로 구성하기 때문에 TCP 및 UDP는 매우 유사한 지연시간을 가짐
 
 
-Action item
-===========
-
-- 왜 NAT를 사용하면 더 성능저하가 심해지는가 ?
-- KVM에서 사용하는 virtio에 알아보자 
-- 왜 KVM은 수신 속도가 NAT보다 더 안좋은가
-
-참고문헌 
-=======
-
-[![IBM Research Report - An Updated Preformance Comparison of Virtual Machines and Linux Containers](http://domino.research.ibm.com/library/cyberdig.nsf/papers/0929052195DD819C85257D2300681E7B/$File/rc25482.pdf)]()
-
-
 History of Docker network performance
 ==========================
 
@@ -49,7 +36,7 @@ History of Docker network performance
 
 [![docker 2013](https://github.com/leeplay/study/blob/master/etc/docker-benchmark-2013.PNG?raw=true)]()
 
-- 위의 테스트 결과를 종합했을 때 전혀 속도 개선이 이뤄지지 않았다.
+- 위의 테스트 결과(0.6 ~ 1.0)를 종합했을 때 전혀 속도 개선이 이뤄지지 않았다.
 
 
 ### docker network 성능저하 이유
@@ -95,3 +82,10 @@ History of Docker network performance
 
 [![NATCPU](https://github.com/leeplay/study/blob/master/etc/nat-cpu-utilization.png?raw=true)]()
 
+참고문헌 
+=======
+
+[![IBM Research Report - An Updated Preformance Comparison of Virtual Machines and Linux Containers](http://domino.research.ibm.com/library/cyberdig.nsf/papers/0929052195DD819C85257D2300681E7B/$File/rc25482.pdf)]()
+
+[![Impact of Network Address Translation on Router Performance
+](https://vtechworks.lib.vt.edu/handle/10919/35307)]()
