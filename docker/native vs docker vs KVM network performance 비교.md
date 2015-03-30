@@ -15,7 +15,7 @@ Network bandwidth
 - 1500 byte MTU 단일 TCP 연결 위로 단방향의 벌크 데이터 전송의 goodput을 측정하기 위해 nuttcp를 사용
 - 10 gbps 로 튜닝함(socket buffer size 증가, tcp window scaling)
 - 다커는 호스트의 호스트의 모든 컨테이너를 브릿지하고, NAT를 통해 외부 네트워크와 연결해 현저하게 전송 단계를 증가시킴
-- vhost-net은 전송에서는 아주 효율적이지만 수신 쪽에서는 높은 오버헤드를 가짐
+- vhost-net은 전송에서는 아주 효율적이지만 수신 쪽에서는 높은 오버헤드를 가짐(kernel-user space context switching을 회피하기 때문에 성능이 뛰어나다고 알려져 있음)
 - NAT를 사용하지 않는 컨테이너는 native linux와 동일한 성능을 가지게 될 것이라고 예상 
 
 Network latency
