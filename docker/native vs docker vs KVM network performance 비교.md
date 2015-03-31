@@ -85,7 +85,6 @@ History of Docker network performance
 참고문헌 
 =======
 
-[![IBM Research Report - An Updated Preformance Comparison of Virtual Machines and Linux Containers](http://domino.research.ibm.com/library/cyberdig.nsf/papers/0929052195DD819C85257D2300681E7B/$File/rc25482.pdf)]()
+- IBM Research Report - An Updated Preformance Comparison of Virtual Machines and Linux Containers (http://domino.research.ibm.com/library/cyberdig.nsf/papers/0929052195DD819C85257D2300681E7B/$File/rc25482.pdf)
 
-[![Impact of Network Address Translation on Router Performance
-](https://vtechworks.lib.vt.edu/handle/10919/35307)]()
+- Impact of Network Address Translation on Router Performance (https://vtechworks.lib.vt.edu/handle/10919/35307)
