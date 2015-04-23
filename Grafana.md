@@ -17,4 +17,4 @@ cAdvisor는 중요한 데이터를 제공해주지만 데이터를 db에 저장�
 - Collector : Graphite에 어떠한 데이터를 쌓기 위한 모듈
 - Carbon-Cache : Collector가 보내온 데이터(네임스페이스, 시간, 데이터)를 받아 Whisper에 저장, 데이터 수집기 
 - Whisper : 실제로 데이터를 파일시스템에 저장하고 읽어오는 모듈
-- 
+- Graphite-Web : http를 통해 Whisper에 저장된 데이터를 가져옴 
