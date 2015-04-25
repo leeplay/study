@@ -328,4 +328,11 @@ func libcontainerConfigToContainerSpec(config *libcontainerConfigs.Config, mi *i
 
 위 항목 모두 libcontainer의 api를 통해 가져오며 libcontainer는 cgroup config와 /proc/cpuinfo 정보를 읽어서 가져온다. 
 
-### Usage
+### CPU
+
+### Memory
+
+### Network
+
+### Filesystem
+
