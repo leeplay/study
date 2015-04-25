@@ -387,6 +387,8 @@ func (s *CpuacctGroup) GetStats(path string, stats *cgroups.Stats) error {
 }
 ```
 
+- 아래 정보를 가져간다.
+
 ```
 kyu@kyu-HP-EliteBook-2570p:/sys/fs/cgroup/cpuacct$ ls -al
 합계 0
@@ -450,6 +452,8 @@ func (s *MemoryGroup) GetStats(path string, stats *cgroups.Stats) error {
 }
 ```
 
+- 아래 정보를 가져간다.
+
 ```
 kyu@kyu-HP-EliteBook-2570p:/sys/fs/cgroup/memory$ ls -al
 합계 0
@@ -487,6 +491,7 @@ drwxr-xr-x  4 root root   0  4월 25 16:55 docker
 -rw-r--r--  1 root root   0  4월 22 16:16 tasks
 drwxr-xr-x  4 root root   0  4월 22 16:16 user
 ```
+
 ### Network
 
 ```
@@ -545,6 +550,8 @@ func (self *realSysFs) GetNetworkStatValue(dev string, stat string) (uint64, err
 }
 ```
 
+- 아래 정보를 가져간다.
+
 ```
 kyu@kyu-HP-EliteBook-2570p:/sys/class/net$ ls -al
 합계 0
@@ -588,6 +595,8 @@ func (self *realSysFs) GetBlockDeviceNumbers(name string) (string, error) {
 	return string(dev), nil
 }
 ```
+
+- 아래 정보를 가져간다.
 
 ```
 yu@kyu-HP-EliteBook-2570p:/sys/block$ ls -al
