@@ -27,7 +27,7 @@ docker run -d borja/unixbench
 json object 형태의 컨테이너의 모든 정보를 얻을 수 있는 api도 제공합니다.
 
 
-cAdvisor 수집 데이터 
+cAdvisor 작동 단계  
 ====================
 
 - cadvisor.go 
@@ -85,7 +85,7 @@ func main() {
 }
 ```
 
-- manager.go 
+### manager 초기화 단계  
 
 ```
 // libcontainer의 라이브러리를 사용해 만들어짐 
@@ -211,7 +211,10 @@ machineInfo := &info.MachineInfo{
 }
 ```	
 
-- syscall  
+### manager 실행 단계  
+
+- syscall용 netlink 생성
+- cpu load 
 
 ```
 func newConnection() (*Connection, error) {
@@ -235,6 +238,11 @@ func newConnection() (*Connection, error) {
 	return conn, err
 }
 ```
+
+- Watch for OOMs 
+
+- / 컨테이너 생성 
+
 
 cAdvisor 데이터 수집방법
 ========================
