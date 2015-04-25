@@ -293,6 +293,39 @@ type containerData struct {
 
 ![isolation](https://github.com/leeplay/study/blob/master/etc/cadvisor_isolation.png?raw=true)
 
+- Shares
+- Allowed Cores 
+- Limit
+- Swap Limit 
 
+```
+func libcontainerConfigToContainerSpec(config *libcontainerConfigs.Config, mi *info.MachineInfo) info.ContainerSpec {
+	var spec info.ContainerSpec
+	spec.HasMemory = true
+	spec.Memory.Limit = math.MaxUint64
+	spec.Memory.SwapLimit = math.MaxUint64
+	if config.Cgroups.Memory > 0 {
+		spec.Memory.Limit = uint64(config.Cgroups.Memory)
+	}
+	if config.Cgroups.MemorySwap > 0 {
+		spec.Memory.SwapLimit = uint64(config.Cgroups.MemorySwap)
+	}
 
+	// Get CPU info
+	spec.HasCpu = true
+	spec.Cpu.Limit = 1024
+	if config.Cgroups.CpuShares != 0 {
+		spec.Cpu.Limit = uint64(config.Cgroups.CpuShares)
+	}
+	spec.Cpu.Mask = utils.FixCpuMask(config.Cgroups.CpusetCpus, mi.NumCores)
 
+	spec.HasNetwork = true
+	spec.HasDiskIo = true
+
+	return spec
+}
+```
+
+위 항목 모두 libcontainer의 api를 통해 가져오며 libcontainer는 cgroup config와 /proc/cpuinfo 정보를 읽어서 가져온다. 
+
+### Usage
