@@ -234,6 +234,14 @@ func newConnection() (*Connection, error) {
 ==================
 
 - 100ms(default) 기준으로 "/"에 변동된 container 가 있는지 확인
+
+```
+longHousekeeping := 100 * time.Millisecond
+if *HousekeepingInterval/2 < longHousekeeping {
+	longHousekeeping = *HousekeepingInterval / 2
+}
+```
+
 - 주어진 namespace 기반으로 현재 실행 중인 컨테이너를 찾음 (eg. docker, user)
 
 ```
@@ -243,8 +251,47 @@ func (m *manager) getContainersDiff(containerName string) (added []info.Containe
 ![/](https://github.com/leeplay/study/blob/master/etc/cadvisor_root.png?raw=true)
 
 
-- 
+- 새로운 컨테이너가 있다면 manager에 추가, 이 때 manager가 가지고 있는 시스템 전체 정보가 함께 넘어간다. 
 
+```
+cont, err := newContainerData(containerName, m.memoryStorage, handler, m.loadReader, logUsage)
+```
+
+- 삭제된 컨테이너가 있다면 manager에서 삭제
+
+```
+delete(m.containers, namespacedName)  // map에서 삭제 
+```
+
+컨테이너 모니터링 정보 
+======================
+
+- manager 구조체에서 시스템의 전체적인 정보를 관리했다면 container 당 개별정보 관리는 containerData 구조체이서 이뤄진다. 
+
+```
+type containerData struct {
+	handler              container.ContainerHandler
+	info                 containerInfo
+	memoryStorage        *memory.InMemoryStorage
+	lock                 sync.Mutex
+	loadReader           cpuload.CpuLoadReader
+	summaryReader        *summary.StatsSummary
+	loadAvg              float64 // smoothed load average seen so far.
+	housekeepingInterval time.Duration
+	lastUpdatedTime      time.Time
+	lastErrorTime        time.Time
+
+	// Whether to log the usage of this container when it is updated.
+	logUsage bool
+
+	// Tells the container to stop.
+	stop chan bool
+}
+```
+
+### Isolation 
+
+![isolation](https://github.com/leeplay/study/blob/master/etc/cadvisor_isolation.png?raw=true)
 
 
 
