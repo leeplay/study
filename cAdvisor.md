@@ -326,13 +326,186 @@ func libcontainerConfigToContainerSpec(config *libcontainerConfigs.Config, mi *i
 }
 ```
 
-위 항목 모두 libcontainer의 api를 통해 가져오며 libcontainer는 cgroup config와 /proc/cpuinfo 정보를 읽어서 가져온다. 
+위 항목 모두 libcontainer의 api를 통해 가져오며 libcontainer는 cgroup config를 읽어 가져온다.
 
 ### CPU
 
+```
+type ContainerInfo struct {
+	ContainerReference
+
+	// The direct subcontainers of the current container.
+	Subcontainers []ContainerReference `json:"subcontainers,omitempty"`
+
+	// The isolation used in the container.
+	Spec ContainerSpec `json:"spec,omitempty"`
+
+	// Historical statistics gathered from the container.
+	Stats []*ContainerStats `json:"stats,omitempty"`
+}
+```
+
+```
+type ContainerStats struct {
+	// The time of this stat point.
+	Timestamp time.Time    `json:"timestamp"`
+	Cpu       CpuStats     `json:"cpu,omitempty"`
+	DiskIo    DiskIoStats  `json:"diskio,omitempty"`
+	Memory    MemoryStats  `json:"memory,omitempty"`
+	Network   NetworkStats `json:"network,omitempty"`
+
+	// Filesystem statistics
+	Filesystem []FsStats `json:"filesystem,omitempty"`
+
+	// Task load stats
+	TaskStats LoadStats `json:"task_stats,omitempty"`
+}
+```
+
 ### Memory
+
+
 
 ### Network
 
+```
+func getNetworkStats(name string, sysFs sysfs.SysFs) (info.NetworkStats, error) {
+	stats := info.NetworkStats{}
+	var err error
+	stats.RxBytes, err = sysFs.GetNetworkStatValue(name, "rx_bytes")
+	if err != nil {
+		return stats, err
+	}
+	stats.RxPackets, err = sysFs.GetNetworkStatValue(name, "rx_packets")
+	if err != nil {
+		return stats, err
+	}
+	stats.RxErrors, err = sysFs.GetNetworkStatValue(name, "rx_errors")
+	if err != nil {
+		return stats, err
+	}
+	stats.RxDropped, err = sysFs.GetNetworkStatValue(name, "rx_dropped")
+	if err != nil {
+		return stats, err
+	}
+	stats.TxBytes, err = sysFs.GetNetworkStatValue(name, "tx_bytes")
+	if err != nil {
+		return stats, err
+	}
+	stats.TxPackets, err = sysFs.GetNetworkStatValue(name, "tx_packets")
+	if err != nil {
+		return stats, err
+	}
+	stats.TxErrors, err = sysFs.GetNetworkStatValue(name, "tx_errors")
+	if err != nil {
+		return stats, err
+	}
+	stats.TxDropped, err = sysFs.GetNetworkStatValue(name, "tx_dropped")
+	if err != nil {
+		return stats, err
+	}
+	return stats, nil
+}
+```
+
+```
+func (self *realSysFs) GetNetworkStatValue(dev string, stat string) (uint64, error) {
+	statPath := path.Join(netDir, dev, "/statistics", stat)
+	out, err := ioutil.ReadFile(statPath)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read stat from %q for device %q", statPath, dev)
+	}
+	var s uint64
+	n, err := fmt.Sscanf(string(out), "%d", &s)
+	if err != nil || n != 1 {
+		return 0, fmt.Errorf("could not parse value from %q for file %s", string(out), statPath)
+	}
+	return s, nil
+}
+```
+
+```
+kyu@kyu-HP-EliteBook-2570p:/sys/class/net$ ls -al
+합계 0
+drwxr-xr-x  2 root root 0  4월 23 01:16 .
+drwxr-xr-x 65 root root 0  4월 23 01:16 ..
+lrwxrwxrwx  1 root root 0  4월 22 16:16 br-tun -> ../../devices/virtual/net/br-tun
+lrwxrwxrwx  1 root root 0  4월 22 17:09 docker0 -> ../../devices/virtual/net/docker0
+lrwxrwxrwx  1 root root 0  4월 22 16:16 eth0 -> ../../devices/pci0000:00/0000:00:19.0/net/eth0
+lrwxrwxrwx  1 root root 0  4월 23 01:16 lo -> ../../devices/virtual/net/lo
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ovs-system -> ../../devices/virtual/net/ovs-system
+lrwxrwxrwx  1 root root 0  4월 25 15:58 veth4113c31 -> ../../devices/virtual/net/veth4113c31
+lrwxrwxrwx  1 root root 0  4월 26 01:05 vethd5143b2 -> ../../devices/virtual/net/vethd5143b2
+lrwxrwxrwx  1 root root 0  4월 22 16:16 virbr0 -> ../../devices/virtual/net/virbr0
+lrwxrwxrwx  1 root root 0  4월 22 16:16 wlan0 -> ../../devices/pci0000:00/0000:00:1c.3/0000:24:00.0/net/wlan0
+```
+
+```
+kyu@kyu-HP-EliteBook-2570p:~$ netstat -i
+Kernel Interface table
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+br-tun     1500 0         0      0      0 0             8      0      0      0 BRU
+docker0    1500 0   1193026      0      0 0       2093062      0      0      0 BMRU
+eth0       1500 0  53237347      0     48 0       5010292      0      0      0 BMRU
+lo        65536 0      1124      0      0 0          1124      0      0      0 LRU
+veth4113c31  1500 0    223532      0      0 0        285284      0      0      0 BRU
+virbr0     1500 0         0      0      0 0             0      0      0      0 BMU
+```
+
 ### Filesystem
 
+```
+func (self *realSysFs) GetBlockDevices() ([]os.FileInfo, error) {
+	return ioutil.ReadDir(blockDir)
+}
+
+func (self *realSysFs) GetBlockDeviceNumbers(name string) (string, error) {
+	dev, err := ioutil.ReadFile(path.Join(blockDir, name, "/dev"))
+	if err != nil {
+		return "", err
+	}
+	return string(dev), nil
+}
+```
+
+```
+yu@kyu-HP-EliteBook-2570p:/sys/block$ ls -al
+합계 0
+drwxr-xr-x  2 root root 0  4월 23 01:16 .
+dr-xr-xr-x 13 root root 0  4월 23 01:16 ..
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop0 -> ../devices/virtual/block/loop0
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop1 -> ../devices/virtual/block/loop1
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop2 -> ../devices/virtual/block/loop2
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop3 -> ../devices/virtual/block/loop3
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop4 -> ../devices/virtual/block/loop4
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop5 -> ../devices/virtual/block/loop5
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop6 -> ../devices/virtual/block/loop6
+lrwxrwxrwx  1 root root 0  4월 22 16:16 loop7 -> ../devices/virtual/block/loop7
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram0 -> ../devices/virtual/block/ram0
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram1 -> ../devices/virtual/block/ram1
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram10 -> ../devices/virtual/block/ram10
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram11 -> ../devices/virtual/block/ram11
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram12 -> ../devices/virtual/block/ram12
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram13 -> ../devices/virtual/block/ram13
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram14 -> ../devices/virtual/block/ram14
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram15 -> ../devices/virtual/block/ram15
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram2 -> ../devices/virtual/block/ram2
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram3 -> ../devices/virtual/block/ram3
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram4 -> ../devices/virtual/block/ram4
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram5 -> ../devices/virtual/block/ram5
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram6 -> ../devices/virtual/block/ram6
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram7 -> ../devices/virtual/block/ram7
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram8 -> ../devices/virtual/block/ram8
+lrwxrwxrwx  1 root root 0  4월 22 16:16 ram9 -> ../devices/virtual/block/ram9
+lrwxrwxrwx  1 root root 0  4월 23 01:16 sda -> ../devices/pci0000:00/0000:00:1f.2/ata1/host0/target0:0:0/0:0:0:0/block/sda
+```
+
+```
+kyu@kyu-HP-EliteBook-2570p:/dev/disk/by-uuid$ ls -al
+합계 0
+drwxr-xr-x 2 root root 100  4월 23 01:16 .
+drwxr-xr-x 5 root root 100  4월 23 01:16 ..
+lrwxrwxrwx 1 root root  10  4월 22 16:16 008244d8-3cf5-40f2-97fc-45a1972ed6bc -> ../../sda6
+lrwxrwxrwx 1 root root  10  4월 22 16:16 9EC66000C65FD6DD -> ../../sda1
+lrwxrwxrwx 1 root root  10  4월 22 16:16 b9348159-88cd-4b01-9def-59417c15471a -> ../../sda5
+```
