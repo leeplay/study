@@ -96,9 +96,9 @@ type manager struct {
 	fsInfo                 fs.FsInfo        // docker rootdir을 최상위로 한 파일시스템 stat 정보
 	machineInfo            info.MachineInfo  // /proc/cpuinfo, meminfo 등등 
 	versionInfo            info.VersionInfo  // kernel, docker, os, cadvisor 버전
-	quitChannels           []chan error
+	quitChannels           []chan error      // watcher 등록
 	cadvisorContainer      string              // docker가 사용 중인 cgroup 경로   
-	dockerContainersRegexp *regexp.Regexp      
+	dockerContainersRegexp *regexp.Regexp
 	loadReader             cpuload.CpuLoadReader  // kernel module과 user space process간 통신을 위한  netlink 생성, cpu 사용량을 커널에게 받음  
 	eventHandler           events.EventManager   // 이벤트 핸들러 등록 (eg. 컨테이너 생명 주기 이벤트)
 	startupTime            time.Time           // mangager 생성 시간
@@ -241,7 +241,11 @@ func newConnection() (*Connection, error) {
 
 - Watch for OOMs 
 
-- / 컨테이너 생성 
+- "/" 컨테이너 생성 (diff 계산을 위한 기준 설정?)
+
+- 모든 컨테이너 로딩
+
+- 새로운 컨테이너 watch용 스레드 생성 
 
 
 cAdvisor 데이터 수집방법
