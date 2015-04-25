@@ -56,7 +56,7 @@ func main() {
 		glog.Fatalf("Failed to create a system interface: %s", err)
 	}
 
-	// memory storage 관리 manager 생성
+	// memory, storage 관리 manager 생성
 	containerManager, err := manager.New(memoryStorage, sysFs)
 	if err != nil {
 		glog.Fatalf("Failed to create a Container Manager: %s", err)
@@ -99,8 +99,8 @@ type manager struct {
 	quitChannels           []chan error
 	cadvisorContainer      string              // docker가 사용 중인 cgroup 경로   
 	dockerContainersRegexp *regexp.Regexp      
-	loadReader             cpuload.CpuLoadReader  // 
-	eventHandler           events.EventManager
+	loadReader             cpuload.CpuLoadReader  // kernel module과 user space process간 통신을 위한  netlink 생성, cpu 사용량을 커널에게 받음  
+	eventHandler           events.EventManager   // 이벤트 핸들러 등록 (eg. 컨테이너 생명 주기 이벤트)
 	startupTime            time.Time           // mangager 생성 시간
 }
 ```
@@ -211,6 +211,30 @@ machineInfo := &info.MachineInfo{
 }
 ```	
 
+- syscall  
+
+```
+func newConnection() (*Connection, error) {
+
+	fd, err := syscall.Socket(syscall.AF_NETLINK, syscall.SOCK_DGRAM, syscall.NETLINK_GENERIC)
+	if err != nil {
+		return nil, err
+	}
+
+	conn := new(Connection)
+	conn.fd = fd
+	conn.seq = 0
+	conn.pid = uint32(os.Getpid())
+	conn.addr.Family = syscall.AF_NETLINK
+	conn.rbuf = bufio.NewReader(conn)
+	err = syscall.Bind(fd, &conn.addr)
+	if err != nil {
+		syscall.Close(fd)
+		return nil, err
+	}
+	return conn, err
+}
+```
 
 cAdvisor 데이터 수집방법
 ========================
