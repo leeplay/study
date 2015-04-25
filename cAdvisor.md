@@ -362,10 +362,131 @@ type ContainerStats struct {
 }
 ```
 
+```
+func (s *CpuacctGroup) GetStats(path string, stats *cgroups.Stats) error {
+	userModeUsage, kernelModeUsage, err := getCpuUsageBreakdown(path)
+	if err != nil {
+		return err
+	}
+
+	totalUsage, err := getCgroupParamUint(path, "cpuacct.usage")
+	if err != nil {
+		return err
+	}
+
+	percpuUsage, err := getPercpuUsage(path)
+	if err != nil {
+		return err
+	}
+
+	stats.CpuStats.CpuUsage.TotalUsage = totalUsage
+	stats.CpuStats.CpuUsage.PercpuUsage = percpuUsage
+	stats.CpuStats.CpuUsage.UsageInUsermode = userModeUsage
+	stats.CpuStats.CpuUsage.UsageInKernelmode = kernelModeUsage
+	return nil
+}
+```
+
+```
+kyu@kyu-HP-EliteBook-2570p:/sys/fs/cgroup/cpuacct$ ls -al
+합계 0
+drwxr-xr-x  4 root root   0  4월 22 16:16 .
+drwxr-xr-x 12 root root 240  4월 22 16:16 ..
+-rw-r--r--  1 root root   0  4월 22 16:16 cgroup.clone_children
+--w--w--w-  1 root root   0  4월 22 16:16 cgroup.event_control
+-rw-r--r--  1 root root   0  4월 22 16:16 cgroup.procs
+-r--r--r--  1 root root   0  4월 22 16:16 cgroup.sane_behavior
+-r--r--r--  1 root root   0  4월 22 16:16 cpuacct.stat
+-rw-r--r--  1 root root   0  4월 22 16:16 cpuacct.usage
+-r--r--r--  1 root root   0  4월 22 16:16 cpuacct.usage_percpu
+drwxr-xr-x  4 root root   0  4월 25 16:55 docker
+-rw-r--r--  1 root root   0  4월 22 16:16 notify_on_release
+-rw-r--r--  1 root root   0  4월 22 16:16 release_agent
+-rw-r--r--  1 root root   0  4월 22 16:16 tasks
+drwxr-xr-x  4 root root   0  4월 22 16:16 user
+```
+
 ### Memory
 
+```
+func (s *MemoryGroup) GetStats(path string, stats *cgroups.Stats) error {
+	// Set stats from memory.stat.
+	statsFile, err := os.Open(filepath.Join(path, "memory.stat"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return err
+	}
+	defer statsFile.Close()
 
+	sc := bufio.NewScanner(statsFile)
+	for sc.Scan() {
+		t, v, err := getCgroupParamKeyValue(sc.Text())
+		if err != nil {
+			return fmt.Errorf("failed to parse memory.stat (%q) - %v", sc.Text(), err)
+		}
+		stats.MemoryStats.Stats[t] = v
+	}
 
+	// Set memory usage and max historical usage.
+	value, err := getCgroupParamUint(path, "memory.usage_in_bytes")
+	if err != nil {
+		return fmt.Errorf("failed to parse memory.usage_in_bytes - %v", err)
+	}
+	stats.MemoryStats.Usage = value
+	value, err = getCgroupParamUint(path, "memory.max_usage_in_bytes")
+	if err != nil {
+		return fmt.Errorf("failed to parse memory.max_usage_in_bytes - %v", err)
+	}
+	stats.MemoryStats.MaxUsage = value
+	value, err = getCgroupParamUint(path, "memory.failcnt")
+	if err != nil {
+		return fmt.Errorf("failed to parse memory.failcnt - %v", err)
+	}
+	stats.MemoryStats.Failcnt = value
+
+	return nil
+}
+```
+
+```
+kyu@kyu-HP-EliteBook-2570p:/sys/fs/cgroup/memory$ ls -al
+합계 0
+drwxr-xr-x  4 root root   0  4월 22 16:16 .
+drwxr-xr-x 12 root root 240  4월 22 16:16 ..
+-rw-r--r--  1 root root   0  4월 22 16:16 cgroup.clone_children
+--w--w--w-  1 root root   0  4월 22 16:16 cgroup.event_control
+-rw-r--r--  1 root root   0  4월 22 16:16 cgroup.procs
+-r--r--r--  1 root root   0  4월 22 16:16 cgroup.sane_behavior
+drwxr-xr-x  4 root root   0  4월 25 16:55 docker
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.failcnt
+--w-------  1 root root   0  4월 22 16:16 memory.force_empty
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.kmem.failcnt
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.kmem.limit_in_bytes
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.kmem.max_usage_in_bytes
+-r--r--r--  1 root root   0  4월 22 16:16 memory.kmem.slabinfo
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.kmem.tcp.failcnt
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.kmem.tcp.limit_in_bytes
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.kmem.tcp.max_usage_in_bytes
+-r--r--r--  1 root root   0  4월 22 16:16 memory.kmem.tcp.usage_in_bytes
+-r--r--r--  1 root root   0  4월 22 16:16 memory.kmem.usage_in_bytes
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.limit_in_bytes
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.max_usage_in_bytes
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.move_charge_at_immigrate
+-r--r--r--  1 root root   0  4월 22 16:16 memory.numa_stat
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.oom_control
+----------  1 root root   0  4월 22 16:16 memory.pressure_level
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.soft_limit_in_bytes
+-r--r--r--  1 root root   0  4월 22 16:16 memory.stat
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.swappiness
+-r--r--r--  1 root root   0  4월 22 16:16 memory.usage_in_bytes
+-rw-r--r--  1 root root   0  4월 22 16:16 memory.use_hierarchy
+-rw-r--r--  1 root root   0  4월 22 16:16 notify_on_release
+-rw-r--r--  1 root root   0  4월 22 16:16 release_agent
+-rw-r--r--  1 root root   0  4월 22 16:16 tasks
+drwxr-xr-x  4 root root   0  4월 22 16:16 user
+```
 ### Network
 
 ```
