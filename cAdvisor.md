@@ -29,7 +29,80 @@ json object 형태의 컨테이너의 모든 정보를 얻을 수 있는 api도 
 cAdvisor 수집 데이터 
 ====================
 
+- cadvisor.go 
 
+``` go
+func main() {
+	defer glog.Flush()
+	flag.Parse()
+
+	if *versionFlag {
+		fmt.Printf("cAdvisor version %s\n", version.VERSION)
+		os.Exit(0)
+	}
+
+	setMaxProcs()
+
+	memoryStorage, err := NewMemoryStorage(*argDbDriver)
+	if err != nil {
+		glog.Fatalf("Failed to connect to database: %s", err)
+	}
+
+	sysFs, err := sysfs.NewRealSysFs()
+	if err != nil {
+		glog.Fatalf("Failed to create a system interface: %s", err)
+	}
+
+	containerManager, err := manager.New(memoryStorage, sysFs)
+	if err != nil {
+		glog.Fatalf("Failed to create a Container Manager: %s", err)
+	}
+
+	mux := http.DefaultServeMux
+
+	// Register all HTTP handlers.
+	err = cadvisorHttp.RegisterHandlers(mux, containerManager, *httpAuthFile, *httpAuthRealm, *httpDigestFile, *httpDigestRealm, *prometheusEndpoint)
+	if err != nil {
+		glog.Fatalf("Failed to register HTTP handlers: %v", err)
+	}
+
+	// Start the manager.
+	if err := containerManager.Start(); err != nil {
+		glog.Fatalf("Failed to start container manager: %v", err)
+	}
+
+	// Install signal handler.
+	installSignalHandler(containerManager)
+
+	glog.Infof("Starting cAdvisor version: %q on port %d", version.VERSION, *argPort)
+
+	addr := fmt.Sprintf("%s:%d", *argIp, *argPort)
+	glog.Fatal(http.ListenAndServe(addr, nil))
+}
+```
+
+- manager.go 
+
+```
+type manager struct {
+	containers             map[namespacedContainerName]*containerData
+	containersLock         sync.RWMutex
+	memoryStorage          *memory.InMemoryStorage
+	fsInfo                 fs.FsInfo
+	machineInfo            info.MachineInfo
+	versionInfo            info.VersionInfo
+	quitChannels           []chan error
+	cadvisorContainer      string
+	dockerContainersRegexp *regexp.Regexp
+	loadReader             cpuload.CpuLoadReader
+	eventHandler           events.EventManager
+	startupTime            time.Time
+}
+```
+
+### SubContainers
+  - manager.go
+  - 
 
 cAdvisor 데이터 수집방법
 ========================
