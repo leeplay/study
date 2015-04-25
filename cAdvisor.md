@@ -27,8 +27,8 @@ docker run -d borja/unixbench
 json object 형태의 컨테이너의 모든 정보를 얻을 수 있는 api도 제공합니다.
 
 
-cAdvisor 작동 단계  
-====================
+메인 함수   
+==========
 
 - cadvisor.go 
 
@@ -50,7 +50,7 @@ func main() {
 		glog.Fatalf("Failed to connect to database: %s", err)
 	}
 
-	// blocdevice(eg. device, device size, device count), networkdevice(networkdevice, networkaddress, MTU, networkspeed), Cache, SystemUUID
+	// block-device(eg. device, device size, device count), network-device(networkdevice, networkaddress, MTU, networkspeed), Cache, SystemUUID
 	sysFs, err := sysfs.NewRealSysFs()
 	if err != nil {
 		glog.Fatalf("Failed to create a system interface: %s", err)
@@ -64,31 +64,13 @@ func main() {
 
 	mux := http.DefaultServeMux
 
-	// Register all HTTP handlers.
-	err = cadvisorHttp.RegisterHandlers(mux, containerManager, *httpAuthFile, *httpAuthRealm, *httpDigestFile, *httpDigestRealm, *prometheusEndpoint)
-	if err != nil {
-		glog.Fatalf("Failed to register HTTP handlers: %v", err)
-	}
-
-	// Start the manager.
-	if err := containerManager.Start(); err != nil {
-		glog.Fatalf("Failed to start container manager: %v", err)
-	}
-
-	// Install signal handler.
-	installSignalHandler(containerManager)
-
-	glog.Infof("Starting cAdvisor version: %q on port %d", version.VERSION, *argPort)
-
-	addr := fmt.Sprintf("%s:%d", *argIp, *argPort)
-	glog.Fatal(http.ListenAndServe(addr, nil))
+...
 }
 ```
 
-### manager 초기화 단계  
+### manager 생성 단계  
 
 ```
-// libcontainer의 라이브러리를 사용해 만들어짐 
 type manager struct {
 	containers             map[namespacedContainerName]*containerData  // 네임스페이스와 컨테이너명 
 	containersLock         sync.RWMutex
@@ -241,15 +223,28 @@ func newConnection() (*Connection, error) {
 
 - Watch for OOMs 
 
-- "/" 컨테이너 생성 (diff 계산을 위한 기준 설정?)
+- "/" 컨테이너 생성 (diff 계산을 위한 루트 설정)
 
 - 모든 컨테이너 로딩
 
 - 새로운 컨테이너 watch용 스레드 생성 
 
 
-cAdvisor 데이터 수집방법
-========================
+컨테이너 생명 주기
+==================
+
+- 100ms(default) 기준으로 "/"에 변동된 container 가 있는지 확인
+- 주어진 namespace 기반으로 현재 실행 중인 컨테이너를 찾음 (eg. docker, user)
+
+```
+func (m *manager) getContainersDiff(containerName string) (added []info.ContainerReference, removed []info.ContainerReference, err error) {
+```
+
+![/](https://github.com/leeplay/study/blob/master/etc/cadvisor_root.png?raw=true)
+
+
+- 
+
 
 
 
