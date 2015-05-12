@@ -7,3 +7,5 @@ cAdvisor supports exporting stats to InfluxDB. See the documentation for more in
 cAdvisor also exposes container stats as Prometheus metrics. See the documentation for more information.
 
 Heapster enables cluster wide monitoring of containers using cAdvisor.
+
+https://github.com/influxdb/influxdb
