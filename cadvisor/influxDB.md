@@ -37,7 +37,15 @@ Goal
 Getting Started
 ================
 
+```
+# for 64-bit systems
+$ wget https://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
+$ sudo dpkg -i influxdb_latest_amd64.deb
+$ sudo service influxdb start
+```
 
+- /opt/influxdb 설치됨 
+- db 생성에서 막혔음, 훈민님에게 물어본 후 진행 
 
 api 사용법 파악 
 
