@@ -18,3 +18,9 @@ To run Heapster on a Kubernetes cluster with,
 
 Take a look at the storage schema here.
 
+heapster는 resource usage metrics를 계산하기 위해 cAdvisor를 사용해 container cluster 모니터링을 가능하게 함
+
+
+http://rancher.com/comparing-monitoring-options-for-docker-deployments/
+
+http://rancher.com/docker-monitoring-continued-prometheus-and-sysdig/
