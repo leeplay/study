@@ -1,26 +1,31 @@
 Overview
 ========
 
-Heapster enables Container Cluster Monitoring.
-Internally, heapster uses cAdvisor for compute resource usage metrics.
+- heapster는 resource usage metrics를 계산하기 위해 cAdvisor를 사용해 container cluster 모니터링을 가능하게 함
+- kube 와 coreos 지원 (확대할 예정)
 
-Heapster currently supports Kubernetes and CoreOS natively. It can be extended to support other cluster management solutions easily. While running in a Kube cluster, heapster collects compute resource usage of all pods and nodes.
-
-Source configuration is documented here.
 Running Heapster on Kubernetes
+==============================
 
-Heapster supports a pluggable storage backend. It supports InfluxDB with Grafana, Google Cloud Monitoring and Google Cloud Logging. We welcome patches that add additional storage backends.
+- pluggable storage backend 지원 (influxdb with Grafana, Google Cloud Monitoring, Google Cloud Logging)
 
-To run Heapster on a Kubernetes cluster with,
+Metrics
+========
 
-    InfluxDB use this guide.
-    Google Cloud Monitoring and Google Cloud Logging use this guide.
+| Metric Name        | Description                                                                                        | Type       | Units       | Supported Since |
+|--------------------|----------------------------------------------------------------------------------------------------|------------|-------------|-----------------|
+| uptime             | Number of millisecond since the container was started                                             | Cumulative | Milliseconds | v0.9            |
+| cpu/usage          | Cumulative CPU usage on all cores                                                                  | Cumulative | Nanoseconds       | v0.9            |
+| memory/usage       | Total memory usage                                                                                 | Gauge      | Bytes       | v0.9            |
+| memory/page_faults | Number of major page faults                                                                        | Cumulative      | Count       | v0.9            |
+| memory/working_set | Total working set usage. Working set is the memory being used and not easily dropped by the Kernel | Gauge      | Bytes       | v0.9            |
+| network/rx         | Cumulative number of bytes received over the network                                               | Cumulative | Bytes       | v0.9            |
+| network/rx_errors  | Cumulative number of errors while receiving over the network                                       | Cumulative | Count       | v0.9            |
+| network/tx         | Cumulative number of bytes sent over the network                                                   | Cumulative | Bytes       | v0.9            |
+| network/tx_errors  | Cumulative number of errors while sending over the network                                         | Cumulative | Count       | v0.9            |
+| filesystem/usage   | Total number of bytes used on a filesystem identified by label 'resource_id'                       | Gauge      | Bytes       | v0.11.0            |
 
-Take a look at the storage schema here.
-
-heapster는 resource usage metrics를 계산하기 위해 cAdvisor를 사용해 container cluster 모니터링을 가능하게 함
 
 
 http://rancher.com/comparing-monitoring-options-for-docker-deployments/
-
 http://rancher.com/docker-monitoring-continued-prometheus-and-sysdig/
