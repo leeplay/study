@@ -24,3 +24,8 @@
 ## Conclusion 
 
 훈민님이 설치한 influxDB + cAdvisor + grafana와 비교해보자  
+
+## Reference 
+
+- http://rancher.com/comparing-monitoring-options-for-docker-deployments/
+- http://rancher.com/docker-monitoring-continued-prometheus-and-sysdig/
