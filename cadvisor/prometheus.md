@@ -11,6 +11,8 @@
 
 ## Demo
 
+제 로컬 장비에 구축하였습니다.
+
 - [services](http://10.64.51.185:9090/)
 - [exporter](http://10.64.51.185:9104/metrics)
 - [dashboard](http://10.64.51.185:3000/dash1)
