@@ -24,8 +24,9 @@
 
 ## Conclusion 
 
-훈민님이 설치한 influxDB + cAdvisor + grafana와 비교해보자  
-
+- 사내 도커 빌드풀에 prometheus를 설치해보는 것도 괜찮을 거 같다.
+- 현재 사용 중인 influxDB + cAdvisor + grafana와 비교해보자  
+인
 ## Reference 
 
 - http://rancher.com/comparing-monitoring-options-for-docker-deployments/
