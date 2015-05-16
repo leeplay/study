@@ -1,4 +1,4 @@
-갑자기 prometheus를 보게된 이유는 cAdvisor에서 클러스터 모니터링으로 influxDB, Heapster와 함께 Prometheus를 소개하고 있으며 놀랍게도 cAdvisor의 Prometheus를 proposal한 사람이 Docker Inc 개발자였습니다. 게다가 Rancher에서도 Prometheus를 컨테이너 모니터링의 주요 도구로 소개하고 있어 한번 조사를 해봤습니다. 
+갑자기 prometheus를 보게된 이유는 cAdvisor에서 클러스터 모니터링으로 influxDB, Heapster와 함께 Prometheus를 소개하고 있으며 신기하게도 cAdvisor의 Prometheus를 proposal한 사람이 Docker Inc 개발자였습니다. 게다가 Rancher에서도 Prometheus를 컨테이너 모니터링의 주요 도구로 소개하고 있어 한번 조사를 해봤습니다. 
 
 ## Overview 
 
@@ -11,11 +11,16 @@
 ## Demo
 
 - [services](http://10.64.51.185:9090/)
-- [exporter](http://10.64.51.185:9104/)
+- [exporter](http://10.64.51.185:9104/metrics)
+- [dashboard](http://10.64.51.185:3000/dash1)
 
 ## Feature
 
 - cusotm exporter 를 손쉽게 만들 수 있어 모니터링 데이터에 제약이 없다. 
 - 주요 storage나 cluster에서 [prometheus exporter](http://prometheus.io/docs/instrumenting/exporters/)를 지원한다.
-- 서비스 내의 graph는 임시성이므로 dashboard는 별도로 구축을 해줘야 한다. 
-- 
+- 여러 종류의 [시각화 도구](http://prometheus.io/docs/visualization/promdash/)를 붙일 수 있다.  
+- notification
+
+## Conclusion 
+
+훈민님이 설치한 influxDB + cAdvisor + grafana와 비교해보자  
