@@ -1,5 +1,3 @@
-갑자기 prometheus를 보게된 이유는 cAdvisor에서 클러스터 모니터링으로 influxDB, Heapster와 함께 Prometheus를 소개하고 있으며 신기하게도 cAdvisor의 Prometheus를 proposal한 사람이 Docker Inc 개발자였습니다. 게다가 Rancher에서도 Prometheus를 컨테이너 모니터링의 주요 도구로 소개하고 있어 한번 조사를 해봤습니다. 
-
 ## Overview 
 
 - self-hosted tool
