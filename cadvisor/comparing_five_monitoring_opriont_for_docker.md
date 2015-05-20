@@ -20,10 +20,12 @@ prickly_hypatia       0.00%               740 KiB/1.961 GiB     0.04%           
 - CAdvisor는 docker stat에 의한 정보를 비주얼 하게 제공 
 - cpu, memory, network, disk-space 리소스를 그래프로 확인 가능
 - 설치와 사용이 간편함 
-- 
-CAdvisor is a useful tool that is trivially easy to setup, it saves us from having to ssh into the server to look at resource consumption and also produces graphs for us. In addition the pressure gauges provide a quick overview of when a your cluster needs additional resources. Furthermore, unlike other options in this article CAdvisor is free as it is open source and also it runs on hardware already provisioned for your cluster, other than some processing resources there is no additional cost of running CAdvisor. However, it has it limitations; it can only monitor one docker host and hence if you have a multi-node deployment  your stats will be disjoint and spread though out your cluster. Note that you can use heapster to monitor multiple nodes if you are running Kubernetes.  The data in the charts is a moving window of one minute only and there is no way to look at longer term trends. There is no mechanism to kick-off alerting if the resource usage is at dangerous levels. If you currently do not have any visibility in to the resource consumption of your docker node/cluster then CAdvisor is a good first step into container monitoring however, if you intend to run any critical tasks on your containers a more robust tool or approach is needed.  Note that Rancher runs CAdvisor on each connected host, and exposes a limited set of stats through the UI, and all of the system stats through the API.
-능
-
+- aggregation 지원
+- 오픈소스이며 클러스터에서 provisioned 되어 동작함 
+- 하나의 docker host만 모니터 가능
+- 쿠베 환경의 멀티 노드를 모니터 하려면 heapster를 사용해야 함.
+- alerting 메커니즘이 없음 
+- rancher에서 cAdvisor를 사용 
 
 ## Score Card
 
