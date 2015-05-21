@@ -27,18 +27,28 @@ prickly_hypatia       0.00%               740 KiB/1.961 GiB     0.04%           
 - alerting 메커니즘이 없음 
 - rancher에서 cAdvisor를 사용 
 
+## Scout
+
+The next approach for docker monitoring is Scout and it addresses several of limitations of CAdvisor. Scout is a hosted monitoring service which can aggregate metrics from many hosts and containers and present the data over longer time-scales. It can also create alerts based on those metrics. The first step  to getting scout running is to sign up for a Scout account at https://scoutapp.com/, the free trial account should be suitable for testing out integration.  Once you have created your account and logged in, click on your account name in the top right corner and then Account Basics and take note of your Account Key as you will need this to send metrics from our docker server.
+
+
+
+## Data Dog
+
+## Sensu
+
 ## Score Card
 
 - 5점 만점
 
 |          |docker|cadvisor|scout|Data Dog|Sensu|
 |----------|------|--------|-----|--------|-----|
-|쉬운 배포|5|5| | | |
-|detail 레벨|5|2| | | |
-|aggregation 레벨|0|1| | | |
-|alert 지원|0|0| | | |
-|non-docker 지원|0|0| | | |
-|비용|free|free| | | |
+|쉬운 배포|5|5|4|5|1|
+|detail 레벨|5|2|2|5|4|
+|aggregation 레벨|0|1|3|5|4|
+|alert 지원|0|0|3|Supported|Supported but limited|
+|non-docker 리소스 지원|X|X|O|5|5|
+|비용|free|free|$10/host|15/host|Free|
 
 ## conclusion
 
