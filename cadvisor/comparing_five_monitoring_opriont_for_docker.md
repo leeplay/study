@@ -31,6 +31,7 @@ prickly_hypatia       0.00%               740 KiB/1.961 GiB     0.04%           
 
 The next approach for docker monitoring is Scout and it addresses several of limitations of CAdvisor. Scout is a hosted monitoring service which can aggregate metrics from many hosts and containers and present the data over longer time-scales. It can also create alerts based on those metrics. The first step  to getting scout running is to sign up for a Scout account at https://scoutapp.com/, the free trial account should be suitable for testing out integration.  Once you have created your account and logged in, click on your account name in the top right corner and then Account Basics and take note of your Account Key as you will need this to send metrics from our docker server.
 
+다음으로 Scout과 Cadvisor의 한계를 확인하겠습니다. 
 
 
 ## Data Dog
@@ -47,7 +48,7 @@ The next approach for docker monitoring is Scout and it addresses several of lim
 |detail 레벨|5|2|2|5|4|
 |aggregation 레벨|0|1|3|5|4|
 |alert 지원|0|0|3|Supported|Supported but limited|
-|non-docker 리소스 지원|X|X|O|5|5|
+|non-docker 리소스 지원|X|X|Supported|5|5|
 |비용|free|free|$10/host|15/host|Free|
 
 ## conclusion
