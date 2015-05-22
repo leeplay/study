@@ -36,10 +36,15 @@ Scout는 많은 호스트와 컨테이너 그리고 오랜 시간에 걸친 데�
 - scout agent 컨테이너를 실행
 - scout web view에서 모니터링이 되는 걸 확인
 - trigger 설정 
+- plugins set? 때문에 cAdvisor에 비해 도커 정보 이외에도 다른 정보를 가져올 수 있습니다. 
+- 원스탑 모니터링 시스템
 
-Another advantage of using Scout over CAdvisor is that it has a large set of plugins which can pull in other data about your deployment in addition to docker information. This allows Scout to be your one stop monitoring system instead of having a different monitoring system for various resources in your system.
+For example if you want a trigger to alert you about issues in your web containers but not about your Jenkins containers Scout will not be able to support that use case. Despite the drawbacks Scout is a significantly more useful tool for monitoring your docker deployments. However this does come at a cost, ten dollars per monitored host. The cost could be a factor if you are running a large deployment with many hosts.
 
-One drawback of Scout is that it does not present detailed information about individual containers on each host like CAdvisor can. This is problematic, if your are running heterogeneous containers on the same server. For example if you want a trigger to alert you about issues in your web containers but not about your Jenkins containers Scout will not be able to support that use case. Despite the drawbacks Scout is a significantly more useful tool for monitoring your docker deployments. However this does come at a cost, ten dollars per monitored host. The cost could be a factor if you are running a large deployment with many hosts.
+현재 scout의 하나의 문제점은 cAdvisor처럼 개별 컨테이너의 detail한 정보를 제공하지 않습니다. 하나의 서버에서 여러 종류의 컨테이너를 실행하면 문제의 소지가 될 수 있습니다. 예를들어 alert의 트리거를 
+
+
+
 
 
 ## Data Dog
