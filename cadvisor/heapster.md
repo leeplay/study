@@ -43,4 +43,18 @@ Lables
 
 ### InfluxDB
 
-Each metric translates to a separate 'series' in InfluxDB. Labels are stored as additional columns. The series name is constructed by combining the metric name with its type and units: "metric Name""units""type".
+각 metric 은 influxDB의 series로 변경되고 Label은 칼럼이 추가되어 저장됩니다. 
+series 명칭은 "metric name" + "units" + "type" 형태로 지정되며 units이 count일 경우 생략됩니다. 
+
+```
+cpu/usage_ns_cumulative
+filesystem/usage
+memory/page_faults_gauge
+memory/usage_bytes_gauge
+memory/working_set_bytes_gauge
+network/rx_bytes_cumulative
+network/rx_errors_cumulative
+network/tx_bytes_cumulative
+network/tx_errors_cumulative
+uptime_ms_cumulative
+```
