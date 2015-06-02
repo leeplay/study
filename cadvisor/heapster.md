@@ -26,7 +26,21 @@ Metrics
 | filesystem/usage   | Total number of bytes used on a filesystem identified by label 'resource_id'                       | Gauge      | Bytes       | v0.11.0            |
 
 
+Lables
+=======
 
-http://rancher.com/comparing-monitoring-options-for-docker-deployments/
+| Label Name     | Description                                                                   | Supported Since | Kubernetes specific |
+|----------------|-------------------------------------------------------------------------------|-----------------|---------------------|
+| pod_id         | Unique ID of a Pod                                                            | v0.9            | Yes                 |
+| pod_name       | User-provided name of a Pod                                                   | HEAD            | Yes                 |
+| pod_namespace  | The namespace of a Pod                                                        | v0.10           | Yes                 |
+| container_name | User-provided name of the container or full cgroup name for system containers | v0.9            | No                  |
+| labels         | Comma-separated list of user-provided labels. Format is 'key:value'           | v0.9            | Yes                 |
+| hostname       | Hostname where the container ran                                              | v0.9            | No                  |
+| resource_id    | An unique identifier used to differentiate multiple metrics of the same type. e.x. Fs partitions under filesystem/usage | v0.11.0 | No |
 
-http://rancher.com/docker-monitoring-continued-prometheus-and-sysdig/
+## Storage Schema
+
+### InfluxDB
+
+Each metric translates to a separate 'series' in InfluxDB. Labels are stored as additional columns. The series name is constructed by combining the metric name with its type and units: "metric Name""units""type".
