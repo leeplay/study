@@ -61,8 +61,5 @@ uptime_ms_cumulative
 
 ## Running Heapster on Kubernetes
 
-http://blog.kubernetes.io/2015/05/resource-usage-monitoring-kubernetes.html
-
- Heapster is a cluster-wide aggregator of monitoring and event data. It runs as a pod in the cluster, similar to how any Kubernetes application would run. The Heapster pod discovers all nodes in the cluster and queries usage information from the nodes’ Kubelets, the on-machine Kubernetes agent. The Kubelet itself fetches the data from cAdvisor. Heapster groups the information by pod along with the relevant labels. This data is then pushed to a configurable backend for storage and visualization. Currently supported backends include InfluxDB (with Grafana for visualization) and Google Cloud Monitoring. The overall architecture of the service can be seen below:
-
+![heapster](https://github.com/leeplay/study/blob/master/etc/heapster-overview.png?raw=true)
 
