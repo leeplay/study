@@ -67,4 +67,12 @@ uptime_ms_cumulative
 
 1. ![cadvisor.md](https://github.com/leeplay/study/blob/master/cadvisor/cAdvisor.md) 
 2. ![kubernetes/pkg/kubelet/cadvisor/cadvisor_linux.go](https://github.com/GoogleCloudPlatform/kubernetes/blob/e1a153e841421c6ba9f9db774864ff92a1cf7dbc/pkg/kubelet/cadvisor/cadvisor_linux.go) cadvisor에 접근해 정보 수집
-3. 
+3. ![heapster 설정정보](https://github.com/GoogleCloudPlatform/kubernetes/blob/c1fa82837eec60b11f602cfd1822a3038bb6edc2/cluster/addons/cluster-monitoring/google/heapster-controller.yaml) 가 kuberenetes 실행 시 heapster를 실행시킴
+4. heapster에서 influxdb를 실행 
+5. heapster에서 kube_client에서 제공되는 api를 사용해 kubelet에서 정보를 가져옴
+6. heapster에서 influxdb에서 제공되는 api를 사용해 metric 데이터를 저장함 (https://github.com/GoogleCloudPlatform/heapster/blob/6b083d24432ea7cec510f55010ca86c49f75037e/sinks/influxdb/driver.go)
+7. grafana에서 설정된 influxdb에 조회해 정보를 가져옴 (https://github.com/grafana/grafana/blob/2c1188f6642ff2541233ed6318cbaf9064dbe00d/docs/sources/datasources/influxdb.md)
+
+
+
+쿠베에서 제공하는 자동스크립트에서 grafana에서 자동으로 influxdb 를 설정하는 지 확인 해보고 마무리 
