@@ -66,5 +66,5 @@ uptime_ms_cumulative
 - cadvisor -> kubelet -> heapster -> influxdb -> grafana
 
 1. ![cadvisor.md](https://github.com/leeplay/study/blob/master/cadvisor/cAdvisor.md) 
-2. ![kubernetes/pkg/kubelet/cadvisor/cadvisor_linux.go](https://github.com/GoogleCloudPlatform/kubernetes/blob/e1a153e841421c6ba9f9db774864ff92a1cf7dbc/pkg/kubelet/cadvisor/cadvisor_linux.go) 에 접근해 정보 수집
+2. ![kubernetes/pkg/kubelet/cadvisor/cadvisor_linux.go](https://github.com/GoogleCloudPlatform/kubernetes/blob/e1a153e841421c6ba9f9db774864ff92a1cf7dbc/pkg/kubelet/cadvisor/cadvisor_linux.go) cadvisor에 접근해 정보 수집
 3. 
