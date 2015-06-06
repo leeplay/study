@@ -1,9 +1,6 @@
 Heapster
 ========
 
-Overview
-========
-
 - heapster는 resource usage metrics를 계산하기 위해 cAdvisor를 사용해 container cluster 모니터링을 가능하게 함
 - kube 와 coreos 지원 (확대할 예정)
 
