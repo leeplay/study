@@ -1,14 +1,17 @@
 
-개념
+Overview
 =========
 
 - 구글에서 공개한 리눅스 컨테이너 관리 시스템
 - GCE, AWS 같은 클라우드 환경과 물리 장비를 모두 지원
 
+![image](https://github.com/leeplay/study/blob/master/image/architecture.png?raw=true)
 
 ### Container 
 
 - 컨테이너형 가상화 기술에서 최소 단위
+
+![image](https://github.com/leeplay/study/blob/master/image/container.png?raw=true)
 
 ### Pod
 
@@ -16,11 +19,15 @@
 - Pod 안에서는 같은 네트워크, 디스크 환경을 공유
 - YAML/JSON 파일로 선언
 
+![image](https://github.com/leeplay/study/blob/master/image/pod.png?raw=true)
+
 ### Minion
 
 - 컨테이너가 실행되는 물리적(논리적) 단위
 - Node 위의 Docker Daemon에서 컨테이너를 실행
 - Kubelet, Proxy
+
+![image](https://github.com/leeplay/study/blob/master/image/minion.png?raw=true)
 
 ### Kubelet
 
@@ -28,6 +35,8 @@
 - 컨테이너와 Pod을 관리하는 역할
 - etcd
 -cAdvisor
+
+![image](https://github.com/leeplay/study/blob/master/image/kubelet.png?raw=true)
 
 ### Label
 
@@ -47,6 +56,7 @@
 - 같은 역할을 하는 Pod들을 묶는 단위
 - Service가 요청을 받으면 Pod들에 처리를 넘겨줌 
 
+![image](https://github.com/leeplay/study/blob/master/image/service.png?raw=true)
 
 ### 출처 
 
