@@ -6,6 +6,7 @@ Overview
 - GCE, AWS 같은 클라우드 환경과 물리 장비를 모두 지원
 
 ![image](https://github.com/leeplay/study/blob/master/image/architecture.png?raw=true)
+![image](https://github.com/leeplay/study/blob/master/image/kube.png?raw=true)
 
 ### Container 
 
