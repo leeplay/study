@@ -24,8 +24,8 @@ Overview
     
   - SystemModeler
     - AssumePod(pod *api.Pod)
-	  - ForgetPod(pod *api.Pod)
-	  - ForgetPodByKey(key string)
+    - ForgetPod(pod *api.Pod)
+    - ForgetPodByKey(key string)
     - LockedAction(f func())
   
 - struct
