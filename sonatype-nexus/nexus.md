@@ -47,7 +47,11 @@ Nexus는 3가지 에디션이 있음
 
 ### Nexus LDAP Integration
 
+넥서스 pro 버전에서 추가 제공되는 기능 (아직 볼 필요는 없다.)
+
+In addition to the basic LDAP support from Nexus OSS, Nexus Pro offers LDAP support features for enterprise LDAP deployments. These include the ability to cache authentication information, support for multiple LDAP servers and backup mirrors, the ability to test user logins, support for common user/group mapping templates, and the ability to support more than one schema across multiple servers.
 
 
+상용버전과 무료보전의 기능상 비교(별거없음)
 
-
+넥서스 LDAP은 순수 LDAP의 기능을 지원하므로 LDAP테스트를 직접해봐야겠다. 
