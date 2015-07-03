@@ -63,5 +63,12 @@ Overview
   	- 스케쥴러 Recorder에 바인딩 이벤트 기록 
   	- 스케쥴러 Modeler에 생성된 pod을 인지시킴
 
+### modeler.go
 
+- interface
+  - ExtendedPodLister  // pod들을 리스팅 하는 것외에 기존 pod체크
+    - algorithm.PodLister
+    - Exists(pod *api.Pod) (bool, error)
 
+- struct 
+  - actionLocker
