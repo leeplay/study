@@ -66,9 +66,12 @@ Overview
 ### modeler.go
 
 - interface
-  - ExtendedPodLister  // pod들을 리스팅 하는 것외에 기존 pod체크
+  - ExtendedPodLister  // simpleModeler에서 pod들을 리스팅 하는 것외에 기존 pod체크
     - algorithm.PodLister
     - Exists(pod *api.Pod) (bool, error)
 
 - struct 
-  - actionLocker
+  - actionLocker // fake와 sympleModler에서 사용, lockedAction과 병행해서 사용
+    - sync.Mutex
+    - LockedAction(do func())
+    - 
