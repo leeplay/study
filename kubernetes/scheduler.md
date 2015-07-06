@@ -74,4 +74,19 @@ Overview
   - actionLocker // fake와 sympleModler에서 사용, lockedAction과 병행해서 사용
     - sync.Mutex
     - LockedAction(do func())
-    - 
+  - FakeModeler // SystemModeler 인터페이스를 구현 
+    - AssumePodFunc      func(pod *api.Pod)
+	  - ForgetPodFunc      func(pod *api.Pod)
+	  - ForgetPodByKeyFunc func(key string)
+	  - actionLocker  // actionLocker 상속 
+	  - AssumePod(pod *api.Pod)
+    - ForgetPod(pod *api.Pod)
+    - ForgetPodByKey(key string) 
+  - SimpleModeler  // SystemModeler 인터페이스를 timed pod cache로 구현 
+    - queuedPods    ExtendedPodLister
+	  - scheduledPods ExtendedPodLister
+	  - assumedPods *cache.StoreToPodLister 
+	  - actionLocker
+
+- func
+  - NewSimpleModeler(queuedPods, scheduledPods ExtendedPodLister) *SimpleModeler
