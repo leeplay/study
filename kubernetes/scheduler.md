@@ -124,10 +124,11 @@ Package Scheduler
   
   - func 
     - findNodesThatFit(pod *api.Pod, podLister algorithm.PodLister, predicateFuncs map[string]algorithm.FitPredicate, nodes api.NodeList) (api.NodeList, FailedPredicateMap, error)
-	  - prioritizeNodes(pod *api.Pod, podLister algorithm.PodLister, priorityConfigs []algorithm.PriorityConfig, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
-	  - getBestHosts(list algorithm.HostPriorityList) []string
-	  - EqualPriority(_ *api.Pod, podLister algorithm.PodLister, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
-	  - NewGenericScheduler(predicates map[string]algorithm.FitPredicate, prioritizers []algorithm.PriorityConfig, pods algorithm.PodLister, random *rand.Rand) algorithm.ScheduleAlgorithm
+    	- 
+    - prioritizeNodes(pod *api.Pod, podLister algorithm.PodLister, priorityConfigs []algorithm.PriorityConfig, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
+    - getBestHosts(list algorithm.HostPriorityList) []string
+    - EqualPriority(_ *api.Pod, podLister algorithm.PodLister, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
+    - NewGenericScheduler(predicates map[string]algorithm.FitPredicate, prioritizers []algorithm.PriorityConfig, pods algorithm.PodLister, random *rand.Rand) algorithm.ScheduleAlgorithm
 
   - struct
     - FitError 
@@ -142,6 +143,7 @@ Package Scheduler
       - random       *rand.Rand
       - randomLock   sync.Mutex
       - Schedule(pod *api.Pod, minionLister algorithm.MinionLister) (string, error)
+      	- scheduler를 위한 minion의 list를 가져옴
       - selectHost(priorityList algorithm.HostPriorityList) (string, error)
  
  
