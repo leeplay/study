@@ -76,17 +76,26 @@ Overview
     - LockedAction(do func())
   - FakeModeler                                      // SystemModeler 인터페이스를 구현 
     - AssumePodFunc      func(pod *api.Pod)
-	  - ForgetPodFunc      func(pod *api.Pod)
-	  - ForgetPodByKeyFunc func(key string)
-	  - actionLocker                             // actionLocker 상속 
-	  - AssumePod(pod *api.Pod)
+    - ForgetPodFunc      func(pod *api.Pod)
+    - ForgetPodByKeyFunc func(key string)
+    - actionLocker                             // actionLocker 상속 
+    - AssumePod(pod *api.Pod)
     - ForgetPod(pod *api.Pod)
     - ForgetPodByKey(key string) 
   - SimpleModeler                                    // SystemModeler 인터페이스를 timed pod cache로 구현 
-    - queuedPods    ExtendedPodLister
-	  - scheduledPods ExtendedPodLister
-	  - assumedPods *cache.StoreToPodLister 
-	  - actionLocker
+    - queuedPods    ExtendedPodLister      //아직 스케쥴링이 안된 pod을 리턴
+    - scheduledPods ExtendedPodLister    // 스케쥴이 된 pod을 리턴 
+    - assumedPods *cache.StoreToPodLister   
+    - actionLocker  // actionLocker 상속
+    - AssumePod(pod *api.Pod)
+    - ForgetPod(pod *api.Pod)
+    - ForgetPodByKey(key string)
+    - listPods(selector labels.Selector) (pods []*api.Pod, err error)
+    - PodLister() algorithm.PodLister   //simpleModelerPods을 생성
+  - simpleModelerPods        // simpleModelerPods은 simpleModler를 PodLister로 하기위한 아답터 입니다. 
+  	- simpleModeler *SimpleModeler
+  	- List(selector labels.Selector) (pods []*api.Pod, err error)
 
 - func
   - NewSimpleModeler(queuedPods, scheduledPods ExtendedPodLister) *SimpleModeler
+  - podNames(pods []*api.Pod) []string    //pod의 네임스페이스, 네임, UID 정보를 읽음
