@@ -100,6 +100,7 @@ Overview
       - scheduledPods.List(selector)호출해 scheduledPods pod list을 가져옴 
       - s.assumedPods.List(selector)호출해 assumed pod list을 가져옴 
         - assumed 가 0이면 scheduled를 리턴
+        - 0이 아니면 scheduled + assumed를 리턴 
     - PodLister() algorithm.PodLister
       - simpleModelerPods을 생성, 스케쥴링이 된 pods을 리턴
       
