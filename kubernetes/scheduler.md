@@ -15,6 +15,8 @@ Overview
   - modeler.go
   - scheduler.go
   
+Package Scheduler 
+=================
 
 ### scheduler.go 
 
@@ -113,3 +115,37 @@ Overview
   - NewSimpleModeler(queuedPods, scheduledPods ExtendedPodLister) *SimpleModeler
   - podNames(pods []*api.Pod) []string
     - pods의 pod들의 네임스페이스, 네임, UID 정보를 가져옴
+
+### generic_scheduler.go
+
+  - variable 
+    - FailedPredicateMap map[string]util.StringSet
+    - var ErrNoNodesAvailable = fmt.Errorf("no nodes available to schedule pods")
+  
+  - func 
+    - findNodesThatFit(pod *api.Pod, podLister algorithm.PodLister, predicateFuncs map[string]algorithm.FitPredicate, nodes api.NodeList) (api.NodeList, FailedPredicateMap, error)
+	  - prioritizeNodes(pod *api.Pod, podLister algorithm.PodLister, priorityConfigs []algorithm.PriorityConfig, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
+	  - getBestHosts(list algorithm.HostPriorityList) []string
+	  - EqualPriority(_ *api.Pod, podLister algorithm.PodLister, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
+	  - NewGenericScheduler(predicates map[string]algorithm.FitPredicate, prioritizers []algorithm.PriorityConfig, pods algorithm.PodLister, random *rand.Rand) algorithm.ScheduleAlgorithm
+
+  - struct
+    - FitError 
+      - Pod *api.Pod
+      - FailedPredicates FailedPredicateMap
+      - Error() string
+  
+  - genericScheduler
+    - predicates   map[string]algorithm.FitPredicate
+	  - prioritizers []algorithm.PriorityConfig
+	  - pods         algorithm.PodLister
+	  - random       *rand.Rand
+	  - randomLock   sync.Mutex
+	  - Schedule(pod *api.Pod, minionLister algorithm.MinionLister) (string, error)
+	  - selectHost(priorityList algorithm.HostPriorityList) (string, error)
+ 
+ 
+
+	  
+
+
