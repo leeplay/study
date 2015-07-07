@@ -135,14 +135,14 @@ Package Scheduler
       - FailedPredicates FailedPredicateMap
       - Error() string
   
-  - genericScheduler
-    - predicates   map[string]algorithm.FitPredicate
-	  - prioritizers []algorithm.PriorityConfig
-	  - pods         algorithm.PodLister
-	  - random       *rand.Rand
-	  - randomLock   sync.Mutex
-	  - Schedule(pod *api.Pod, minionLister algorithm.MinionLister) (string, error)
-	  - selectHost(priorityList algorithm.HostPriorityList) (string, error)
+   - genericScheduler
+      - predicates   map[string]algorithm.FitPredicate
+      - prioritizers []algorithm.PriorityConfig
+      - pods         algorithm.PodLister
+      - random       *rand.Rand
+      - randomLock   sync.Mutex
+      - Schedule(pod *api.Pod, minionLister algorithm.MinionLister) (string, error)
+      - selectHost(priorityList algorithm.HostPriorityList) (string, error)
  
  
 
