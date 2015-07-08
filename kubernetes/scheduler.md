@@ -15,7 +15,7 @@ Overview
   - modeler.go
   - scheduler.go
   
-Package Scheduler 
+package Scheduler 
 =================
 
 ### scheduler.go 
@@ -175,7 +175,115 @@ Package Scheduler
       	- 적합한 호스트 중 한 곳을 랜덤으로 가져온다. 
  
  
+package metrics 
+=================
 
-	  
+### metrics.go
+
+- variable
+	- schedulerSubsystem 
+	- E2eSchedulingLatency    
+	- SchedulingAlgorithmLatency
+	- BindingLatency
+		- Scheduler의 scheduleOne()에서 latency 시간 정보를 기록
+
+- func 
+	- Register()
+		- sheduler 생성 시 최초 한번만 실행 
+	- SinceInMicroseconds()
+		- 시작시간부터 현재시간까지 나노초로 구함
 
 
+package factory 
+=================
+
+- factory.go
+	- variable
+		- BindPodsQps   = 15
+		- BindPodsBurst = 20
+	
+	- struct
+		- ConfigFactory
+			- Client *client.Client
+			- PodQueue *cache.FIFO 
+				- 스케쥴링이 필요한 큐 
+			- ScheduledPodLister *cache.StoreToPodLister
+				- 스케쥴 설정된 pods의 리스트 정보를 가짐
+			- PodLister algorithm.PodLister
+				- 스케쥴 설정된 pods와 스케쥴 되어야 할 pods로 추정되는 리스트
+			- NodeLister *cache.StoreToNodeLister
+				- 모든 minion 리스트 
+			- ServiceLister *cache.StoreToServiceLister
+				- 모든 service 리스트 
+			- StopEverything chan struct{}
+			- BindPodsRateLimiter util.RateLimiter
+			- scheduledPodPopulator *framework.Controller
+			- modeler               scheduler.SystemModeler
+		
+		- nodeEnumerator
+			- *api.NodeList
+		
+			- Len() int
+				- node list의 아이템의 갯수 리턴
+		
+			- Get(index int) interface{}
+				- 주어진 인덱스의 아이템을 리턴
+		
+		- type binder struct
+			- *client.Client
+			- Bind(binding *api.Binding) error
+		
+		- realClock 
+			- Now() time.Time
+		
+		- backoffEntry 
+			- backoff    time.Duration
+				- 두 개의 인스턴스 사이의 흐른시간 ?
+			- lastUpdate time.Time
+		
+		- podBackoff
+			- perPodBackoff   map[string]*backoffEntry
+			- lock            sync.Mutex
+			- clock           clock
+			- defaultDuration time.Duration
+			- maxDuration     time.Duration
+			- getEntry(podID string) *backoffEntry
+				-  
+				 
+			- getBackoff(podID string) time.Duration
+				- 주어진 pod id로 entry 추출  
+				- 
+				- 
+			
+			- wait(podID string)
+			- gc()
+				- perPodBackoff 만큼 순회
+					- perPodBackoff에서 가져온 엔트리의 마지막 업데이트 시간과 현재 시간을 비교
+						- 비교 시간이 맥스지연시간보다 크면 perPodBackoff에서 삭제 
+	
+	- interface
+		- clock 
+			- Now() time.Time
+		
+}
+		
+		
+
+
+- plugins.go 
+
+package algorithmprovider 
+=========================
+
+### plugings.go 
+	- 아직 빈 파일 
+	- _ "github.com/GoogleCloudPlatform/kubernetes/plugin/pkg/scheduler/algorithmprovider/defaults"
+		- 이런 참조로 defaults의 init을 먼저 호출해 factory에 등록한다. 아마 향후에 다른 알고리즘이 등록이 될 거 같다. 
+
+package algorithmprovider/defaults
+==================================
+
+- func 
+	- init()
+		- factory.RegisterAlgorithmProvider(factory.DefaultProvider, defaultPredicates(), defaultPriorities())
+		- factory.RegisterPriorityFunction("EqualPriority", scheduler.EqualPriority, 1)
