@@ -133,11 +133,14 @@ Package Scheduler
     	- filtered, fialedPredicateMap을 리턴 
     	
     - prioritizeNodes(pod *api.Pod, podLister algorithm.PodLister, priorityConfigs []algorithm.PriorityConfig, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
-    	- priorityConfigs가 0이면 EqualPriority를 호출해 HostPriorityList를 전부 동일하게 1로 리턴 
+    	- priorityConfigs가 0이면 EqualPriority를 호출해 HostPriorityList를 전부 동일하게 1로 리턴, 숫자가 높을 수록 좋음 
     	- combinedScores 생성
     	- priorityConfigs 만큼 순회
     		- priorityConfig.Weight를 구함 
-    		- 
+    		- priorityConfig.Function 로 prioritizedList(특정 호스트로 가기 위한 스케쥴링의 우선순위, 낮을 수록 좋음)를 구함
+    		- prioritizedList 만큼 순회
+    			- hostEntry.Score * weight 해서 combinedScores에 넣음 
+    	- combinedScores와 result를 합친 HostPriorityList 를 리턴 
     	
     - getBestHosts(list algorithm.HostPriorityList) []string
     	- list 0 번째가 항상 최우선인듯, 그 녀석과 동급인 hostEntry 정보를 전부 가져옴  
