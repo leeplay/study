@@ -124,11 +124,29 @@ Package Scheduler
   
   - func 
     - findNodesThatFit(pod *api.Pod, podLister algorithm.PodLister, predicateFuncs map[string]algorithm.FitPredicate, nodes api.NodeList) (api.NodeList, FailedPredicateMap, error)
-    	- 
+    	- MapPodsToMachines()를 호출해 스케쥴은 되어있는데 실행되지 않는 pod을 구함 
+    	- 주어진 노드만큼 순회
+    		- 주어진 predicateFuncs만큼 순회
+    			- 실행되지 않은 pod이 기존 노드에 들어가는 게 적합한지 판단
+    				- 적합하지 않으면 failedPredicateMap에 추가 후 노드 순회 반복문으로 빠짐 
+    				- 적합하면 []api.Noden{} filtered에 추가 후 노드 순회 반복문으로 
+    	- filtered, fialedPredicateMap을 리턴 
+    	
     - prioritizeNodes(pod *api.Pod, podLister algorithm.PodLister, priorityConfigs []algorithm.PriorityConfig, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
+    	- priorityConfigs가 0이면 EqualPriority를 호출해 HostPriorityList를 전부 동일하게 1로 리턴 
+    	- combinedScores 생성
+    	- priorityConfigs 만큼 순회
+    		- priorityConfig.Weight를 구함 
+    		- 
+    	
     - getBestHosts(list algorithm.HostPriorityList) []string
+    	- list 0 번째가 항상 최우선인듯, 그 녀석과 동급인 hostEntry 정보를 전부 가져옴  
+    	
     - EqualPriority(_ *api.Pod, podLister algorithm.PodLister, minionLister algorithm.MinionLister) (algorithm.HostPriorityList, error)
+    	- minion의 우선순위를 1로 동일하게 만듬
+    
     - NewGenericScheduler(predicates map[string]algorithm.FitPredicate, prioritizers []algorithm.PriorityConfig, pods algorithm.PodLister, random *rand.Rand) algorithm.ScheduleAlgorithm
+    	- genericscheduler 생성
 
   - struct
     - FitError 
