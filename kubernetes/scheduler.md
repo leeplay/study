@@ -164,8 +164,15 @@ Package Scheduler
       - random       *rand.Rand
       - randomLock   sync.Mutex
       - Schedule(pod *api.Pod, minionLister algorithm.MinionLister) (string, error)
-      	- scheduler를 위한 minion의 list를 가져옴
+      	- findNodesThatFit을 호출해 filteredNodes, failedPredicateMap 를 구함 
+      	- prioritizeNodes를 호출해 priorityList를 구함
+      	- selectHost를 호출해 host를 구함
+
       - selectHost(priorityList algorithm.HostPriorityList) (string, error)
+      	- scheduler를 위한 minion의 list를 가져옴
+      	- 역순으로 정렬한다
+      	- 가장 적합한 호스트를 구한다. 
+      	- 적합한 호스트 중 한 곳을 랜덤으로 가져온다. 
  
  
 
