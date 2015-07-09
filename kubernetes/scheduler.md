@@ -219,7 +219,31 @@ package factory
 			- BindPodsRateLimiter util.RateLimiter
 			- scheduledPodPopulator *framework.Controller
 			- modeler               scheduler.SystemModeler
-		
+			
+			- Create() (*scheduler.Config, error)
+				- 디폴트 알고리즘프로바이더로 스케쥴러 생성 
+			
+			- CreateFromProvider(providerName string) (*scheduler.Config, error)
+				- GetAlgorithmProvider로 알고리즘을 구함
+				- CreateFromKeys로 등록된 fit predicate key와 priority key로 구성된 set으로부터 스케쥴러 생성 
+				- 알고리즘프로바이더로 스케쥴러 생성 
+			
+			- CreateFromConfig(policy schedulerapi.Policy) (*scheduler.Config, error)
+				- config파일로부터 스케쥴러 생성 
+				
+			
+			- CreateFromKeys(predicateKeys, priorityKeys util.StringSet) (*scheduler.Config, error)
+			- createUnassignedPodLW() *cache.ListWatch
+			- createAssignedPodLW() *cache.ListWatch
+			- createMinionLW() *cache.ListWatch
+			- reateServiceLW() *cache.ListWatch
+			- makeDefaultErrorFunc(backoff *podBackoff, podQueue *cache.FIFO) func(pod *api.Pod, err error)
+				- 클러스터에 등록된 노드가 없다 
+				- 스케쥴링 에러다 다시 시도해라 
+				- gc로 1차 정리 
+				- 
+			
+			
 		- nodeEnumerator
 			- *api.NodeList
 		
@@ -232,9 +256,11 @@ package factory
 		- type binder struct
 			- *client.Client
 			- Bind(binding *api.Binding) error
+				- rpc  호출인거 같은데 현재 구현안되어 있음
 		
 		- realClock 
 			- Now() time.Time
+				- 현재시간 리턴 
 		
 		- backoffEntry 
 			- backoff    time.Duration
@@ -248,14 +274,17 @@ package factory
 			- defaultDuration time.Duration
 			- maxDuration     time.Duration
 			- getEntry(podID string) *backoffEntry
-				-  
-				 
+				-  주어진 podId에 해당하는 *backoffEntry의 lastUpdate 시간을 현재시각으로 설정하고  리턴 
+	
 			- getBackoff(podID string) time.Duration
-				- 주어진 pod id로 entry 추출  
-				- 
-				- 
+				- getEntry
+				- backoff 시간을 2로 곱합 
+				- backoff 시간이 maxDuratio 시간보다 크면 backoff 시간에 maxDuration 시간을 입력
+				- backoff 리턴
 			
 			- wait(podID string)
+				- getBackoff 시간만큼 sleep 
+				
 			- gc()
 				- perPodBackoff 만큼 순회
 					- perPodBackoff에서 가져온 엔트리의 마지막 업데이트 시간과 현재 시간을 비교
@@ -264,6 +293,10 @@ package factory
 	- interface
 		- clock 
 			- Now() time.Time
+	
+	- func
+		- NewConfigFactory(client *client.Client) *ConfigFactory
+		- parseSelectorOrDie(s string) fields.Selector
 		
 }
 		
