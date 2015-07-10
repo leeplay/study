@@ -236,12 +236,15 @@ package factory
 			- createUnassignedPodLW() *cache.ListWatch
 			- createAssignedPodLW() *cache.ListWatch
 			- createMinionLW() *cache.ListWatch
-			- reateServiceLW() *cache.ListWatch
+			- createServiceLW() *cache.ListWatch
+				- service로 변경된 cache.ListWatch를 리턴			
+	
 			- makeDefaultErrorFunc(backoff *podBackoff, podQueue *cache.FIFO) func(pod *api.Pod, err error)
 				- 클러스터에 등록된 노드가 없다 
 				- 스케쥴링 에러다 다시 시도해라 
 				- gc로 1차 정리 
-				- 
+				- 주어진 pod을 backoff.wait 시킴
+				- 다시 pod을 구해서 변경되었거나 스케쥴이 됐는지 확인하고 가podQueue *cache.FIFO에 추가
 			
 			
 		- nodeEnumerator
@@ -301,6 +304,22 @@ package factory
 }
 		
 		
+
+
+// Pod is a collection of containers, used as either input (create, update) or as output (list, get).
+type Pod struct {
+	TypeMeta   `json:",inline"`
+	ObjectMeta `json:"metadata,omitempty"`
+
+	// Spec defines the behavior of a pod.
+	Spec PodSpec `json:"spec,omitempty"`
+
+	// Status represents the current information about a pod. This data may not be up
+	// to date.
+	Status PodStatus `json:"status,omitempty"`
+}
+
+
 
 
 - plugins.go 
