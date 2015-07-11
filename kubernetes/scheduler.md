@@ -235,9 +235,10 @@ package factory
 			- CreateFromKeys(predicateKeys, priorityKeys util.StringSet) (*scheduler.Config, error)
 			- createUnassignedPodLW() *cache.ListWatch
 			- createAssignedPodLW() *cache.ListWatch
-			- createMinionLW() *cache.ListWatch
+			- createMinionLW() *cache.ListWatch서
+				- 특정 클라이언트에서 minions로 변경된 cache.ListWatch를 리턴 
 			- createServiceLW() *cache.ListWatch
-				- service로 변경된 cache.ListWatch를 리턴			
+				- 특정 클라이언트에서 service로 변경된 cache.ListWatch를 리턴			
 	
 			- makeDefaultErrorFunc(backoff *podBackoff, podQueue *cache.FIFO) func(pod *api.Pod, err error)
 				- 클러스터에 등록된 노드가 없다 
