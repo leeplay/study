@@ -15,6 +15,41 @@ Overview
   - modeler.go
   - scheduler.go
   
+
+package main
+============
+
+### scheduler.go 
+
+- main
+	- NewSchedulerServer 생성 (ip, port, AlgorithmProvider가 결정됨, 주목해야할 건 AlgorithmProvider임)
+	- scheduler의 플래그 정보 저장
+	- scheduler run 실행 (run 함수는 종료되지 않음)
+
+- server.go 
+	- struct 
+		- SchedulerServer
+			- Port int 
+			- Address util.IP
+			- AlgorithmProvider string
+			- PolicyConfigFile string
+			- EnableProfiling bool
+			- Master string
+			- Kubeconfig string
+			- AddFlags(fs *pflag.FlagSet)
+				- SchedulerServer의 falg 정보 생성
+				
+			- Run(_ []string) error
+				- kubeconfig기반으로 client 생성
+				- 별도의 스레드로 헬스체크와 프로파일링용 서버 생성
+				- configFactory 생성
+				- config 생성
+				- scheduler 생성 및 실행
+				
+			- createConfig(configFactory *factory.ConfigFactory) (*scheduler.Config, error)
+				- 주어진 PolicyConfigFile 생성 or DefaultProvider로 생성 
+	
+
 package Scheduler 
 =================
 
