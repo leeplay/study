@@ -233,10 +233,26 @@ package factory
 				
 			
 			- CreateFromKeys(predicateKeys, priorityKeys util.StringSet) (*scheduler.Config, error)
+				- predicateKeys, priorityKeys 기반으로 스케쥴 생성
+				- PluginFactoryArgs 생성
+				- getFitPredicateFunctions 호출해 predicateFuncs를 받음
+				- getPriorityFunctionConfigs 호출해 priorityConfigs를 받음 
+				- 스케쥴링이 필요한 pod을 watch, queue 합니다. 
+				- 스케쥴된 pods을 populating 합시다. 
+				- minions을 watch 합니다. 미니언은 적절히 리스트되고 최신 로컬 캐쉬를 제공합니다. 
+				- 모든 서비스 오브젝트를 watch, cache합니다. 
+				- 제네릭스케쥴러 생성 
+				- config 생성 후 리턴 
+
 			- createUnassignedPodLW() *cache.ListWatch
+				- 스케쥴링이 필요한 모든 pods을 찾아서 ListWatch로 리턴 
+				
 			- createAssignedPodLW() *cache.ListWatch
+				- 이미 스케쥴이 된 모든 pods을 찾아서 listWatch로 리턴
+
 			- createMinionLW() *cache.ListWatch서
 				- 특정 클라이언트에서 minions로 변경된 cache.ListWatch를 리턴 
+				
 			- createServiceLW() *cache.ListWatch
 				- 특정 클라이언트에서 service로 변경된 cache.ListWatch를 리턴			
 	
@@ -302,11 +318,12 @@ package factory
 		- NewConfigFactory(client *client.Client) *ConfigFactory
 		- parseSelectorOrDie(s string) fields.Selector
 		
-}
+
 		
 		
 
 
+```
 // Pod is a collection of containers, used as either input (create, update) or as output (list, get).
 type Pod struct {
 	TypeMeta   `json:",inline"`
@@ -319,9 +336,7 @@ type Pod struct {
 	// to date.
 	Status PodStatus `json:"status,omitempty"`
 }
-
-
-
+```
 
 - plugins.go 
 
