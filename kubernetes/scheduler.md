@@ -378,7 +378,8 @@ type Pod struct {
 package algorithmprovider 
 =========================
 
-### plugings.go 
+### plugings.go
+
 	- 아직 빈 파일 
 	- _ "github.com/GoogleCloudPlatform/kubernetes/plugin/pkg/scheduler/algorithmprovider/defaults"
 		- 이런 참조로 defaults의 init을 먼저 호출해 factory에 등록한다. 아마 향후에 다른 알고리즘이 등록이 될 거 같다. 
