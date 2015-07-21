@@ -15,8 +15,6 @@ func (s *SchedulerServer) Run(_ []string) error {
 	-> 별도의 고루틴으로 왓칭과 스케쥴링 작업을 수행 
 }
 ```
-
-We want to add the pod to the model iff the bind succeeds, but we don't want to race with any deletions, which happen asyncronously.
 	
 
 주요 모듈 
@@ -36,26 +34,22 @@ We want to add the pod to the model iff the bind succeeds, but we don't want to 
 
 - pod 트래픽 제어 리미터 생성 
 	- NewTokenBucketRateLimiter 사용 
-	
-	
-- genericscheduler 결정 
-- tickRateLimiter 결정
-- simplemodeler 결정 
 
 ### Config
 
--  
-- 
+-  ㅇ
+- ㅇㅇ
 
 ### Scheduler 
 - generic-sheduler 사용 
 - 고루틴으로 되어있어 계속 반복 
 - pod을 가져옴 
-	- Pod을 스케쥴링 대상으로 할 수 있는지 확인
-		- 별도의 go routine 으로 실행 
-		- 스케쥴링이 될 pod의 트래픽을 제어하는데 TokenBucket 알고리즘을 사용한다고 하는데 헐씬 심플함
-		- 스케쥴링 대상 pod을 최대 20개까지 작업대기 시킬 수 있음
-		- chan으로 구성되어 있어 20개가 초과하게 되면 block이 걸리게 됨, 누락은 없어보임 
+	- Pod의 트래픽이 적정한지 확인
+		- 스케쥴링이 될 pod의 트래픽을 제어
+		- 별도의 고루틴에서 ticker(정해진 time duration, 0.015초)만큼 이벤트가 발생하여 token 채널에 true가 입력되고 있음, 최대 20개 입력됨 
+		- token에 true인게 있으면 트래픽이 적절하다고 판단
+		- token bucket 알고리즘과 비슷한 알고리즘을 사용
+		- 두 개의 고루틴이 한쪽에 true를 입력하고 한쪽은 true을 가져가니 ticker 시간 내에 최대 20개까지 처리, 그러므로 누락은 없을 거 같음
 		
 - 스케쥴링 시도 
 	- 모든 minion을 구함 
