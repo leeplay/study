@@ -1,6 +1,81 @@
 Overview
 ========
 
+### 서버 생성 과정 
+
+```
+func (s *SchedulerServer) Run(_ []string) error {
+	
+	-> Go 스레드로 헬스체크와 프로파일링용 서버 생성
+	-> ConfigFactory 생성
+	-> Config 생성
+	-> event broadcaster 생성 후 scheduler 생성을 알림 
+	-> 스케쥴러 생성 
+	-> 스케쥴러 실행 
+	-> 별도의 고루틴으로 왓칭과 스케쥴링 작업을 수행 
+}
+```
+
+We want to add the pod to the model iff the bind succeeds, but we don't want to race with any deletions, which happen asyncronously.
+	
+
+주요 모듈 
+=========
+
+### ConfigFactory
+
+- Store 생성
+	- PodQueue : 스케쥴링이 필요한 pod을 담은 큐
+	- ScheduledPodLister : 스케쥴링이된 pod list
+	- NodeLister : 모든 minion list
+	- ServiceLister : 모든 service List
+	- PodLister : 스케쥴링이 된 pod과 스케쥴링이 될 pod의 list
+
+- modeler 생성 
+	- simpleModeler 사용
+
+- pod 트래픽 제어 리미터 생성 
+	- NewTokenBucketRateLimiter 사용 
+	
+	
+- genericscheduler 결정 
+- tickRateLimiter 결정
+- simplemodeler 결정 
+
+### Config
+
+-  
+- 
+
+### Scheduler 
+- generic-sheduler 사용 
+- 고루틴으로 되어있어 계속 반복 
+- pod을 가져옴 
+	- Pod을 스케쥴링 대상으로 할 수 있는지 확인
+		- 별도의 go routine 으로 실행 
+		- 스케쥴링이 될 pod의 트래픽을 제어하는데 TokenBucket 알고리즘을 사용한다고 하는데 헐씬 심플함
+		- 스케쥴링 대상 pod을 최대 20개까지 작업대기 시킬 수 있음
+		- chan으로 구성되어 있어 20개가 초과하게 되면 block이 걸리게 됨, 누락은 없어보임 
+		
+- 스케쥴링 시도 
+	- 모든 minion을 구함 
+	- 가장 적합한 노드들을 찾음 
+	
+	- 적합한 노드들 중 가장 우선순위가 높은 노드를 찾음
+	
+	- 가장 우선순위가 높은 노드들 중 가장 적합한 호스트를 찾음  
+	
+- 바인딩 메타정보 생성 
+- 바인딩 시도
+	- 바인딩될 pod을 RPC를 호출하여 바인딩
+	- pod이 스케쥴링이 되었다는 정보를 SimpleModeler에 저장
+
+
+
+
+
+
+
 - src/plugin/pkg/scheduler 패키지에 위치함 
 
 - 아래의 패키지로 구성되어 있음
