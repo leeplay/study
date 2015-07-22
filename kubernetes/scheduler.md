@@ -80,12 +80,21 @@ func (s *SchedulerServer) Run(_ []string) error {
 		
 - 스케쥴링 시도 
 	- 모든 minion을 구함
-	- 가장 적합한 노드들을 찾음 
+	- 가장 적합한 노드들을 필터링함
 		- 스케쥴될 pod, 모든 pod의 리스트, 모든 minions 로 시작 
-		- Succeed와 Failed가 아닌 pod들을 구함 
-		- 
-	- 적합한 노드들 중 가장 우선순위가 높은 노드를 찾음
-	- 가장 우선순위가 높은 노드들 중 가장 적합한 호스트를 찾음  
+		- terminated상태가 아닌 pod들을 구함, 즉 현재 실행 중인 pods 
+		- node list 만큼 반복
+			- predicateFuncs 만큼 반복 
+				- predicateFunc로 node에 pod을 배포하기 적합한지 확인 
+		- fit 한 nodes만 리턴
+	- node list의 minion list를 구함
+	- minion list 중 가장 우선순위가 높음 node를 찾음
+		- priority config에 아무런 내용이 없다면 전부 동일한 priority를 받음 
+		- priority config 만큼 반복 
+			- priorityFunc로 minion list의 score를 구함
+			- minion list 만큼 반복
+				- minion의 score와 priorityconfig의 weight을 곱함 
+	- 가장 우선순위가 높은 노드들 중 랜덤으로 하나의 호스트를 선택
 	
 - 바인딩 메타정보 생성 
 - 바인딩 시도
