@@ -103,13 +103,10 @@ func (s *SchedulerServer) Run(_ []string) error {
 
 
 
-주요 알고리즘 
-=========
+주요 알고리즘 : predicate 
+========================
 
-### predicate 
-
-
-- node의 리소스 양이 충분한지 확인즘 알고리즘  
+### node리소스 확인 알고리즘  
 
 ```
 - pod의 요청 리소스를 구함
@@ -126,13 +123,13 @@ func (s *SchedulerServer) Run(_ []string) error {
 - 부적합한 fit이 발견되면 fasle 를, 전부 적합하면 true를 리턴 
 ```
 
-- 지정된 node에 배포 알고리즘  
+### node존재 확인 알고리즘  
 
 ```
 - pod에 지정된 node의 이름이 존재하는지 확인
 ```
 
-- 지정된 port로 배포가 가능한지 확인 알고리즘 
+### port 배포가능 확인 알고리즘 
 
 ```
 - 기존 pod list의 port를 구함 
@@ -140,38 +137,41 @@ func (s *SchedulerServer) Run(_ []string) error {
 - 비교후 true, false 리턴함
 ```
 
-- Disk (GCE, ISCSI, AWS, Git, Secret, NFS, Gluster, RBD) 충돌 확인 알고리즘 
+### Disk (GCE, ISCSI, AWS, Git, Secret, NFS, Gluster, RBD) 충돌 확인 알고리즘 
 
 ```
 - 배포될 Pod의 Volumes 정보를 구함
 	- Volumes 갯수만큼 반복
 		- 기존 pos list 만큼 반복
-			- volume이 충돌나는지 확인(GCE, AWS만 구현되어 있음)
+			- volume이 충돌나는지 확인(GCE, AWS만 구현되어 있음)   <- 코드 기여여부가 보이네요 
 				- pod이 가진 volume과 기존 pod들간의 volume 명칭이 일치하는지 확인
 				- 추가로 volume 벤더별 상태값들을 몇개 더 체크함 
 		- 하나라도 맞지 않으면 도중에 false로 빠져나옴 
 	- 이상없으면 true 리턴
 ```
 
-- 지정된 Selector 체크 알고리즘 
+### Selector 체크 알고리즘 
 
 ```
 진행 중
 ```
 
-- 지정된 Label 체크 알고리즘
+### Label 체크 알고리즘
 
 ```
 진행 중
 ```
 
-- 지정된 Service 유사성 체크 알고리즘 
+### Service 유사성 체크 알고리즘 
 
 ```
 진행 중
 ```
 
-### priority 
+겁나 많네요 ...
+
+주요 알고리즘 : priority 
+========================
 
 진행 중 
 
