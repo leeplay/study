@@ -103,10 +103,10 @@ func (s *SchedulerServer) Run(_ []string) error {
 
 
 
-주요 알고리즘 : predicate 
+주요 알고리즘 : predicate : 배포할 pod의 가장 적합한 node list를 찾는 알고리즘
 ========================
 
-### node리소스 확인 알고리즘  
+### node 리소스 확인 알고리즘  
 
 ```
 - pod의 요청 리소스를 구함
@@ -123,7 +123,7 @@ func (s *SchedulerServer) Run(_ []string) error {
 - 부적합한 fit이 발견되면 fasle 를, 전부 적합하면 true를 리턴 
 ```
 
-### node존재 확인 알고리즘  
+### node 존재 확인 알고리즘  
 
 ```
 - pod에 지정된 node의 이름이 존재하는지 확인
@@ -217,15 +217,93 @@ func (n *NodeLabelChecker) CheckNodeLabelPresence(pod *api.Pod, existingPods []*
 ### Service 유사성 체크 알고리즘 
 
 ```
-진행 중
+- 배포할 pod의 nodeselector 정보를 구함 
+- nodeselector의 label  정보를 구함
+- Service List의 label 만큼 반복
+	- pod의 nodeselector 정보가 label의 정보와 일치하면 affinityLabels에 저장 -> 유사하다고 판단된 것 
+	- pod의 nodeselector가 하나라도 맞지않는게 있다면 labelExist에 false를 저장  
+- labelExist이 false일 경우 모든 서비스 리스트를 가져와서 비교함 
+	- label 정보가 일치하는 service list를 구함
+	- service list만큼 반복 
+		- 동일한 service이기 때문에 항상 0번째에서 selector를 구함 
+		- 해당 service에서 pod list를 구함 
+		- service의 pod list만큼 반복
+			- service의 pod과 배포할 pod의 네임스페이스가 같다면 nsServicePods저장 
+		- nsServicePods 가 0보다 클 경우
+			- nsServicePods의 노드이름으로 ServiceAffinity의 노드 정보를 구함 -> 다른 minion을 구한 거임 
+			- ServiceAffinity의 label 만큼 반복 -> 설정한 label만큼 반복하겠다는 얘기임
+			- label과 다른 minion의 label이 같다면 affinityLabels저장함 
+- 뭔소리인가 싶겠지만 여기까지 오면 affinityLabels 정보가 생성됩니다. 
+- affinityLabels에서 affinitySelector를 꺼냄
+- node의 minion을 구함 
+- affinitySelector와 minion의 label이 일치하는지 판단
 ```
 
-겁나 많네요 ...
+```
+//글자로는 이해하기 힘드니 문제를 내겠습니다. 
 
-주요 알고리즘 : priority 
+selector := map[string]string{"foo": "bar"}
+labels1 := map[string]string{
+	"region": "r1",
+	"zone":   "z11",
+}
+labels2 := map[string]string{
+	"region": "r1",
+	"zone":   "z12",
+}
+labels3 := map[string]string{
+	"region": "r2",
+	"zone":   "z21",
+}
+labels4 := map[string]string{
+	"region": "r2",
+	"zone":   "z22",
+}
+
+node1 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine1", Labels: labels1}}
+node2 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine2", Labels: labels2}}
+node3 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine3", Labels: labels3}}
+node4 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine4", Labels: labels4}}
+node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
+}
+
+//아래 스케쥴링 결과를 예상해보시오 ?
+{
+	pod:    new(api.Pod),
+	node:   "machine1",
+	labels: []string{"region"},
+},
+
+// 아래 스케쥴링 결과를 예상해보시오 ?
+{
+	pod:    &api.Pod{Spec: api.PodSpec{NodeSelector: map[string]string{"region": "r2"}}},
+	node:   "machine1",
+	labels: []string{"region"},
+}
+
+// 아래 스케쥴링 결과를 예상해보시오 ?
+{
+	pod:      &api.Pod{ObjectMeta: api.ObjectMeta{Labels: selector}},
+	pods:     []*api.Pod{{Spec: api.PodSpec{NodeName: "machine1"}, ObjectMeta: api.ObjectMeta{Labels: selector}}},
+	node:     "machine1",
+	services: []api.Service{{Spec: api.ServiceSpec{Selector: selector}}},
+}
+	
+
+
+	
+
+// 다 맞추시면 스케쥴링 전문가가 되셨습니다. 		
+정답 : true, false, true
+
+// node가 가진 label 정보에 논리적으로 구역을 정함, region 정보의 일치성만 판단함, node정보가 틀려도 fit하다고 판단함, 아마 노드 정보는 별도의 메소드에서 체크하니 그런거 같음  
+```
+
+주요 알고리즘 : priority : 찾은 node list 중 가장 우선순위가 높은 node를 찾는 알고리즘
 ========================
 
-진행 중 
+
+
 
 
 당장 코드 기여 가능할 곳 ???
@@ -243,4 +321,5 @@ func (n *NodeLabelChecker) CheckNodeLabelPresence(pod *api.Pod, existingPods []*
 - pod의 실행 단위 안에 컨테이너 갯수를 설정이 되나 ?
 - 쿠베 기동 시 기존 노드의 리소스 정보 파악은 어떤 식인지? 
 - 쿠베 기동 후 신규 노드의 리소스 정보 파악은 어떤 식인지
+- 왜 presence 를 써야만 했을까 ?
 
