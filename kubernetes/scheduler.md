@@ -100,3 +100,87 @@ func (s *SchedulerServer) Run(_ []string) error {
 - 바인딩 시도
 	- 바인딩될 pod을 RPC를 호출하여 바인딩
 	- pod이 스케쥴링이 되었다는 정보를 SimpleModeler에 저장
+
+
+
+주요 알고리즘 
+=========
+
+### predicate 
+
+
+- node의 리소스 양이 충분한지 확인즘 알고리즘  
+
+```
+- pod의 요청 리소스를 구함
+- 배포지정된 node의 상태정보(현재 상태 정보는 cpu, memory, storage)를 구함
+- 배포될 pod의 request정보(cpu, memory)가 0 이면
+	- node가 가질 수 있는 pod의 갯수가 existing pod의 갯수보다 크면 true 작으면 false 리턴
+- 기존 pod list를 새로운 pod list로 복사 
+- 새로운 pod list에 배포할 pod 추가
+- node의 capacity를 초과하는지, 모든 pod list의 fit 여부를 확인 
+	- node의  토탈 cpu, memory를 구함 
+	- existing pod의 모든 pod을 체크 <- 굳이 왜 ???, 새롭게 추가된 것만 하지지
+		- 전체 리소스양과 pod별 요청 리소스양을 체크해서 전체 리소스양을 초과하는지 확인 
+		- pod을 fit한 것과 doesnt'fit한 것과 나눔
+- 부적합한 fit이 발견되면 fasle 를, 전부 적합하면 true를 리턴 
+```
+
+- 지정된 node에 배포 알고리즘  
+
+```
+- pod에 지정된 node의 이름이 존재하는지 확인
+```
+
+- 지정된 port로 배포가 가능한지 확인 알고리즘 
+
+```
+- 기존 pod list의 port를 구함 
+- 배포될 pod의 port를 구함 
+- 비교후 true, false 리턴함
+```
+
+- Disk (GCE, ISCSI, AWS, Git, Secret, NFS, Gluster, RBD) 충돌 확인 알고리즘 
+
+```
+- 배포될 Pod의 Volumes 정보를 구함
+	- Volumes 갯수만큼 반복
+		- 기존 pos list 만큼 반복
+			- volume이 충돌나는지 확인(GCE, AWS만 구현되어 있음)
+				- pod이 가진 volume과 기존 pod들간의 volume 명칭이 일치하는지 확인
+				- 추가로 volume 벤더별 상태값들을 몇개 더 체크함 
+		- 하나라도 맞지 않으면 도중에 false로 빠져나옴 
+	- 이상없으면 true 리턴
+```
+
+- 지정된 Selector 체크 알고리즘 
+
+```
+진행 중
+```
+
+- 지정된 Label 체크 알고리즘
+
+```
+진행 중
+```
+
+- 지정된 Service 유사성 체크 알고리즘 
+
+```
+진행 중
+```
+
+### priority 
+
+진행 중 
+
+### 나에게 던지는 질문
+
+- 특별히 노드를 정하는 부분은 없는데, 디폴트 노드 선택 알고리즘은 어떤거지 ?
+- 쿠베 기동시 정의되어 있는 pod을 인지하고 실행하는 것과 기동 후에 명령어를 통해서 실행하는 건 차이가 있는지 ?
+- pod에 리소스 요구기준이 없을 때 할당하는 디폴트 리소스 값 ?
+- pod의 실행 단위 안에 컨테이너 갯수를 설정이 되나 ?
+- 쿠베 기동 시 기존 노드의 리소스 정보 파악은 어떤 식인지? 
+- 쿠베 기동 후 신규 노드의 리소스 정보 파악은 어떤 식인지
+
