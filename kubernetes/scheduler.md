@@ -153,13 +153,65 @@ func (s *SchedulerServer) Run(_ []string) error {
 ### Selector 체크 알고리즘 
 
 ```
-진행 중
+// 아래처럼 node를 선택하는 selector를 가짐
+
+Spec: api.PodSpec{
+	NodeSelector: map[string]string{
+	"foo": "bar",
+	"baz": "blah",
+	},
+}
+
+labels: map[string]string{
+	"foo": "bar",
+}
+
 ```
 
-### Label 체크 알고리즘
+```
+- 노드에 존재하는 minion list를 구함 
+- 배포할 pod의 selector가 없다면 true 리턴 
+- 배포할 pod의 selector와 node의 label이 일치하는지 확인 
+```
+
+### LabelPresence 체크 알고리즘
 
 ```
-진행 중
+// 아래처럼 label의 존재와 presence의 값이 일치하는지 확인하는 알고리즘 
+
+
+{
+	labels:   []string{"foo", "bar"},
+	presence: true,
+	fits:     true,
+	test:     "all labels match, presence true",
+}
+
+// 처음엔 pod을 사용하는 줄 알았는데 전혀 사용하지 않음, 불필요한 인자가 있을 순 있지만 이건 혼란을 주기 때문에... -> 코드 개선 ? 
+
+func (n *NodeLabelChecker) CheckNodeLabelPresence(pod *api.Pod, existingPods []*api.Pod, node string) (bool, error) {
+	var exists bool
+	minion, err := n.info.GetNodeInfo(node)
+	if err != nil {
+		return false, err
+	}
+	minionLabels := labels.Set(minion.Labels)
+	for _, label := range n.labels {
+		exists = minionLabels.Has(label)
+		if (exists && !n.presence) || (!exists && n.presence) {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+```
+
+```
+- 노드에 존재하는 minion list를 구함 
+- minion list 들의 label list 정보를 구함
+	- label list만큼 반복
+		- minion이 label을 가지고 있는지 확인
+			- 가지고 있다면 node의 presence정보와 일치하는지 확인 
 ```
 
 ### Service 유사성 체크 알고리즘 
@@ -174,6 +226,14 @@ func (s *SchedulerServer) Run(_ []string) error {
 ========================
 
 진행 중 
+
+
+당장 코드 기여 가능할 곳 ???
+========================
+
+비동기 부사 표현 오타 4곳, 사용하지 않는 인자 3개 (PodSelectorMatches, CheckNodeLabelPresence)
+
+
 
 ### 나에게 던지는 질문
 
