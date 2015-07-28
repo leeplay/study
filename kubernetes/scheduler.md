@@ -306,7 +306,7 @@ node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
 
 - 배포할 pod과 유사한 service list들에 우선순위를 부여하는 알고리즘
 
-### pod을 배포할 서비스 리스트를 찾는 알고리즘 
+### pod을 배포할 서비스 리스트를 가진 node에 우선순위를 부여하는 알고리즘 
 
 ```
 - 전체 서비스 리스트를 구함 
@@ -324,25 +324,49 @@ node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
 - algorithm.HostPriority{Host: minion.Name, Score: int(fScore)} 이런 식으로 모든 minion에 score가 매겨짐, 이렇게되면 label정보가 같은, 배포가 적게 된 node에 더 먼저 배포가 되게 됨 
 ```
 
-```
+### pod을 배포할 서비스 리스트를 가진 node에 zone label을 추가해 우선순위를 부여하는 알고리즘 
 
 ```
-
-### 존 확산 알고리즘
-
-```
+- 위와 동일함 
+- label에 zone 값을 주어 해당 zone이 아닌 node들에는 0의 score를 부여해 우선순위에서 가장 낮은 값을 줌 
 ```
 
 주요 알고리즘 : priority 
 ========================
 
-- 부여된 우선순위들 중 가장 적합한 호스트를 찾는 알고리즘 
+- node list에 우선순위를 결정하는 알고리즘
+
+### 요청된 resource로 node list의 우선순위를 결정하는는 알고리즘
 
 ```
-진행 중 
+- 스케쥴링 되어야 할 pod list를 구함
+- node list만큼 반복
+	- 해당 node의 existing pod list만큼 반복
+		- pod의 모든 container의 tatal cpu, memory를 구함 
+	- 배포할 pod 의 tatal cpu, memory를 구함, 해당 node의 필요한 resource의 전체 계산이 끝남 
+	- 해당 node의 status resource를 구함
+	- 해당 node의 cpu 우선순위를 구함 
+		- (capacity - requested) * 10) / capacity), 많은 리소스를 가진 node의 우선순위가 높아짐 
+	- 해당 node의 memory 우선순위를 구함
+		- 위와 동일
+	- 구한 cpu와 memory를 합해서 2로 나눔
+		- int((cpuScore + memoryScore) / 2) 
+- node list에 우선순위가 매겨짐 
 ```
 
+### node의 name과 일치하는 node 들에 더 높은 우선순위를 부여하는 알고리즘 
 
+```
+- node와 같은 name 을 가진 다른 node list에 높은 우선순위를 부여 (e.g. 동일하면 10, 불일치하면 0)
+```
+
+### 요청된 resource의 cpu와 memory 절대값으로 node list의 우선순위를 결정하는는 알고리즘
+
+```
+- 첫번째 알고리즘과 유사, 수식만 다름
+- 쉽게 말해서 요청된 게 현재 node의 리소스보다 크면 우선순위는 0이 됨 
+- cpu - momory의 차이가 클수록 높은 우선순위를 받음 
+```
 
 당장 코드 기여 가능할 곳 ???
 ========================
