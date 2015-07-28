@@ -103,8 +103,10 @@ func (s *SchedulerServer) Run(_ []string) error {
 
 
 
-주요 알고리즘 : predicate : 배포할 pod의 가장 적합한 node list를 찾는 알고리즘
+주요 알고리즘 : predicate  
 ========================
+
+- 배포할 pod의 가장 적합한 node list를 찾는 알고리즘
 
 ### node 리소스 확인 알고리즘  
 
@@ -299,15 +301,29 @@ node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
 // node가 가진 label 정보에 논리적으로 구역을 정함, region 정보의 일치성만 판단함, node정보가 틀려도 fit하다고 판단함, 아마 노드 정보는 별도의 메소드에서 체크하니 그런거 같음  
 ```
 
-주요 알고리즘 : spreading : 찾은 node list의 배포할 pod과 유사한 service list들에 우선순위를 부여하는 알고리즘
+주요 알고리즘 : spreading 
 ========================
 
+- 배포할 pod과 유사한 service list들에 우선순위를 부여하는 알고리즘
+
+### pod을 배포할 서비스 리스트를 찾는 알고리즘 
+
 ```
-진행 중
+- 전체 서비스 리스트를 구함 
+- 배포할 pod의 정보, pod list의 정보, minion list의 정보를 구함 
+	- 주어진 pod의 서비스 정보를 구함, 그럼 pod과 동일한 서비스 label을 가진 서비스 리스트가 구해짐 
+	- 
 ```
 
-주요 알고리즘 : priority : 부여된 우선순위들 중 가장 적합한 호스트를 찾는 알고리즘
+### 존 확산 알고리즘
+
+```
+```
+
+주요 알고리즘 : priority 
 ========================
+
+- 부여된 우선순위들 중 가장 적합한 호스트를 찾는 알고리즘 
 
 ```
 진행 중 
