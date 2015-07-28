@@ -321,7 +321,11 @@ node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
 	- 위에서 max count를 못 구한 node 라면 디폴트 값으로 채워짐 
 	- 우선순위의 score를 정하는 수식임, maxCount-counts[minion.Name]) / float32(maxCount) 
 	- 0부터 10까지인데 높을수록 우선순위가 높음
-- 
+- algorithm.HostPriority{Host: minion.Name, Score: int(fScore)} 이런 식으로 모든 minion에 score가 매겨짐, 이렇게되면 label정보가 같은, 배포가 적게 된 node에 더 먼저 배포가 되게 됨 
+```
+
+```
+
 ```
 
 ### 존 확산 알고리즘
