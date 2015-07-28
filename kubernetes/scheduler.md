@@ -371,15 +371,16 @@ node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
 
 정리
 ====
-  
+
 - 위의 알고리즘별 동작 순서를 세세히 알 필요는 없다고 생각해서 한번 정리를 하겠습니다.
+
 - 크게는 두 가지 알고리즘으로 이루어져 있음
-        - 배포대상 pod list의 유동량을 체크하는 알고리즘 하나
-        - 적합한 node를 선정하는 알고리즘 하나
-        	- 적합한 node를 선정하는 알고리즘은 3개의 서브 알고리즘으로 이루어져 있음
-        	- predicate
-        	- spread
-        	- priority
+- 배포대상 pod list의 유동량을 체크하는 알고리즘 하나
+- 적합한 node를 선정하는 알고리즘 하나
+- 적합한 node를 선정하는 알고리즘은 3개의 서브 알고리즘으로 이루어져 있음
+- predicate
+- spread
+- priority
 
 
 
