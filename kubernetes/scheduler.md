@@ -311,8 +311,17 @@ node5 := api.Node{ObjectMeta: api.ObjectMeta{Name: "machine5", Labels: labels4}}
 ```
 - 전체 서비스 리스트를 구함 
 - 배포할 pod의 정보, pod list의 정보, minion list의 정보를 구함 
-	- 주어진 pod의 서비스 정보를 구함, 그럼 pod과 동일한 서비스 label을 가진 서비스 리스트가 구해짐 
-	- 
+	- pod과 동일한 서비스 label을 가진 pod list를 구함 
+		- 구한 pod list와 동일한 네임스페이스를 가진 pod list를 다시 구함
+- 전체 minion list를 구함
+- 위에서 구한 동일한 네임스페이스를 가진 pod list만큼 반복
+	- pod이 가진 node.name 이 동일한 만큼 카운트를 증가시킴
+		- 만약 max count를 초과하면 증가시키지 않음, 그럼 여기서 동일한 서비스, 노드의 네임스페이스를 가진 pod들이 구해짐
+- 모든 node list의 우선순위를 정함
+	- 위에서 max count를 못 구한 node 라면 디폴트 값으로 채워짐 
+	- 우선순위의 score를 정하는 수식임, maxCount-counts[minion.Name]) / float32(maxCount) 
+	- 0부터 10까지인데 높을수록 우선순위가 높음
+- 
 ```
 
 ### 존 확산 알고리즘
