@@ -19,6 +19,30 @@
 - RX
  - https://github.com/vert-x3/vertx-examples/tree/master/rx-examples
     
-### 프레임워크 
+#### 프레임워크 
 
 - https://github.com/vert-x3/vertx-awesome
+
+
+### Vertx 기본 1-2
+
+#### Data Access
+
+#### Integration
+
+#### Authentication and Authorisation
+
+#### Reactive
+
+#### Testing
+
+
+### Vertx 심화
+
+#### Devops
+
+#### Clustering
+
+#### Cloud
+
+#### Advanced
