@@ -7,7 +7,7 @@
 
 #### 샘플코드
 
-- 기본
+- 전체
  - https://github.com/vert-x3/vertx-examples/
 
 - core 
@@ -16,8 +16,6 @@
 - web
  - https://github.com/vert-x3/vertx-examples/tree/master/web-examples
  
-- RX
- - https://github.com/vert-x3/vertx-examples/tree/master/rx-examples
     
 #### 프레임워크 
 
