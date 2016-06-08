@@ -1,5 +1,5 @@
 
-### Vertx 기본 1-1
+### Vertx 기본 1
 
 #### 공식문서
 
@@ -24,7 +24,7 @@
 - https://github.com/vert-x3/vertx-awesome
 
 
-### Vertx 기본 1-2
+### Vertx 기본 2
 
 #### Data Access
 
