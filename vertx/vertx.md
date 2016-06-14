@@ -44,3 +44,6 @@
 #### Cloud
 
 #### Advanced
+
+
+http://vertx.io/vertx2/embedding_manual.html
