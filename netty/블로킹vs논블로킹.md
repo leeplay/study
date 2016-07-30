@@ -19,7 +19,7 @@
 이때 블로킹 소켓은 I/O 처리에 블로킹이 발생하기 때문에 새로운 스레드를 하나 생성하고 그 스레드에게 클라이언트 소켓에 대한 I/O 처리를 넘겨주게 된다. 
 이로써 서버소켓이 동작하는 스레드는 다음 클라이언트의 연결을 처리할 수 있게 된다. 
 
-blocking.jpg
+[![blocking io](https://github.com/leeplay/study/blob/master/image/blocking.jpg?raw=true)]()
 
 서버 소켓의 accept 메서드가 병목 지점이다. 
 
