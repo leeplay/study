@@ -8,7 +8,7 @@ ByteBuffer, CharBuffer, IntBuffer, ShortBuffer, LongBuffer, FloatBuffer, DoubleB
 - allocate : JVM 힙영역에 바이트를 생성한다. 힙범퍼라 불린다.
 - allocateDirect : 운영체제의 커널 영역에 바이트 버퍼를 생성한다. 다이렉트 버퍼란 불린다. 힙버퍼에 비해 생성시간은 길지만 뛰어난 성능을 제공한다. 
 
-[![bytebuffer](https://github.com/leeplay/study/blob/master/image/pipeline.png?raw=true)]()
+[![bytebuffer](https://github.com/leeplay/study/blob/master/image/bytefueer.png?raw=true)]()
 
 flip 메서드는 쓰기 작업 완료 이후에 데이터의 처음부터 읽을 수 잇도록 현재 포인터의 위치를 변경하여 읽기에서 쓰기 또는 쓰기에서 읽기로 작업을 전환할 수 있게 된다. 
 자바의 바이트 버퍼를 사용할 때는 읽기와 쓰기를 분리하여 생각해야 하며 특히 다중 스레드 환경에서 바이트 버퍼를 공유하지 않아야 한다. 
