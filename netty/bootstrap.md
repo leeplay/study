@@ -51,6 +51,7 @@ EpollEventLoopGroup, OioEventLoopGroup
 
 #### channel 
 소켓 입출력 모드 설정
+
 LocalServerChannel : 하나의 자바 가상머신에서 가상 통신을 위한 서버 소켓 채널을 생성
 OioServerSocketChannel : 블로킹 모드의 서버 소켓 채널을 생성
 NioServerSocketChannel : 논블로킹 모드의 서버 소켓 채널을 생성
