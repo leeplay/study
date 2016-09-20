@@ -229,6 +229,7 @@ nodejs-mysql : nodejs + mysql
  - BufferFactory를 생성함
  - EventLoopContext 생성함
 
+#### APIGW에서 봐야될 소스
  http://kimseunghyun76.tistory.com/406
  http://vertx.io/docs/vertx-core/java/
  http://vertx.io/docs/vertx-web/java/
