@@ -153,7 +153,7 @@ nodejs-mysql : nodejs + mysql
 
 [![vertx3](https://github.com/leeplay/study/blob/master/image/vertx3.png?raw=true)]()
 
-#### Vertx 구동 순서
+#### Vertx 내부소스
 
 #### Starter
 - default 동작과  -cp를 주었을 때 처리 방식은 다르지만   run 을 호출함
