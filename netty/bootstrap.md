@@ -51,14 +51,15 @@ EpollEventLoopGroup, OioEventLoopGroup
 
 #### channel 
 소켓 입출력 모드 설정
-LocalServerChannel : 하나의 자바 가상머신에서 가상 통신을 위한 서버 소켓 채널을 생성
-OioServerSocketChannel : 블로킹 모드의 서버 소켓 채널을 생성
-NioServerSocketChannel : 논블로킹 모드의 서버 소켓 채널을 생성
-EpollServerSocketChannel : 리눅스 커널의 epoll 입출력 모드를 지원하는 서버 소켓 채널을 생성
-OioSctpServerChannel : SCTP 전송 계층을 사용하는 블로킹 모드의 서버 소켓 채널을 생성
-NioSctpServerChannel : SCTP 전송 계층을 사용하는 논블로킹 모드의 서버 소켓 채널을 생성
-NioUdtByteAcceptorChannel : UDT 프로토콜을 지원하는 논블로킹 모드의 서버 소켓 채널을 생성
-NioUdtMessageAcceptorChannel : UDT 프로토콜을 지원하는 블로킹 모드의 서버 소켓 채널을 생성
+
+* LocalServerChannel : 하나의 자바 가상머신에서 가상 통신을 위한 서버 소켓 채널을 생성
+* OioServerSocketChannel : 블로킹 모드의 서버 소켓 채널을 생성
+* NioServerSocketChannel : 논블로킹 모드의 서버 소켓 채널을 생성
+* EpollServerSocketChannel : 리눅스 커널의 epoll 입출력 모드를 지원하는 서버 소켓 채널을 생성
+* OioSctpServerChannel : SCTP 전송 계층을 사용하는 블로킹 모드의 서버 소켓 채널을 생성
+* NioSctpServerChannel : SCTP 전송 계층을 사용하는 논블로킹 모드의 서버 소켓 채널을 생성
+* NioUdtByteAcceptorChannel : UDT 프로토콜을 지원하는 논블로킹 모드의 서버 소켓 채널을 생성
+* NioUdtMessageAcceptorChannel : UDT 프로토콜을 지원하는 블로킹 모드의 서버 소켓 채널을 생성
 
 SCTP : TCP, UDP와 같은 전송 계층에 해당하는 포로토콜로써 차세대 프로토콜로 주목 받음, 리눅스에서 지원함, 윈도우는 지원안함
 UDT : UDP프로토콜을 기반으로 작성된 어플리케이션 계층의 프로토콜이다. 즉 HTTP, SMTP같은 레벨이다. 주로 고성능 분산 컴퓨팅의 데이터 전송에 사용됨 
@@ -83,14 +84,16 @@ channel메서드와 동일한 기능 수행, ChannelFactory 인터페이스를 �
  }
 
 #### option
+
 서버 소켓 채널의 옵션 지정, 커널에서 사용하는 값을 변경한다는 의미
-TCP_NODELAY : 데이터 송수신에 Nagle 알고리즘의 비활성화 여부를 지정
-SO_KEEPALIVE : 운영체제에서 지정된 시간에 한번씩 keepalive패킷을 상대방에게 전송
-SO_SNDBUF : 상대방으로 송신할 커널 송신 버퍼의 크기 
-SO_RCVBUF : 상대방으로 수신할 커널 수신 버퍼의 크기 
-SO_REUSEADDR : TIME_WAIT 상태의 포트를 서버 소켓에 바인드할 수 있게 한다.
-SO_LINGER : 소켓을 닫을 때 커널의 송신 버퍼에 전송되지 않은 데이터의 전송 대기시간을 지정
-SO_BACKLOG : 동시에 수용 가능한 소켓 연결 요청 수
+
+* TCP_NODELAY : 데이터 송수신에 Nagle 알고리즘의 비활성화 여부를 지정
+* SO_KEEPALIVE : 운영체제에서 지정된 시간에 한번씩 keepalive패킷을 상대방에게 전송
+* SO_SNDBUF : 상대방으로 송신할 커널 송신 버퍼의 크기 
+* SO_RCVBUF : 상대방으로 수신할 커널 수신 버퍼의 크기 
+* SO_REUSEADDR : TIME_WAIT 상태의 포트를 서버 소켓에 바인드할 수 있게 한다.
+* SO_LINGER : 소켓을 닫을 때 커널의 송신 버퍼에 전송되지 않은 데이터의 전송 대기시간을 지정
+* SO_BACKLOG : 동시에 수용 가능한 소켓 연결 요청 수
 
 TCP_NODELAY
 네이글 알고리즘은 가능하면 데이터를 나누어보내지 말고 한꺼번에 보내라라는 원칙을 기반으로 만들어진 알고리즘
