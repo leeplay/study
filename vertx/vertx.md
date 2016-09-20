@@ -1,8 +1,7 @@
 
 #### Reactor 개요
 
-vertx1
-[![vertx1](https://github.com/leeplay/study/blob/master/image/vertx1.jpg?raw=true)]()
+[![vertx1](https://github.com/leeplay/study/blob/master/image/vertx1.png?raw=true)]()
 
 
 - 이벤트에 반응하는 reactor를 만들고 reactor에 이벤트를 처리할 event handler들을 등록한다. (initiate)
@@ -37,7 +36,7 @@ vertx1
 - 시스템의 CPU 개수만큼 이벤트 루프 스레드를 생성해서 이벤트를 처리하는데 각각의 이벤트 루프 스레드는 서로 다른 클래스로더로 만들어진 완전히 독립적인 코드를 실행하므로 동기화 문제는 발생하지 않는다. 
 - 이렇게 특정 이벤트 루프 스레드에서 한번 실행된 코드는 절대 다른 이벤트 루프 스레드에서 실행되지 않음을 보장한다.
 
-[![vertx2](https://github.com/leeplay/study/blob/master/image/vertx2.jpg?raw=true)]()
+[![vertx2](https://github.com/leeplay/study/blob/master/image/vertx2.png?raw=true)]()
 
 - 이벤트 루프 쓰레드에서 실행되는 코드 단위를 Verticle이라고 한다.
 - 각 이벤트 루프 스레드는 서로 독립적인 Verticle을 실행한다.
@@ -92,7 +91,7 @@ Vert.x의 ELP는 Single Thread에서 동작하지만, 동시에 여러개의 ELP
  - event bus로 request를 보낸 Verticle은 response를 기다리지 않고, 바로 다음 로직을 진행하다가, Worker Verticle에서 작업이 끝난 이벤트 메세지가 오면 다음 ELP가 돌때 그 이벤트를 받아서 응답 메세지 처리를 한다.
  - DB 작업이나, 시간이 오래 걸리는 작업은 이렇게 Worker Verticle을 이용해서 구현할 수 있다.
 
- [![vertx4](https://github.com/leeplay/study/blob/master/image/vertx4.jpg?raw=true)]()
+ [![vertx4](https://github.com/leeplay/study/blob/master/image/vertx4.png?raw=true)]()
 
 - Worker Verticle instance & Thread pooling
  - 이 Worker Verticle의 재미있는 점은 Thread Pool을 지원한다는 것이다. ELP Verticle과 마찬가지로, Worker Verticle instance는 독립된 클래스 로드로 로딩되어 생성된 객체로 쓰레드에서 각각 다른 독립된 instance가 수행되기 때문에, Thread safe하다.
@@ -152,7 +151,7 @@ Vert.x나 Node.JS와 같은 Single Threaded 모델의 서버들이 내세우는 
 servlet-raw : resin + mysql
 nodejs-mysql : nodejs + mysql
 
-[![vertx3](https://github.com/leeplay/study/blob/master/image/vertx3.jpg?raw=true)]()
+[![vertx3](https://github.com/leeplay/study/blob/master/image/vertx3.png?raw=true)]()
 
 #### Vertx 구동 순서
 
