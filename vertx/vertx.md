@@ -230,11 +230,11 @@ nodejs-mysql : nodejs + mysql
  - EventLoopContext 생성함
 
 #### APIGW에서 봐야될 소스
- http://kimseunghyun76.tistory.com/406
- http://vertx.io/docs/vertx-core/java/
- http://vertx.io/docs/vertx-web/java/
- http://vertx.io/docs/vertx-hazelcast/java/
- http://vertx.io/docs/vertx-rx/java/
- http://vertx.io/docs/vertx-reactive-streams/java/
- http://vertx.io/docs/vertx-tcp-eventbus-bridge/java/
- http://vertx.io/docs/vertx-sync/java/
+
+- http://vertx.io/docs/vertx-core/java/
+- http://vertx.io/docs/vertx-web/java/
+- http://vertx.io/docs/vertx-hazelcast/java/
+- http://vertx.io/docs/vertx-rx/java/
+- http://vertx.io/docs/vertx-reactive-streams/java/
+- http://vertx.io/docs/vertx-tcp-eventbus-bridge/java/
+- http://vertx.io/docs/vertx-sync/java/
