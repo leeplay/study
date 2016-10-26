@@ -1,5 +1,35 @@
 ## Vertx-core
 
+### vertx option 
+
+#### eventLoopPoolSize
+#### workerPoolSize
+#### internalBlockingPoolSize
+#### maxEventLoopExcuteTime
+#### maxWorkerExcuteTime
+#### clusterManager
+#### haEnabled
+#### quorumSize
+#### haGroup
+#### metricsOptions
+#### warningExceptionTime
+#### EventBusOptions
+#### addressREsloverOptions
+
+### deploy option 
+
+#### json config
+#### worker
+#### multiThreaded
+#### isolationGroup
+#### workerPoolNAme
+#### workerPoolSIze
+#### maxWorkerExecuteTIme
+#### ha
+#### extraClasspath
+#### instances
+#### isolatedClasses
+
 ### package
 
 #### buffer
