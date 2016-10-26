@@ -12,4 +12,6 @@
 
 ### event layer
 
+[![layer4](https://github.com/leeplay/study/blob/master/image/event-layer1.png?raw=true)]()
+
 [![pipeline](https://github.com/leeplay/study/blob/master/image/pipeline.png?raw=true)]()
