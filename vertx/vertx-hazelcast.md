@@ -2,6 +2,8 @@ http://yakolla.tistory.com/95
 
 http://vertx.io/docs/vertx-hazelcast/java/
 
+https://github.com/hazelcast/hazelcast
+
 Vertx는 cluster manager의 디폴트 구현체로 hazelcast를 사용합니다.
 Vertx clustermanager는 pluggable 구조이기 때문에 다른 cluster manager 구현체를 사용할 수 있습니다.
 
