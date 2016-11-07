@@ -49,3 +49,13 @@ https://github.com/vert-x3/vertx-hazelcast/issues/24
 (스마트 클라이언트 클러스터 매니져를 사용할 때 버텍스 인스턴스가 죽거나 연결이 해제되면 인스턴스의 이벤트버스 등록은 제거되지 않습니다.
 멤버를 제거하는 콜이 호출되지 않고 메세지는 죽은 어드레스로 전송하게 됩니다. 3.6 브랜치에서 패치됨 )
 
+
+- Using Hazelcast async methods
+
+IMap and IAtomicLong 인터페이스는 버텍스 쓰레드 모델에 적합하게 ICompletableFuture<V> 를 리턴하는 비동기 메소드와 함께 사용할 수 있습니다. -> 이것도 소스 확인
+
+그럼에도 불구하고 이 인터페이스는 오랫동안 사용해왔지만 이 인터페이스는 public하게 제공되지 않는다. 
+
+HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이다. -Dvertx.hazelcast.async-api=true 이런 JVM 기동옵션을 제공하는데 클러스터 내에서 커뮤니케이트 하는데 사용된다. -> 이거 옵션 확인
+
+이 옵션이 활성화되면 워커 쓰레드 대신에 이벤트 루프 쓰레드에서 발생하는 모든 카운터 오퍼레이션, AsyncMap get, put, remove 오퍼레이션이 실행됩니다. -> 뭔 소리지 소스 확인
