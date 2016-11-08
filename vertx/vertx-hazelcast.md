@@ -4,10 +4,8 @@ http://vertx.io/docs/vertx-hazelcast/java/
 
 https://github.com/hazelcast/hazelcast
 
-단락별 정리 
-설정 정리
-예제코드 정리
-내부 소스 정리
+http://docs.hazelcast.org/docs/3.6.1/manual/html-single/index.html#preface
+
 
 ## This is a cluster manager implementation for Vert.x that uses Hazelcast.
 
