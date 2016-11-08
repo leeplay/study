@@ -50,7 +50,7 @@ https://github.com/vert-x3/vertx-hazelcast/issues/24
 멤버를 제거하는 콜이 호출되지 않고 메세지는 죽은 어드레스로 전송하게 됩니다. 3.6 브랜치에서 패치됨 )
 
 
-- Using Hazelcast async methods
+### Using Hazelcast async methods
 
 IMap and IAtomicLong 인터페이스는 버텍스 쓰레드 모델에 적합하게 ICompletableFuture<V> 를 리턴하는 비동기 메소드와 함께 사용할 수 있습니다. -> 이것도 소스 확인
 
@@ -59,3 +59,23 @@ IMap and IAtomicLong 인터페이스는 버텍스 쓰레드 모델에 적합하�
 HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이다. -Dvertx.hazelcast.async-api=true 이런 JVM 기동옵션을 제공하는데 클러스터 내에서 커뮤니케이트 하는데 사용된다. -> 이거 옵션 확인
 
 이 옵션이 활성화되면 워커 쓰레드 대신에 이벤트 루프 쓰레드에서 발생하는 모든 카운터 오퍼레이션, AsyncMap get, put, remove 오퍼레이션이 실행됩니다. -> 뭔 소리지 소스 확인
+
+
+### Trouble shooting clustering
+
+#### Multicast not enabled on the machine.
+
+#### Using wrong network interface
+
+#### Using a VPN
+
+#### When multicast is not available
+
+#### Enabling logging
+
+### Hazelcast logging
+
+- JUL을 기본으로 사용하는데 다른 로깅 라이브러리를 사용하고 싶다면 시스템 환경변수에 설정해줘라
+- Dhazelcast.logging.type=slf4j
+
+
