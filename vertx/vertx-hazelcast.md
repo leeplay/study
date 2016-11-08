@@ -110,6 +110,7 @@ or
   - [![eventbusimploncluster](https://github.com/leeplay/study/blob/master/image/eventbusimploncluster.png?raw=true)]()
 - master 
   - [![master](https://github.com/leeplay/study/blob/master/image/master.png?raw=true)]()
+  - cluster.xml파일은 다른 멤버에 존재하지 않아도 마스터가 죽으면 다른 멤버가 마스터가 된다.
 
 
 ### 시연
