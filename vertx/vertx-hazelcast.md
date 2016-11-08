@@ -49,6 +49,7 @@ Vertx cluster manager는 이런 기능을 지원합니다.
 - 클러스터내에서 ha를 사용할 때 헤이즐캐스트 클라이언트 사용하지 말아라. 그 클라이언트는 클러스터를 떠나거나 데이터를 유실하거나 불안전한 상태에서 클러스터를 떠나도 노티를 주지 않는다. (https://github.com/vert-x3/vertx-hazelcast/issues/24)
  - 스마트 클라이언트 클러스터 매니져를 사용할 때 버텍스 인스턴스가 죽거나 연결이 해제되면 인스턴스의 이벤트버스 등록은 제거되지 않습니다. 멤버를 제거하는 콜이 호출되지 않고 메세지는 죽은 어드레스로 전송하게 됩니다. 3.6 브랜치에서 패치됨 )
 
+[![hazelcastinstanceconfig](https://github.com/leeplay/study/blob/master/image/hazelcastinstanceconfig.png?raw=true)]()
 
 ### Using Hazelcast async methods
 
@@ -107,5 +108,5 @@ or
 
 [![eventbusimploncluster](https://github.com/leeplay/study/blob/master/image/eventbusimploncluster.png?raw=true)]()
 
-[![hazelcastinstanceconfig](https://github.com/leeplay/study/blob/master/image/hazelcastinstanceconfig.png?raw=true)]()
+
 
