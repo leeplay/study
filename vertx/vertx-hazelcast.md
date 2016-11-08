@@ -63,13 +63,25 @@ HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이�
 
 ### Trouble shooting clustering
 
+기본 컨피그 정보로 작동하지 않을 경우 아래 내용을 확인해봐라
+
 #### Multicast not enabled on the machine.
+
+OSX는 멀티캐스트가 비활성화 되어있다. 활성화 시키려면 구글에 검색해봐라
 
 #### Using wrong network interface
 
+머신에 네트워크 인터페이스가 하나 이상일 경우 헤이즐캐스트는 잘못된 인터페이스를 선택할 수 있으므로 헤이즐캐스트에 인터페이스 설정을 추가해주고 Vertx를 클러스터 모드로 실행시킬 때 커맨드 라인에서 -cluster-host옵션으로 설정에 넣은 ip를 인자로 넣어줘라
+
 #### Using a VPN
 
+위의 변형된 형태이다. VPN은 가상 네트워크 인터페이스를 만들고 이것은 종종 멀티캐스트를 지원하지 않는다. 이전 섹션을 참고해라
+
 #### When multicast is not available
+
+경우에 따라서 당신의 환경에서 멀티캐스트를 사용할 수 없다. 예를 들면 TCP sockets, AWS 이다.
+헤이즐캐스트 문서를 잘봐라
+
 
 #### Enabling logging
 
