@@ -73,6 +73,15 @@ HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이�
 
 #### Enabling logging
 
+클러스터링 이슈를 트러블슈팅 할 때 헤이즐캐스트는 문제해결을 위한 로깅 정보를 남길 수 있습니다. JUL로깅을 쓴다고 가정할 경우 vertx-default-jul-logging.properties 파일을 클래스 패스에 넣어두고 이런 설정을 합니다. 
+
+- com.hazelcast.level=INFO
+
+or
+
+- java.util.logging.ConsoleHandler.level=INFO
+- java.util.logging.FileHandler.level=INFO
+
 ### Hazelcast logging
 
 - JUL을 기본으로 사용하는데 다른 로깅 라이브러리를 사용하고 싶다면 시스템 환경변수에 설정해줘라
