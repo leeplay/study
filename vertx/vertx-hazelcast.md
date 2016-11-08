@@ -78,4 +78,8 @@ HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이�
 - JUL을 기본으로 사용하는데 다른 로깅 라이브러리를 사용하고 싶다면 시스템 환경변수에 설정해줘라
 - Dhazelcast.logging.type=slf4j
 
+[![logging](https://github.com/leeplay/study/blob/master/image/logging.png?raw=true)]()
+
+
+
 
