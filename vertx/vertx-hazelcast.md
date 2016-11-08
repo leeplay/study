@@ -106,7 +106,10 @@ or
 
 ### etc
 
-[![eventbusimploncluster](https://github.com/leeplay/study/blob/master/image/eventbusimploncluster.png?raw=true)]()
+- 어플리케이션에서 바라보는 건 eventbus 지만 모드에 따라서 내부 구현체가 달라진다. 즉 cluster이든 standalone모드이든 어플리케이션 코드에선 개발자가 신경쓸 필요없다.
+  - [![eventbusimploncluster](https://github.com/leeplay/study/blob/master/image/eventbusimploncluster.png?raw=true)]()
+- master 
+  - [![master](https://github.com/leeplay/study/blob/master/image/master.png?raw=true)]()
 
 
 ### 시연
