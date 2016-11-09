@@ -151,3 +151,7 @@ or
 
 - Transactions
  - DistributedMap, DistributedQueue 등에 대한 트랜잭션을 사용할 수 있다. 커밋/롤백을 할 수 있기 때문에 더 신중한 연산이 필요한 곳에서도 IMDG를 사용할 수 있다.
+ 
+ - Partitioning
+ 
+ [![hazelcast-partition](https://github.com/leeplay/study/blob/master/image/hazelcast-partition.png?raw=true)]()
