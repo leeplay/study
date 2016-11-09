@@ -35,20 +35,20 @@ Vertx cluster manager는 이런 기능을 지원합니다.
 
 ### Configuring this cluster manager
 
-- default-cluster.xml 파일이 jar안에 패키지 되어있다. -> 소스 확인
+- default-cluster.xml 파일이 jar안에 패키지 되어있다
 - 설정을 오버라이드 하고 싶다면 cluster.xml 설정파일을 생성해 클래스패스에 넣어주면 된다. 
 - 임베디드해서 사용하고 싶으면 jar 안에 root에 넣어놔라
 - cluster.xml이 현재 디렉터리 에 있다면, conf 디렉터리에 있다면 
 - vertx.hazelcast.config 환경변수를 이용하는 방법
  - vertx.hazelcast.config가 설정되어 있으면 설정은 오버라이드 되고 만약 이 설정으로 로딩에 실패하면 폴백으로 다른 cluster.xml을 찾거나 디폴트 컨피그레이션 설정정보를 로딩한다.
  - Dhazelcast.config는 헤이즐캐스트 변수이므로 vertx에서는 지원하지 않는다.
-- 프로그래밍적으로도 설정할 수 있다. 헤이즐캐스트는 멀티캐스트와 TCP를 포함한 몇 가지 서로다른 전송을 지원합니다.- 기본 설정은 멀티캐스트를 사용합니다. 반드시 multicast가 enable되어 있어야 합니다. (머신을 의미하는건지, 네트워크 상을 의미하는건지)
+- 프로그래밍적으로도 설정할 수 있다. 헤이즐캐스트는 멀티캐스트와 TCP를 포함한 몇 가지 서로다른 전송을 지원합니다.- 기본 설정은 멀티캐스트를 사용합니다. 반드시 multicast가 enable되어 있어야 합니다. (머신을 의미하는건지, 네트워크 상을 의미하는건지, 설정을 의미하는 건지)
 
 ### Using an existing Hazelcast cluster
 
-- 클러스터 매니져내에 기존 HazelcastInstance가 있으면 재사용할 수 있다. -> 재사용한다는게 무슨 말이지 ? 기존 클러스터에 조인한다는 말인가 옵션만 재사용한단 말인가, HazelcastInstance는 헤이즐캐스트내 객체인듯
+- 클러스터 매니져내에 기존 HazelcastInstance가 있으면 재사용할 수 있다. -> 기존 클러스터에 조인한다는 말인가 ? 옵션만 재사용한단 말인가 ? HazelcastInstance는 헤이즐캐스트내 객체인듯
 - 이 경우는 vertx cluster의 오너가 아니 클러스터를 종료시킬 수 없다.
-- 커스텀 헤이즐캐스트를 사용하려면 이런 옵셔이 필요하다. 
+- 커스텀 헤이즐캐스트를 사용하려면 이런 옵션이 필요하다. 
 
 - 클러스터내에서 ha를 사용할 때 헤이즐캐스트 클라이언트 사용하지 말아라. 그 클라이언트는 클러스터를 떠나거나 데이터를 유실하거나 불안전한 상태에서 클러스터를 떠나도 노티를 주지 않는다. (https://github.com/vert-x3/vertx-hazelcast/issues/24)
  - 스마트 클라이언트 클러스터 매니져를 사용할 때 버텍스 인스턴스가 죽거나 연결이 해제되면 인스턴스의 이벤트버스 등록은 제거되지 않습니다. 멤버를 제거하는 콜이 호출되지 않고 메세지는 죽은 어드레스로 전송하게 됩니다. 3.6 브랜치에서 패치됨 )
@@ -57,11 +57,11 @@ Vertx cluster manager는 이런 기능을 지원합니다.
 
 ### Using Hazelcast async methods
 
-IMap and IAtomicLong 인터페이스는 버텍스 쓰레드 모델에 적합하게 ICompletableFuture<V> 를 리턴하는 비동기 메소드와 함께 사용할 수 있습니다. -> 이것도 소스 확인
+IMap and IAtomicLong 인터페이스는 버텍스 쓰레드 모델에 적합하게 ICompletableFuture<V> 를 리턴하는 비동기 메소드와 함께 사용할 수 있습니다. 
 
 그럼에도 불구하고 이 인터페이스는 오랫동안 사용해왔지만 이 인터페이스는 public하게 제공되지 않는다. 
 
-HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이다. -Dvertx.hazelcast.async-api=true 이런 JVM 기동옵션을 제공하는데 클러스터 내에서 커뮤니케이트 하는데 사용된다. -> 이거 옵션 확인
+HazelcastClusterManager의 기본 동작은 퍼블릭한 API를 쓰기위함이다. -Dvertx.hazelcast.async-api=true 이런 JVM 기동옵션을 제공하는데 클러스터 내에서 커뮤니케이트 하는데 사용된다.
 
 이 옵션이 활성화되면 워커 쓰레드 대신에 이벤트 루프 쓰레드에서 발생하는 모든 카운터 오퍼레이션, AsyncMap get, put, remove 오퍼레이션이 실행됩니다. -> 뭔 소리지 소스 확인
 
