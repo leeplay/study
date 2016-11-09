@@ -29,6 +29,10 @@ Vertx cluster manager는 이런 기능을 지원합니다.
 - 다른 클래스 매니져가 클래스패스에 올라가지 않도록 확인해라
 - 또한 Vertx를 생성할 때 구체화된 옵션을 통해서 클러스터 매니져를 구체화할 수 있다. 
 
+
+[![vertx-hazelcast](https://github.com/leeplay/study/blob/master/image/vertx-hazelcast.png?raw=true)]()
+
+
 ### Configuring this cluster manager
 
 - default-cluster.xml 파일이 jar안에 패키지 되어있다. -> 소스 확인
