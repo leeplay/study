@@ -156,3 +156,13 @@ or
 - Partitioning
  
  [![hazelcast-partition](https://github.com/leeplay/study/blob/master/image/hazelcast-partition.png?raw=true)]()
+ 
+- Use Cases
+ - 서버 컨피그레이션 공유
+ - 이벤트 기반의 분산 태스크 수행
+ - 멤캐쉬 
+ - 클러스터 내 일부 멤버만 일을 수행해야 할 때 
+ - 채팅서버 (publish/subscriber)
+ - 멀티 테넌시 캐시
+ - 실시간 스트리밍
+ - 세션 데이터 저장 
