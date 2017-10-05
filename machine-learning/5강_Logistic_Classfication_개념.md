@@ -43,3 +43,4 @@
 
 ### tensor flow로 구현하기
 
+- [![logistic7](https://github.com/leeplay/study/blob/master/machine-learning/image/logistic7.png)]()
