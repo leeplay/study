@@ -39,6 +39,7 @@
 - y=0 일 때 cost 함수 -log(1- H(x)), 위와 반대
 - [![logistic5](https://github.com/leeplay/study/blob/master/machine-learning/image/logistic5.png)]()
 - 위 함수로 그래프의 모향이 포물선 형태로 만들었기 때문에 미분이 가능함
+- [![logistic6](https://github.com/leeplay/study/blob/master/machine-learning/image/logistic6.png)]()
 
 ### tensor flow로 구현하기
 
