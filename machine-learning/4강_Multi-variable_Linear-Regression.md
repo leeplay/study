@@ -3,7 +3,7 @@
 ### multi-variable linear regression
 
 - 입력 값이 복수라면 ?
-- image multi_cost_function1
+- [![multi_cost_function1](https://github.com/leeplay/study/blob/master/machine-learning/image/multi_cost_function1.png)]()
 - 수식이 너무 복잡해짐
 - maxtrix 등장
 
