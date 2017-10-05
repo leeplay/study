@@ -44,7 +44,7 @@
 #### Queue Runners
 
 - 파일을 메모리에 올리는게 부담일 때
-- [![loadig_data2](https://github.com/leeplay/study/blob/master/machine-learning/image/loadig_data2.png)]()
+- [![loading_data2](https://github.com/leeplay/study/blob/master/machine-learning/image/loading_data2.png)]()
 - batch를 통해서 구현
-- [![loadig_data3](https://github.com/leeplay/study/blob/master/machine-learning/image/loadig_data3.png)]()
+- [![loading_data3](https://github.com/leeplay/study/blob/master/machine-learning/image/loading_data3.png)]()
 - shuffle_batch (batch의 순서를 조절하고 싶을때)
