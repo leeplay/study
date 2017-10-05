@@ -5,5 +5,5 @@
 ### Source
 
 - machine-learning
- - https://www.youtube.com/watch?v=BS6O0zOGX4E&feature=youtu.be&list=PLlMkM4tgfjnLSOjrEJN31gZATbcj_MpUm
+  - https://www.youtube.com/watch?v=BS6O0zOGX4E&feature=youtu.be&list=PLlMkM4tgfjnLSOjrEJN31gZATbcj_MpUm
 
