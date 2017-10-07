@@ -40,9 +40,39 @@
 - [![softmax7](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax7.png)]()
 - [![softmax8](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax8.png)]()
  
-### tensor flow
+### tensor flow Softmax Classification 구하기
 
 - [![softmax9](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax9.png)]()
 - [![softmax10](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax10.png)]()
 - [![softmax11](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax11.png)]()
 - class가 많아 y값이 정하기 어려워짐, 3 종류가 올 수 있고 표기는 one-hot encoding 방식
+
+### tensor flow Fancy Softmax Classification 구하기
+
+#### softmax_cross_entropy_with_logits
+
+- 이전 entropy를 구하는 함수가 복잡함, 텐서플로우에서는 더 간단한 표현을 가진 함수를 제공해줌
+
+```
+logits = tf.matmul(X, W) + b
+hypothesis = tf.nn.softmax(logits)
+
+# 기존
+cost = tf.reduce_mean(-tf.reduce_sum(Y*tf.log(hypothesis), axis=1))
+
+# fancy
+cost_i = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y_one_hot)
+cost = tf.reduce_mean(cost_i)
+```
+
+#### reshape
+
+- 분류값을 one_hot으로 표현해야 할 때
+- one_hot 함수는 rank를 +1로 만들어서 돌려줌, 1차원을 주면 2차원을 주게됨 -> 여전히 복잡함
+- 예를 들어 [[0], [3]]에 nb_classes를 7을 줬다면 one_hot으로 표현하면 [[[1000000]], [[0001000]]] 이렇게 표현됨
+- 이럴때 reshape 함수를 사용 하게됨
+- 그러면 위의 예에서 [[1000000]], [[0001000]] 이렇게 표현됨, shape이 동일하게 (n, 7)이 됨
+- [![softmax12](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax12.png)]()
+- [![softmax13](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax13.png)]()
+- [![softmax14](https://github.com/leeplay/study/blob/master/machine-learning/image/softmax14.png)]()
+- flattern -> [[1], [0]] -> [1, 0]
