@@ -88,3 +88,31 @@
 - [![cnn25](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn25.png)]()
 - [![cnn26](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn26.png)]()
 - [![cnn27](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn27.png)]()
+
+
+### MNIST 99% with CNN
+
+- 이건 나중에 실습해보자
+
+### CNN Class, Layers, Ensemble
+
+#### Python Class
+
+- 파이썬 개발팁 (객체지향 표현임)
+- [![cnn28](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn28.png)]()
+- 지원 api 패키지
+- [![cnn29](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn29.png)]()
+- [![cnn30](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn30.png)]()
+
+#### Ensemble
+
+- 새로운 데이터가 들어왔을 때 하나의 모델로 예측하는 것이 아닌 다양한 모든 모델에서 예측해보고 결과를 합쳤을 경우 성능이 더 좋게 나옴
+- [![cnn31](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn31.png)]()
+- [![cnn32](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn32.png)]()
+
+
+#### Ensemble prediction
+
+- [![cnn33](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn33.png)]()
+- [![cnn34](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn34.png)]()
+
