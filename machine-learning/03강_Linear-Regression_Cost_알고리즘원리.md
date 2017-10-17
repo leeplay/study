@@ -18,9 +18,9 @@
 - [![cost_minimize1](https://github.com/leeplay/study/blob/master/machine-learning/image/cost_minimize1.png)]()
 
 - 이걸 찾는 알고리즘이 Gradient(경사) descent(내려가다) algorithm
-
+- 미분임, 한 점씩 이동하면서 기울기를 찾아 이동해 더 이상 기울기가 없는 지점까지 도달함
 - [![gradient1](https://github.com/leeplay/study/blob/master/machine-learning/image/gradient1.png)]()
-- a는 그래프에서 기울기를 구할 때 구한 미분 값이 + 라면 w를 양/음 둘 중 하나로 이동시키기 위한 공식 표현
+- a는 leargnig rate, cost 함수 미분값에 따라 그래프 위치가 나오는데 / 는 -로 이동하게 되고 \는 +로 이동하게 됨
 - [![gradient2](https://github.com/leeplay/study/blob/master/machine-learning/image/gradient2.png)]()
  - 미분은 온라인 사이트에서 구해줌
 - [![gradient3](https://github.com/leeplay/study/blob/master/machine-learning/image/gradient3.png)]()
