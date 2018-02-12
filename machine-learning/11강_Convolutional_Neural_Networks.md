@@ -32,6 +32,7 @@
 - [![cnn7](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn7.png)]()
 - 필터를 적용해도 이미즈 사이즈가 줄지 않음
 - 필터를 여러 개 생성해 적용함, 각각의 필터는 weight이 다름
+- 필터는 몇 개를 사용할지 정의만 하면 알아서 딥러닝에서 패턴을 넣어서 해당 이미지를 분류한다. 예를 들면 곡선/직선/타원 등등 이런 ...
 - [![cnn8](https://github.com/leeplay/study/blob/master/machine-learning/image/cnn8.png)]()
 - weight의 수는 5*5*3*6 만큼 생성
 
