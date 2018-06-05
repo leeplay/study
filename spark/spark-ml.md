@@ -349,4 +349,4 @@ model.transform(test).select("id", "text", "probability", "prediction").collect(
 
 - Spark에 딥러닝을 접목하기 위한 모든 시도가 많이 이루어지고 있다.
 - GPU와 Deeplearning Framework를 대체하기 보다는 시너지를 가지는 방향으로 발전될 것이다.
-- https://www.slideshare.net/sanghoonlee982/machine-learning-deep-learnig-with-spark
+
