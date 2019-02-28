@@ -216,12 +216,11 @@ public abstract class SingleThreadEventExecutor extends AbstractEventExecutor {
 
 #### 내부모델 1
 
-<img width="618" alt="2019-02-26 6 00 39" src="https://media.oss.navercorp.com/user/375/files/e3c0e6a0-39f0-11e9-8a63-f08077f846e6">
+[![내부모델1](https://github.com/leeplay/study/blob/master/image/%E1%84%82%E1%85%A2%E1%84%87%E1%85%AE%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF1.png?raw=true)]
 
 #### 내부모델 2
 
-<img width="890" alt="2019-02-26 6 00 58" src="https://media.oss.navercorp.com/user/375/files/e6dfbd48-39f0-11e9-92bc-8a197495cb74">
-
+[![내부모델2](https://github.com/leeplay/study/blob/master/image/%E1%84%82%E1%85%A2%E1%84%87%E1%85%AE%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF2.png?raw=true)]
 
 ### 쓸데없는 용어 정리
 
@@ -248,7 +247,7 @@ public abstract class SingleThreadEventExecutor extends AbstractEventExecutor {
 - 기본적으로 개발자가 설정 가능함
 - 하지만 잘하지 않음, 왜 안해도 될까? 성능검사 참조
 
-<img width="815" alt="2019-02-27 3 30 54" src="https://media.oss.navercorp.com/user/375/files/c8c87d8a-3aa5-11e9-86a2-983558205760">
+[![쓰레드수](https://github.com/leeplay/study/blob/master/image/select_worker.png?raw=true)]
 
 
 - 설정하지 않았다면 보통 아래 룰로 설정됨
@@ -284,7 +283,7 @@ int DEFAULT_IO_SELECT_COUNT = Integer.parseInt(System.getProperty(
 - cpu
   - servlet -> netty 순 그래프 입니다.
 
-<img width="850" alt="2017-03-09 12 04 49" src="https://media.oss.navercorp.com/user/375/files/b4cff6c2-04c0-11e7-937e-06ad12a1dbab">
+[![성능](https://github.com/leeplay/study/blob/master/image/%E1%84%89%E1%85%A5%E1%86%BC%E1%84%82%E1%85%B3%E1%86%BC.png?raw=true)]
 
 - 백엔드 즉시 리턴
 
