@@ -10,6 +10,7 @@
 - 2019년 2월 28일 cncf 공식 프로젝트로 발표됨
 - 현재 docker는 default/best 실행환경이며 이런 의존을 대체하기 위해 시작
 - linux와 window를 지원하기 위한 데몬
+- containerd와 runc는 오픈소스 프로젝트로 cncf/linux에서 인큐베이팅
 
 [![containerD](https://github.com/leeplay/study/blob/master/image/cd_image04.png?raw=true)]()
 
@@ -32,14 +33,14 @@
 
 ### layer
 
-- Docker Engine v1.11 (2016.4)
-  - 새로운 아키텍처 소개
+- 새로운 아키텍처 소개
+  - Docker Engine v1.11
   - 도커 엔진의 컨테이너 실행 환경의 일부분을 별도 데몬으로 재구성
-  - containerD : 컨테이너 라이프사이클 관리를 위한 경량 데몬, core container runtime
-  - container-shim : 컨테이너와 containerd 사이에서 컨테이너를 연결, containerd가 문제가 생기더라도 실행되는 컨테이너에는 영향을 주지않기 위한 레이어
-  - runc : OCI를 준수하는 리눅스 컨테이너 실행환경
-  - containerd와 runc는 오픈소스 프로젝트로 cncf/linux에서 인큐베이팅
-  - libnewtork, volumeAPI, Auth2 등등 기존 데몬에 유지
+- containerD : 컨테이너 라이프사이클 관리를 위한 경량 데몬, core container runtime
+- container-shim : 컨테이너와 containerd 사이에서 컨테이너를 연결, containerd가 문제가 생기더라도 실행되는 컨테이너에는 영향을 주지않기 위한 레이어
+- runc : OCI를 준수하는 리눅스 컨테이너 실행환경
+  
+
 
 [![containerD](https://github.com/leeplay/study/blob/master/image/cd_image05.png?raw=true)]()
 
