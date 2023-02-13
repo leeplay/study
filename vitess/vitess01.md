@@ -82,13 +82,13 @@
 - 한 DB에 모든 테이블을 포함하고 있지만 일부 테이블을 별개의 DB로 구성하고 싶을 때
 
 - MoveTable 도구를 통해서 온라인으로 이동 가능
-- image02
+[![image02](https://github.com/leeplay/study/blob/master/image/vitess-image02.png?raw=true)]
 
 #### Horizontal Sharding
 
 - Shard를 나눠서 scale out
 - Reshard 통해서 온라인으로 가능
-- image03
+[![image03](https://github.com/leeplay/study/blob/master/image/vitess-image03.png?raw=true)]
 
 #### Keyspace, Keyspace ID
 
@@ -117,7 +117,7 @@
 
 - VSchema
   - 하나의 논리적인 DB를 어떻게 나눌것(샤드)인지 표현
-  - image04
+[![image04](https://github.com/leeplay/study/blob/master/image/vitess-image04.png?raw=true)]
 
 - Vindex
   - record의 keyspace id를 찾아내는 방법
@@ -130,14 +130,14 @@
       - 한번 정의하면 변경불가
       - 
   - mysql index와 무관함
-  - image05
+[![image05](https://github.com/leeplay/study/blob/master/image/vitess-image05.png?raw=true)]
 
 #### Query Planning
 - 주어진 사용자쿼리와 VSchema 정보를 활용해 액세스 플랜을 생성함
 
 #### Connectors
 - MySQL 커넥터사용
-- image06
+[![image06](https://github.com/leeplay/study/blob/master/image/vitess-image06.png?raw=true)]
 
 #### SQL 호환성
 - 샤드미적용시 그대로 사용
@@ -163,7 +163,7 @@
 - 데이터 모델
 - 분산쿼리/트랜잭션
 - PK or FK 선택을 해야하는데 참조관계일 경우는 FK로 해야 한 샤드에 다 저장됨
-- image07
+[![image07](https://github.com/leeplay/study/blob/master/image/vitess-image07.png?raw=true)]
 
 #### Shard Function
 
